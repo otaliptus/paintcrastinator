@@ -250,6 +250,28 @@ function steady(x, y) {
   return [x + (best[0] - x) * STEADY, y + (best[1] - y) * STEADY];
 }
 
+// Paint progress is saved in this browser per painting, so you can continue later.
+const progressKey = () => `paintcrastinator:${recipe.id}`;
+function saveProgress() {
+  try {
+    if (!userStrokes.length) { localStorage.removeItem(progressKey()); return; }
+    localStorage.setItem(progressKey(), JSON.stringify({ i: paintIndex, p: userStrokes.map((s) => s.p.map((v) => Math.round(v * 10) / 10)) }));
+  } catch { /* storage full or blocked: painting still works, it just is not saved */ }
+}
+function restoreProgress() {
+  paintIndex = 0;
+  userStrokes = [];
+  try {
+    const saved = JSON.parse(localStorage.getItem(progressKey()) || "null");
+    if (saved && Array.isArray(saved.p) && saved.p.length === saved.i && saved.i <= strokes.length) {
+      userStrokes = saved.p.map((p, k) => ({ p, c: strokes[k].c, s: strokes[k].s, o: strokes[k].o }));
+      paintIndex = saved.i;
+    }
+  } catch { /* ignore bad or blocked storage */ }
+  userStrokes.forEach((stroke) => paintStroke(ctx, stroke));
+  return paintIndex;
+}
+
 function setMode(nextMode) {
   pauseReplay();
   mode = nextMode;
@@ -264,9 +286,9 @@ function setMode(nextMode) {
   frame.classList.toggle("painting", isPaint);
   clearStudy();
   if (isPaint) {
-    paintIndex = 0;
-    userStrokes = [];
+    const resumed = restoreProgress();
     updatePaintUI();
+    if (resumed > 0) $("canvas-status").textContent = `Welcome back — continuing from stroke ${resumed.toLocaleString()}`;
   } else {
     watchCount = 0;
     updateWatchUI();
@@ -315,6 +337,7 @@ function finishPaint(event) {
   if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
   paintIndex += 1;
   updatePaintUI();
+  saveProgress();
 }
 
 function repaintUserStrokes() {
@@ -412,6 +435,7 @@ $("undo-button").addEventListener("click", () => {
     paintIndex -= 1;
     userStrokes.pop();
     repaintUserStrokes();
+    saveProgress();
   }
 });
 $("skip-button").addEventListener("click", () => {
@@ -424,12 +448,14 @@ $("skip-button").addEventListener("click", () => {
     paintIndex += 1;
   }
   updatePaintUI();
+  saveProgress();
 });
 $("restart-button").addEventListener("click", () => {
   paintIndex = 0;
   userStrokes = [];
   drawing = null;
   repaintUserStrokes();
+  saveProgress();
 });
 canvas.addEventListener("pointerdown", beginPaint);
 canvas.addEventListener("pointermove", movePaint);
