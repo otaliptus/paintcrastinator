@@ -29,6 +29,35 @@
     "lessonTip": "Teaches blending: overlap long, quiet strokes and let neighbouring colours meet softly."
   },
   {
+    "id": "lesson-sphere",
+    "title": "Orange Ball on a Table",
+    "artist": "Painting Cookbook lesson",
+    "year": "2026",
+    "width": 960,
+    "height": 600,
+    "strokeCount": 48,
+    "scores": {
+      "reference": "references/lesson-sphere.png",
+      "render": "recipes/lesson-sphere.png",
+      "ssim": 0.87977,
+      "mean_delta_e": 2.8026,
+      "edge_similarity": 0.34544,
+      "colour_similarity": 0.94395,
+      "similarity": 81.887,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Painting Cookbook",
+      "licence": "CC0",
+      "source": "CC0 dedication",
+      "url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "note": "Generated for Painting Cookbook, CC0"
+    },
+    "description": "One orange ball explains form in a handful of dabs: warm upper-left light, a deep core shadow, a quieter reflected edge and a cast shadow anchoring it to the table.",
+    "reference": "references/lesson-sphere.png",
+    "lessonTip": "Teaches form: paint the light side, core shadow, reflected light and cast shadow—not just an orange circle."
+  },
+  {
     "id": "mona-lisa",
     "title": "Mona Lisa",
     "artist": "Leonardo da Vinci",
