@@ -263,11 +263,11 @@
     "scores": {
       "reference": "references/mondrian-1930.jpg",
       "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/mondrian-1930-claude.png",
-      "ssim": 0.88303,
-      "mean_delta_e": 1.9951,
-      "edge_similarity": 0.68092,
-      "colour_similarity": 0.9601,
-      "similarity": 87.583,
+      "ssim": 0.91877,
+      "mean_delta_e": 1.4152,
+      "edge_similarity": 0.74427,
+      "colour_similarity": 0.9717,
+      "similarity": 90.847,
       "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
     },
     "credit": {
@@ -388,6 +388,33 @@
     "reference": "../references/cafe-terrace.jpg"
   },
   {
+    "id": "fighting-temeraire",
+    "title": "The Fighting Temeraire",
+    "artist": "J. M. W. Turner",
+    "year": "1839",
+    "width": 960,
+    "height": 713,
+    "strokeCount": 1800,
+    "scores": {
+      "reference": "references/fighting-temeraire.jpg",
+      "render": "recipes/fighting-temeraire.png",
+      "ssim": 0.56588,
+      "mean_delta_e": 5.1326,
+      "edge_similarity": 0.41944,
+      "colour_similarity": 0.89735,
+      "similarity": 64.335,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "J. M. W. Turner",
+      "licence": "Public domain",
+      "source": "Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:The_Fighting_Temeraire,_JMW_Turner,_National_Gallery.jpg"
+    },
+    "description": "A ghostly ship follows a dark tug through radiant sunset waters.",
+    "reference": "../references/fighting-temeraire.jpg"
+  },
+  {
     "id": "lesson-sky",
     "title": "Sunset over a Still Sea",
     "artist": "Painting Cookbook lesson",
@@ -446,168 +473,6 @@
     "lessonTip": "Teaches aerial perspective: distant shapes are lighter and quieter; nearer hills become darker and clearer."
   },
   {
-    "id": "impression-sunrise",
-    "title": "Impression, Sunrise",
-    "artist": "Claude Monet",
-    "year": "1872",
-    "width": 960,
-    "height": 745,
-    "strokeCount": 225,
-    "scores": {
-      "reference": "references/impression-sunrise.jpg",
-      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/impression-sunrise-claude.png",
-      "ssim": 0.71693,
-      "mean_delta_e": 3.2486,
-      "edge_similarity": 0.30819,
-      "colour_similarity": 0.93503,
-      "similarity": 72.105,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    },
-    "credit": {
-      "author": "Claude Monet",
-      "licence": "Public domain",
-      "url": "https://commons.wikimedia.org/wiki/File:Monet_-_Impression,_Sunrise.jpg",
-      "source": "Wikimedia Commons"
-    },
-    "description": "The harbour dissolves into mist around one orange sun.",
-    "reference": "../references/impression-sunrise.jpg"
-  },
-  {
-    "id": "wheatfield-crows",
-    "title": "Wheatfield with Crows",
-    "artist": "Vincent van Gogh",
-    "year": "1890",
-    "width": 960,
-    "height": 457,
-    "strokeCount": 450,
-    "scores": {
-      "reference": "references/wheatfield-crows.jpg",
-      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/wheatfield-crows-claude.png",
-      "ssim": 0.35841,
-      "mean_delta_e": 4.507,
-      "edge_similarity": 0.38632,
-      "colour_similarity": 0.90986,
-      "similarity": 52.803,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    },
-    "credit": {
-      "author": "Vincent van Gogh",
-      "licence": "Public domain",
-      "url": "https://commons.wikimedia.org/wiki/File:Vincent_van_Gogh_-_Wheatfield_with_crows_-_Google_Art_Project.jpg",
-      "source": "Wikimedia Commons"
-    },
-    "description": "A stormy sky over gold wheat, three paths and a flight of crows.",
-    "reference": "../references/wheatfield-crows.jpg"
-  },
-  {
-    "id": "nocturne-battersea",
-    "title": "Nocturne: Blue and Gold – Old Battersea Bridge",
-    "artist": "James McNeill Whistler",
-    "year": "c. 1872–75",
-    "width": 960,
-    "height": 1288,
-    "strokeCount": 225,
-    "scores": {
-      "reference": "references/nocturne-battersea.jpg",
-      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/nocturne-battersea-claude.png",
-      "ssim": 0.77868,
-      "mean_delta_e": 2.2786,
-      "edge_similarity": 0.47976,
-      "colour_similarity": 0.95443,
-      "similarity": 78.657,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    },
-    "credit": {
-      "author": "James McNeill Whistler",
-      "licence": "Public domain",
-      "url": "https://commons.wikimedia.org/wiki/File:James_McNeill_Whistler_-_Nocturne_en_bleu_et_or.jpg",
-      "source": "Wikimedia Commons"
-    },
-    "description": "A night river in blue-green, with one dark bridge pier.",
-    "reference": "../references/nocturne-battersea.jpg"
-  },
-  {
-    "id": "the-dance",
-    "title": "Dance",
-    "artist": "Henri Matisse",
-    "year": "1910",
-    "width": 960,
-    "height": 632,
-    "strokeCount": 450,
-    "scores": {
-      "reference": "references/the-dance.jpg",
-      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/the-dance-claude.png",
-      "ssim": 0.75122,
-      "mean_delta_e": 3.8863,
-      "edge_similarity": 0.44354,
-      "colour_similarity": 0.92227,
-      "similarity": 75.638,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    },
-    "credit": {
-      "author": "Henri Matisse",
-      "licence": "Public domain",
-      "url": "https://commons.wikimedia.org/wiki/File:Henri_Matisse_-_Dance_1910.jpg",
-      "source": "Wikimedia Commons"
-    },
-    "description": "Five figures in a ring on flat blue and green.",
-    "reference": "../references/the-dance.jpg"
-  },
-  {
-    "id": "red-fuji",
-    "title": "Fine Wind, Clear Morning (Red Fuji)",
-    "artist": "Katsushika Hokusai",
-    "year": "c. 1830–32",
-    "width": 960,
-    "height": 648,
-    "strokeCount": 450,
-    "scores": {
-      "reference": "references/red-fuji.jpg",
-      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/red-fuji-claude.png",
-      "ssim": 0.46098,
-      "mean_delta_e": 4.699,
-      "edge_similarity": 0.3871,
-      "colour_similarity": 0.90602,
-      "similarity": 58.341,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    },
-    "credit": {
-      "author": "Katsushika Hokusai",
-      "licence": "Public domain",
-      "url": "https://commons.wikimedia.org/wiki/File:Katsushika_Hokusai_-_Fine_Wind,_Clear_Morning_(Gaif%C5%AB_kaisei)_-_Google_Art_Project.jpg",
-      "source": "Wikimedia Commons"
-    },
-    "description": "Mount Fuji glows red at dawn under a sky of small clouds.",
-    "reference": "../references/red-fuji.jpg"
-  },
-  {
-    "id": "basket-of-apples",
-    "title": "The Basket of Apples",
-    "artist": "Paul Cézanne",
-    "year": "c. 1893",
-    "width": 960,
-    "height": 758,
-    "strokeCount": 900,
-    "scores": {
-      "reference": "references/basket-of-apples.jpg",
-      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/basket-of-apples-claude.png",
-      "ssim": 0.60541,
-      "mean_delta_e": 5.0413,
-      "edge_similarity": 0.60666,
-      "colour_similarity": 0.89917,
-      "similarity": 69.372,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    },
-    "credit": {
-      "author": "Paul Cézanne",
-      "licence": "Public domain",
-      "url": "https://commons.wikimedia.org/wiki/File:Le_panier_de_pommes,_par_Paul_C%C3%A9zanne.jpg",
-      "source": "Wikimedia Commons"
-    },
-    "description": "Apples, a bottle and a cloth built from blocky planes of colour.",
-    "reference": "../references/basket-of-apples.jpg"
-  },
-  {
     "id": "sudden-shower",
     "title": "Sudden Shower over Shin-Ōhashi Bridge",
     "artist": "Utagawa Hiroshige",
@@ -633,5 +498,167 @@
     },
     "description": "Travellers hurry across a bridge under slanting rain.",
     "reference": "../references/sudden-shower.jpg"
+  },
+  {
+    "id": "impression-sunrise",
+    "title": "Impression, Sunrise",
+    "artist": "Claude Monet",
+    "year": "1872",
+    "width": 960,
+    "height": 745,
+    "strokeCount": 225,
+    "scores": {
+      "reference": "references/impression-sunrise.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/impression-sunrise-claude.png",
+      "ssim": 0.72876,
+      "mean_delta_e": 3.0616,
+      "edge_similarity": 0.3274,
+      "colour_similarity": 0.93877,
+      "similarity": 73.156,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Claude Monet",
+      "licence": "Public domain",
+      "url": "https://commons.wikimedia.org/wiki/File:Monet_-_Impression,_Sunrise.jpg",
+      "source": "Wikimedia Commons"
+    },
+    "description": "The harbour dissolves into mist around one orange sun.",
+    "reference": "../references/impression-sunrise.jpg"
+  },
+  {
+    "id": "wheatfield-crows",
+    "title": "Wheatfield with Crows",
+    "artist": "Vincent van Gogh",
+    "year": "1890",
+    "width": 960,
+    "height": 457,
+    "strokeCount": 450,
+    "scores": {
+      "reference": "references/wheatfield-crows.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/wheatfield-crows-claude.png",
+      "ssim": 0.39326,
+      "mean_delta_e": 4.1587,
+      "edge_similarity": 0.42271,
+      "colour_similarity": 0.91683,
+      "similarity": 55.475,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Vincent van Gogh",
+      "licence": "Public domain",
+      "url": "https://commons.wikimedia.org/wiki/File:Vincent_van_Gogh_-_Wheatfield_with_crows_-_Google_Art_Project.jpg",
+      "source": "Wikimedia Commons"
+    },
+    "description": "A stormy sky over gold wheat, three paths and a flight of crows.",
+    "reference": "../references/wheatfield-crows.jpg"
+  },
+  {
+    "id": "nocturne-battersea",
+    "title": "Nocturne: Blue and Gold – Old Battersea Bridge",
+    "artist": "James McNeill Whistler",
+    "year": "c. 1872–75",
+    "width": 960,
+    "height": 1288,
+    "strokeCount": 225,
+    "scores": {
+      "reference": "references/nocturne-battersea.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/nocturne-battersea-claude.png",
+      "ssim": 0.80023,
+      "mean_delta_e": 1.9213,
+      "edge_similarity": 0.5029,
+      "colour_similarity": 0.96157,
+      "similarity": 80.403,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "James McNeill Whistler",
+      "licence": "Public domain",
+      "url": "https://commons.wikimedia.org/wiki/File:James_McNeill_Whistler_-_Nocturne_en_bleu_et_or.jpg",
+      "source": "Wikimedia Commons"
+    },
+    "description": "A night river in blue-green, with one dark bridge pier.",
+    "reference": "../references/nocturne-battersea.jpg"
+  },
+  {
+    "id": "the-dance",
+    "title": "Dance",
+    "artist": "Henri Matisse",
+    "year": "1910",
+    "width": 960,
+    "height": 632,
+    "strokeCount": 450,
+    "scores": {
+      "reference": "references/the-dance.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/the-dance-claude.png",
+      "ssim": 0.77239,
+      "mean_delta_e": 2.9978,
+      "edge_similarity": 0.47499,
+      "colour_similarity": 0.94004,
+      "similarity": 77.807,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Henri Matisse",
+      "licence": "Public domain",
+      "url": "https://commons.wikimedia.org/wiki/File:Henri_Matisse_-_Dance_1910.jpg",
+      "source": "Wikimedia Commons"
+    },
+    "description": "Five figures in a ring on flat blue and green.",
+    "reference": "../references/the-dance.jpg"
+  },
+  {
+    "id": "red-fuji",
+    "title": "Fine Wind, Clear Morning (Red Fuji)",
+    "artist": "Katsushika Hokusai",
+    "year": "c. 1830–32",
+    "width": 960,
+    "height": 648,
+    "strokeCount": 450,
+    "scores": {
+      "reference": "references/red-fuji.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/red-fuji-claude.png",
+      "ssim": 0.50957,
+      "mean_delta_e": 4.1712,
+      "edge_similarity": 0.45193,
+      "colour_similarity": 0.91658,
+      "similarity": 62.302,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Katsushika Hokusai",
+      "licence": "Public domain",
+      "url": "https://commons.wikimedia.org/wiki/File:Katsushika_Hokusai_-_Fine_Wind,_Clear_Morning_(Gaif%C5%AB_kaisei)_-_Google_Art_Project.jpg",
+      "source": "Wikimedia Commons"
+    },
+    "description": "Mount Fuji glows red at dawn under a sky of small clouds.",
+    "reference": "../references/red-fuji.jpg"
+  },
+  {
+    "id": "basket-of-apples",
+    "title": "The Basket of Apples",
+    "artist": "Paul Cézanne",
+    "year": "c. 1893",
+    "width": 960,
+    "height": 758,
+    "strokeCount": 900,
+    "scores": {
+      "reference": "references/basket-of-apples.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/basket-of-apples-claude.png",
+      "ssim": 0.6523,
+      "mean_delta_e": 4.4043,
+      "edge_similarity": 0.65089,
+      "colour_similarity": 0.91191,
+      "similarity": 72.997,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Paul Cézanne",
+      "licence": "Public domain",
+      "url": "https://commons.wikimedia.org/wiki/File:Le_panier_de_pommes,_par_Paul_C%C3%A9zanne.jpg",
+      "source": "Wikimedia Commons"
+    },
+    "description": "Apples, a bottle and a cloth built from blocky planes of colour.",
+    "reference": "../references/basket-of-apples.jpg"
   }
 ]

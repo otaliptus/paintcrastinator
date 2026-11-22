@@ -1,10 +1,10 @@
 {
   "reference": "references/basket-of-apples.jpg",
   "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/basket-of-apples-claude.png",
-  "ssim": 0.60541,
-  "mean_delta_e": 5.0413,
-  "edge_similarity": 0.60666,
-  "colour_similarity": 0.89917,
-  "similarity": 69.372,
+  "ssim": 0.6523,
+  "mean_delta_e": 4.4043,
+  "edge_similarity": 0.65089,
+  "colour_similarity": 0.91191,
+  "similarity": 72.997,
   "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
 }

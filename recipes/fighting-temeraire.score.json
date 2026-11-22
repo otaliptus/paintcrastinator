@@ -1,0 +1,10 @@
+{
+  "reference": "references/fighting-temeraire.jpg",
+  "render": "recipes/fighting-temeraire.png",
+  "ssim": 0.56588,
+  "mean_delta_e": 5.1326,
+  "edge_similarity": 0.41944,
+  "colour_similarity": 0.89735,
+  "similarity": 64.335,
+  "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+}

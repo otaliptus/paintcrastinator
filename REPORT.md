@@ -16,22 +16,24 @@ Every score is computed from the stored reference and the PNG emitted by the sam
 | The Blue Marble | 5,000 | 0.67182 | 1.9196 | 0.74967 | **77.043** |
 | Sunflowers | 5,000 | 0.78084 | 1.5400 | 0.75553 | **83.355** |
 | The Snail | 2,000 | 0.92635 | 1.3608 | 0.80608 | **92.224** |
-| Composition with Red, Blue and Yellow | 450 | 0.88303 | 1.9951 | 0.68092 | **87.583** |
+| Composition with Red, Blue and Yellow | 450 | 0.91877 | 1.4152 | 0.74427 | **90.847** |
 | Almond Blossom | 2,800 | 0.68395 | 3.3252 | 0.65722 | **75.481** |
 | Woman with a Parasol | 2,400 | 0.68953 | 3.3495 | 0.63320 | **75.413** |
 | Wanderer above the Sea of Fog | 2,400 | 0.83050 | 1.7940 | 0.72491 | **85.475** |
 | Café Terrace at Night | 2,500 | 0.30820 | 7.4742 | 0.33597 | **47.506** |
+| The Fighting Temeraire | 1,800 | 0.56588 | 5.1326 | 0.41944 | **64.335** |
 | Sunset over a Still Sea | 20 | 0.93770 | 2.0841 | 0.39498 | **86.248** |
 | Orange Ball on a Table | 48 | 0.87977 | 2.8026 | 0.34544 | **81.887** |
 | Three Hills in Morning Haze | 31 | 0.85205 | 2.7578 | 0.02661 | **75.607** |
 | Composition VIII | 450 | 0.36276 | 8.2827 | 0.29935 | **49.472** |
-| Impression, Sunrise | 225 | 0.71693 | 3.2486 | 0.30819 | **72.105** |
-| Wheatfield with Crows | 450 | 0.35841 | 4.5070 | 0.38632 | **52.803** |
-| Nocturne: Blue and Gold – Old Battersea Bridge | 225 | 0.77868 | 2.2786 | 0.47976 | **78.657** |
-| Dance | 450 | 0.75122 | 3.8863 | 0.44354 | **75.638** |
-| Fine Wind, Clear Morning (Red Fuji) | 450 | 0.46098 | 4.6990 | 0.38710 | **58.341** |
-| The Basket of Apples | 900 | 0.60541 | 5.0413 | 0.60666 | **69.372** |
 | Sudden Shower over Shin-Ōhashi Bridge | 900 | 0.49337 | 3.6850 | 0.56046 | **63.331** |
+| Impression, Sunrise | 225 | 0.72876 | 3.0616 | 0.32740 | **73.156** |
+| Wheatfield with Crows | 450 | 0.39326 | 4.1587 | 0.42271 | **55.475** |
+| Nocturne: Blue and Gold – Old Battersea Bridge | 225 | 0.80023 | 1.9213 | 0.50290 | **80.403** |
+| Dance | 450 | 0.77239 | 2.9978 | 0.47499 | **77.807** |
+| Fine Wind, Clear Morning (Red Fuji) | 450 | 0.50957 | 4.1712 | 0.45193 | **62.302** |
+| Arrangement in Grey and Black (Whistler's Mother) | 450 | 0.81492 | 1.7614 | 0.55452 | **82.082** |
+| The Basket of Apples | 900 | 0.65230 | 4.4043 | 0.65089 | **72.997** |
 
 ## Icons — stroke-count selection
 
