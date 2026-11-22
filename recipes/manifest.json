@@ -442,5 +442,57 @@
       "source": "Wikimedia Commons"
     },
     "description": "A night river in blue-green, with one dark bridge pier."
+  },
+  {
+    "id": "mondrian-1930",
+    "title": "Composition with Red, Blue and Yellow",
+    "artist": "Piet Mondrian",
+    "year": "1930",
+    "width": 960,
+    "height": 973,
+    "strokeCount": 450,
+    "scores": {
+      "reference": "references/mondrian-1930.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/mondrian-1930-claude.png",
+      "ssim": 0.73051,
+      "mean_delta_e": 4.5632,
+      "edge_similarity": 0.40894,
+      "colour_similarity": 0.90874,
+      "similarity": 73.574,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Piet Mondrian",
+      "licence": "Public domain",
+      "url": "https://commons.wikimedia.org/wiki/File:Piet_Mondriaan,_1930_-_Mondrian_Composition_II_in_Red,_Blue,_and_Yellow.jpg",
+      "source": "Wikimedia Commons"
+    },
+    "description": "A measured grid of red, blue, yellow and white held by black bars."
+  },
+  {
+    "id": "basket-of-apples",
+    "title": "The Basket of Apples",
+    "artist": "Paul Cézanne",
+    "year": "c. 1893",
+    "width": 960,
+    "height": 758,
+    "strokeCount": 900,
+    "scores": {
+      "reference": "references/basket-of-apples.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/basket-of-apples-claude.png",
+      "ssim": 0.44103,
+      "mean_delta_e": 7.9105,
+      "edge_similarity": 0.48861,
+      "colour_similarity": 0.84179,
+      "similarity": 56.84,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Paul Cézanne",
+      "licence": "Public domain",
+      "url": "https://commons.wikimedia.org/wiki/File:Le_panier_de_pommes,_par_Paul_C%C3%A9zanne.jpg",
+      "source": "Wikimedia Commons"
+    },
+    "description": "Apples, a bottle and a cloth built from blocky planes of colour."
   }
 ]
