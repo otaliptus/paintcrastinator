@@ -316,12 +316,12 @@
     "strokeCount": 1800,
     "scores": {
       "reference": "references/wanderer-sea-of-fog.jpg",
-      "render": "recipes/wanderer-sea-of-fog.png",
-      "ssim": 0.6463,
-      "mean_delta_e": 3.8929,
-      "edge_similarity": 0.46364,
-      "colour_similarity": 0.92214,
-      "similarity": 70.165,
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/wanderer-sea-of-fog-claude.png",
+      "ssim": 0.67068,
+      "mean_delta_e": 3.292,
+      "edge_similarity": 0.5877,
+      "colour_similarity": 0.93416,
+      "similarity": 73.728,
       "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
     },
     "credit": {
