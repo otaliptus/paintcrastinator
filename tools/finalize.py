@@ -7,7 +7,12 @@ ROOT = Path(__file__).resolve().parents[1]
 MASTERWORK_IDS = ["mona-lisa", "girl-with-a-pearl-earring", "starry-night", "great-wave", "van-gogh-self-portrait"]
 ICON_IDS = ["countach", "breakfast-at-tiffanys", "marilyn-1953", "the-scream", "blue-marble"]
 MODERN_IDS = ["sunflowers", "the-snail", "mondrian-1930"]
-IDS = MASTERWORK_IDS + ICON_IDS + MODERN_IDS
+INTERMEDIATE_IDS = ["almond-blossom", "woman-with-a-parasol", "wanderer-sea-of-fog", "cafe-terrace", "fighting-temeraire", "the-kiss"]
+completed_intermediate = [pid for pid in INTERMEDIATE_IDS if (ROOT / "recipes" / f"{pid}.score.json").exists()]
+existing_manifest = json.loads((ROOT / "recipes" / "manifest.json").read_text())
+existing_ids = [item["id"] for item in existing_manifest]
+IDS = MASTERWORK_IDS + ICON_IDS + MODERN_IDS + completed_intermediate
+IDS += [pid for pid in existing_ids if pid not in IDS]
 manifest = []
 rows = []
 for pid in IDS:
@@ -20,6 +25,9 @@ for pid in IDS:
     entry = {key: recipe[key] for key in ["id", "title", "artist", "year", "width", "height", "strokeCount", "scores"]}
     if "credit" in recipe:
         entry["credit"] = recipe["credit"]
+    for key in ["description", "reference", "lessonTip"]:
+        if key in recipe:
+            entry[key] = recipe[key]
     manifest.append(entry)
     rows.append((recipe["title"], recipe["strokeCount"], scores))
 (ROOT / "recipes" / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
@@ -107,4 +115,4 @@ lines += [
     "Scores are rounded only for presentation. The full method and unrounded-input results are stored beside each recipe in `recipes/<id>.score.json`.",
 ]
 (ROOT / "REPORT.md").write_text("\n".join(lines) + "\n")
-print(json.dumps(manifest, indent=2))
+print(f"Finalized {len(manifest)} recipes; intermediate: {', '.join(completed_intermediate) or 'none'}")
