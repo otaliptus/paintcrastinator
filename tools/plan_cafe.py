@@ -10,6 +10,7 @@ from plan_intermediate import META, URLS, ROOT, segment, stripes, contours, allo
 
 pid = "cafe-terrace"
 title, artist, year, stroke_count, clusters, description = META[pid]
+stroke_count = 2500
 source = np.asarray(Image.open(ROOT / "references" / f"{pid}.jpg").convert("RGB"), dtype=np.float32) / 255
 h, w = source.shape[:2]
 regions, _ = segment(source, pid, 34)
@@ -89,28 +90,32 @@ def flat_edges(mask, count, c):
 
 
 # Opaque rectangular colour sampling prevents gaps between later regional strokes.
+# Keep the sampled building colours: a single blue sky mask would erase the
+# upper-left facade and the dark row on the right before detail is added.
 underpaint = []
-rows, columns = 20, 20
+rows, columns = 20, 30
 for row in range(rows):
     y0, y1 = round(row * h / rows), round((row + 1) * h / rows)
     for column in range(columns):
         x0, x1 = round(column * w / columns), round((column + 1) * w / columns)
         c = colour(source[y0:y1, x0:x1].reshape(-1, 3).mean(0))
-        if (y0 + y1) / 2 < 430 * sy and (x0 + x1) / 2 > 180 * sx:
-            c = colour(np.median(source[:round(430 * sy), round(600 * sx):round(900 * sx)].reshape(-1, 3), axis=0))
         inset = (x1 - x0) * .10
         underpaint.append({"p": [round(x0 + inset, 1), round((y0 + y1) / 2, 1), round(x1 - inset, 1), round((y0 + y1) / 2, 1)], "c": c, "s": round((y1 - y0) * 1.32, 1), "o": 1.0})
 
 yy, xx = np.mgrid[:h, :w]
-sky = (yy < 430 * sy).astype(np.uint8)
-terrace = poly([(0, 190), (120, 170), (220, 220), (365, 200), (500, 245),
-                (620, 345), (655, 505), (605, 675), (585, 807), (450, 825),
-                (300, 789), (130, 810), (0, 821)])
+sky = poly([(390, 0), (850, 0), (820, 165), (755, 175), (700, 245),
+            (635, 225), (620, 345), (655, 505), (623, 505), (535, 438),
+            (400, 405), (420, 260), (390, 120)])
+upper_left = poly([(0, 0), (390, 0), (390, 120), (420, 260), (400, 405),
+                   (260, 392), (120, 423), (0, 448)])
+terrace = poly([(0, 568), (170, 558), (340, 535), (480, 560), (593, 581),
+                (605, 675), (585, 807), (450, 825), (300, 789), (130, 810), (0, 821)])
 awning = poly([(0, 448), (120, 423), (260, 392), (400, 405), (535, 438),
                (623, 505), (593, 581), (480, 560), (340, 535), (170, 558), (0, 568)])
 warm = np.maximum(terrace, awning)
-dark_right = poly([(635, 225), (753, 175), (1000, 167), (1000, 813), (855, 790),
-                   (750, 730), (680, 671), (617, 579)])
+dark_right = poly([(850, 0), (1000, 0), (1000, 813), (855, 790), (750, 730),
+                   (680, 671), (617, 579), (655, 505), (620, 345), (635, 225),
+                   (755, 175), (820, 165)])
 street = (yy > (760 * sy + np.maximum(0, xx - 580 * sx) * .16)).astype(np.uint8)
 left = poly([(0, 220), (90, 205), (130, 330), (115, 700), (0, 752)])
 figures = poly([(118, 622), (195, 578), (306, 585), (421, 560), (525, 616),
@@ -120,8 +125,12 @@ sky_colour = colour(np.median(source[:round(390 * sy), round(610 * sx):round(850
 yellow_pixels = source[awning.astype(bool)]
 yellow_pixels = yellow_pixels[(yellow_pixels[:, 0] > .55) & (yellow_pixels[:, 1] > .45) & (yellow_pixels[:, 2] < .65)]
 yellow_colour = colour(np.median(yellow_pixels, axis=0))
-form = flat(sky, 150, sky_colour, 30, 2.3) + filled(warm, 180, 24, 3.0) + filled(dark_right, 130, 22, 2.8) + filled(street, 140, 25, 3.0)
-refinement = flat(awning, 180, yellow_colour, 16, 2.0) + filled(warm, 60, 15, 2.4) + filled(dark_right, 100, 13, 2.2) + filled(street, 190, 14, 2.4) + filled(left, 20, 12, 2.0)
+form = (flat(sky, 130, sky_colour, 30, 2.3) + filled(upper_left, 100, 22, 2.7)
+        + filled(warm, 140, 24, 3.0) + filled(dark_right, 140, 22, 2.8)
+        + filled(street, 140, 25, 3.0))
+refinement = (flat(awning, 180, yellow_colour, 16, 2.0) + filled(warm, 100, 15, 2.4)
+              + filled(dark_right, 140, 13, 2.2) + filled(street, 220, 14, 2.4)
+              + filled(left, 30, 12, 2.0) + filled(upper_left, 80, 12, 2.0))
 
 # A small star field is deliberately reserved for the last stage.
 stars = []
@@ -132,10 +141,12 @@ for index, (x, y) in enumerate(star_positions):
     px, py = x * sx, y * sy
     stars.append({"p": [round(px - 3.0, 1), round(py, 1), round(px + 3.0, 1), round(py, 1)], "c": "#f6dfa0" if index % 3 else "#efe8bd", "s": 5.0 + index % 3, "o": 1.0})
 sky_spark = filled(sky, 18, 5, 1.2, "small")
-detail = stars + sky_spark + flat_edges(awning, 100, "#555632") + filled(street, 120, 4, 1.0, "small") + edged(figures, 100, .8)
+detail = (stars + sky_spark + flat_edges(awning, 100, "#555632")
+          + filled(street, 140, 4, 1.0, "small") + edged(figures, 100, .8)
+          + edged(upper_left, 80, .8) + edged(dark_right, 50, .8))
 
 stages = []
-expected = {"blocking": 400, "form": 600, "refinement": 550, "detail": 350}
+expected = {"blocking": 600, "form": 650, "refinement": 750, "detail": 500}
 for stage_id, label, strokes in [
     ("blocking", "Blocking in", underpaint),
     ("form", "Form and colour", form),
@@ -151,10 +162,12 @@ recipe = {
     "id": pid, "title": title, "artist": artist, "year": year,
     "description": description, "width": w, "height": h,
     "ground": colour(source[:round(h * .16)].reshape(-1, 3).mean(0)),
+    "strokeCount": len(underpaint) + len(form) + len(refinement) + len(detail),
     "reference": f"../references/{pid}.jpg", "seed": 1888, "profile": "directional-flat",
     "planner": "Opaque sampled underpaint; Lab colour regions; warm architectural masks and perspective-directed paving",
     "credit": {"author": artist, "licence": "Public domain", "source": "Wikimedia Commons", "url": URLS[pid]},
-    "strokeCount": stroke_count, "stages": stages,
+    "stages": stages,
 }
+assert recipe["strokeCount"] == stroke_count == 2500
 (ROOT / "recipes" / f"{pid}.json").write_text(json.dumps(recipe, separators=(",", ":")) + "\n")
 print(f"Planned {pid}: {stroke_count} strokes in four stages")

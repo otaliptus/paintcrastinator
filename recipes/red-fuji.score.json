@@ -1,10 +1,10 @@
 {
   "reference": "references/red-fuji.jpg",
   "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/red-fuji-claude.png",
-  "ssim": 0.35514,
-  "mean_delta_e": 6.7556,
-  "edge_similarity": 0.277,
-  "colour_similarity": 0.86489,
-  "similarity": 49.634,
+  "ssim": 0.46098,
+  "mean_delta_e": 4.699,
+  "edge_similarity": 0.3871,
+  "colour_similarity": 0.90602,
+  "similarity": 58.341,
   "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
 }
