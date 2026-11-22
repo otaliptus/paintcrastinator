@@ -1,0 +1,10 @@
+{
+  "reference": "references/sudden-shower.jpg",
+  "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/sudden-shower-claude.png",
+  "ssim": 0.31448,
+  "mean_delta_e": 7.2955,
+  "edge_similarity": 0.41025,
+  "colour_similarity": 0.85409,
+  "similarity": 49.073,
+  "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+}

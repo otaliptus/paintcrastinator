@@ -1,19 +1,24 @@
 const gallery = document.getElementById("gallery");
 
-// Difficulty levels, easiest first, by stroke count.
+// Sections by paint-along time (about 4 seconds per stroke), shortest first.
 const LEVELS = [
-  { name: "Lessons", max: 99 },
-  { name: "Easy", max: 999 },
-  { name: "Intermediate", max: 2999 },
-  { name: "Masterpieces", max: Infinity },
+  { name: "Warm-ups · a few minutes", max: 99 },
+  { name: "15 minutes", max: 299 },
+  { name: "30 minutes", max: 599 },
+  { name: "1 hour", max: 1199 },
+  { name: "2–3 hours", max: 2999 },
+  { name: "Masterpieces · 5 hours", max: Infinity },
 ];
 
 const referencePath = (recipe) => `../${(recipe.reference || `references/${recipe.id}.jpg`).replace(/^(\.\.\/)+/, "")}`;
 const renderPath = (recipe) => `../recipes/${recipe.id}.png`;
-// Paint-along time at about 4 seconds per stroke.
+// Paint-along time at about 4 seconds per stroke, rounded to 15 minutes above an hour.
 function duration(count) {
   const min = Math.max(1, Math.round(count * 4 / 60));
-  return min < 60 ? `${min} min` : `${Math.round(min / 60)} h`;
+  if (min < 60) return `${min} min`;
+  const quarter = Math.round(min / 15) * 15;
+  const h = Math.floor(quarter / 60), m = quarter % 60;
+  return m ? `${h} h ${m} min` : `${h} h`;
 }
 
 function creditText(credit) {
