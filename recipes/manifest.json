@@ -390,5 +390,57 @@
     "description": "Three overlapping hill bands demonstrate aerial perspective: the distant ridge is pale and quiet, the middle hill is cooler and darker, and the nearest slope carries the deepest green under a pale morning sky.",
     "reference": "../references/lesson-hills.png",
     "lessonTip": "Teaches aerial perspective: distant shapes are lighter and quieter; nearer hills become darker and clearer."
+  },
+  {
+    "id": "impression-sunrise",
+    "title": "Impression, Sunrise",
+    "artist": "Claude Monet",
+    "year": "1872",
+    "width": 960,
+    "height": 745,
+    "strokeCount": 225,
+    "scores": {
+      "reference": "references/impression-sunrise.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/impression-sunrise-claude.png",
+      "ssim": 0.68097,
+      "mean_delta_e": 4.3527,
+      "edge_similarity": 0.27833,
+      "colour_similarity": 0.91295,
+      "similarity": 69.016,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Claude Monet",
+      "licence": "Public domain",
+      "url": "https://commons.wikimedia.org/wiki/File:Monet_-_Impression,_Sunrise.jpg",
+      "source": "Wikimedia Commons"
+    },
+    "description": "The harbour dissolves into mist around one orange sun."
+  },
+  {
+    "id": "nocturne-battersea",
+    "title": "Nocturne: Blue and Gold – Old Battersea Bridge",
+    "artist": "James McNeill Whistler",
+    "year": "c. 1872–75",
+    "width": 960,
+    "height": 1288,
+    "strokeCount": 225,
+    "scores": {
+      "reference": "references/nocturne-battersea.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/nocturne-battersea-claude.png",
+      "ssim": 0.68845,
+      "mean_delta_e": 3.7363,
+      "edge_similarity": 0.4048,
+      "colour_similarity": 0.92527,
+      "similarity": 71.695,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "James McNeill Whistler",
+      "licence": "Public domain",
+      "url": "https://commons.wikimedia.org/wiki/File:James_McNeill_Whistler_-_Nocturne_en_bleu_et_or.jpg",
+      "source": "Wikimedia Commons"
+    },
+    "description": "A night river in blue-green, with one dark bridge pier."
   }
 ]

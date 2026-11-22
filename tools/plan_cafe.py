@@ -62,6 +62,32 @@ def edged(mask, count, coverage=.9):
     return strokes
 
 
+def single_region(mask, c):
+    yy, xx = np.nonzero(mask)
+    cs, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    polygon = cv2.approxPolyDP(max(cs, key=cv2.contourArea), 1.5, True).reshape(-1, 2)
+    return {"mask": mask, "area": len(xx), "points": np.column_stack([xx, yy]).astype(float), "colour": c, "polygon": polygon, "luminance": .5}
+
+
+def flat(mask, count, c, diameter=20, coverage=2.4):
+    region = single_region(mask, c)
+    strokes = allocate([stripes(region, pid, diameter)], [region], count, "area")
+    for stroke in strokes:
+        stroke.pop("weight", None)
+        stroke["s"] = round(stroke["s"] * coverage, 1)
+    return strokes
+
+
+def flat_edges(mask, count, c):
+    region = single_region(mask, c)
+    strokes = allocate([contours(region)], [region], count, "edges")
+    for stroke in strokes:
+        stroke.pop("weight", None)
+        stroke["c"] = c
+        stroke["s"] = 1.8
+    return strokes
+
+
 # Opaque rectangular colour sampling prevents gaps between later regional strokes.
 underpaint = []
 rows, columns = 20, 20
@@ -70,6 +96,8 @@ for row in range(rows):
     for column in range(columns):
         x0, x1 = round(column * w / columns), round((column + 1) * w / columns)
         c = colour(source[y0:y1, x0:x1].reshape(-1, 3).mean(0))
+        if (y0 + y1) / 2 < 430 * sy and (x0 + x1) / 2 > 180 * sx:
+            c = colour(np.median(source[:round(430 * sy), round(600 * sx):round(900 * sx)].reshape(-1, 3), axis=0))
         inset = (x1 - x0) * .10
         underpaint.append({"p": [round(x0 + inset, 1), round((y0 + y1) / 2, 1), round(x1 - inset, 1), round((y0 + y1) / 2, 1)], "c": c, "s": round((y1 - y0) * 1.32, 1), "o": 1.0})
 
@@ -88,8 +116,12 @@ left = poly([(0, 220), (90, 205), (130, 330), (115, 700), (0, 752)])
 figures = poly([(118, 622), (195, 578), (306, 585), (421, 560), (525, 616),
                 (548, 735), (443, 788), (285, 775), (143, 746)])
 
-form = filled(sky, 150, 30, 3.0) + filled(warm, 180, 24, 3.0) + filled(dark_right, 130, 22, 2.8) + filled(street, 140, 25, 3.0)
-refinement = filled(warm, 240, 15, 2.4) + filled(dark_right, 100, 13, 2.2) + filled(street, 190, 14, 2.4) + filled(left, 20, 12, 2.0)
+sky_colour = colour(np.median(source[:round(390 * sy), round(610 * sx):round(850 * sx)].reshape(-1, 3), axis=0))
+yellow_pixels = source[awning.astype(bool)]
+yellow_pixels = yellow_pixels[(yellow_pixels[:, 0] > .55) & (yellow_pixels[:, 1] > .45) & (yellow_pixels[:, 2] < .65)]
+yellow_colour = colour(np.median(yellow_pixels, axis=0))
+form = flat(sky, 150, sky_colour, 30, 2.3) + filled(warm, 180, 24, 3.0) + filled(dark_right, 130, 22, 2.8) + filled(street, 140, 25, 3.0)
+refinement = flat(awning, 180, yellow_colour, 16, 2.0) + filled(warm, 60, 15, 2.4) + filled(dark_right, 100, 13, 2.2) + filled(street, 190, 14, 2.4) + filled(left, 20, 12, 2.0)
 
 # A small star field is deliberately reserved for the last stage.
 stars = []
@@ -100,7 +132,7 @@ for index, (x, y) in enumerate(star_positions):
     px, py = x * sx, y * sy
     stars.append({"p": [round(px - 3.0, 1), round(py, 1), round(px + 3.0, 1), round(py, 1)], "c": "#f6dfa0" if index % 3 else "#efe8bd", "s": 5.0 + index % 3, "o": 1.0})
 sky_spark = filled(sky, 18, 5, 1.2, "small")
-detail = stars + sky_spark + edged(warm, 100, .85) + filled(street, 120, 7, 1.45) + edged(figures, 100, .8)
+detail = stars + sky_spark + flat_edges(awning, 100, "#555632") + filled(street, 120, 4, 1.0, "small") + edged(figures, 100, .8)
 
 stages = []
 expected = {"blocking": 400, "form": 600, "refinement": 550, "detail": 350}
