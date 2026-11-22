@@ -35,6 +35,7 @@ Every painting is a *recipe*: an ordered list of soft brush strokes, each with a
   - **Steady hand** pulls your stroke onto the guide, so a shaky mouse or finger still lands where it should.
   - **Undo**, **Skip stage** and **Restart** are always there, and short recipes show a one-line tip for each stage.
   - **Your progress is saved** in your browser for each painting, so you can close the tab and continue later.
+- **♪ Music** in the header plays a soft lo-fi loop in the background while you paint. It is off by default, and the site remembers your choice.
 
 ## How it works
 

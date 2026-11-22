@@ -127,3 +127,9 @@ h1, h2, h3, p { margin-top: 0; }
 @media (prefers-reduced-motion: reduce) { #painting-canvas, #guide-canvas { transition: none; } }
 
 .header-links { display: flex; gap: 22px; align-items: center; }
+
+/* Background music toggle */
+.music-toggle { padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; white-space: nowrap; }
+.music-toggle:hover { border-color: var(--accent); color: var(--ink); }
+.music-toggle[aria-pressed="true"] { border-color: var(--accent); background: var(--paper-light); color: var(--accent-dark); }
+@media (max-width: 680px) { .header-links { gap: 12px; } .music-toggle { padding: 5px 9px; font-size: 11px; } }

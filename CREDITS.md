@@ -29,4 +29,8 @@ Every painting in Paintcrastinator is rebuilt from brush strokes; the reference 
 - **Wanderer above the Sea of Fog** (c. 1818) — Caspar David Friedrich. Public domain, [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Caspar_David_Friedrich_-_Wanderer_above_the_Sea_of_Fog.jpeg).
 - **Woman with a Parasol** (1875) — Claude Monet. Public domain, [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Claude_Monet_-_Woman_with_a_Parasol_-_Madame_Monet_and_Her_Son_-_Google_Art_Project.jpg).
 
+## Music
+
+- **Background lo-fi loop** (`app/lofi-loop.m4a`, `app/lofi-loop.ogg`) — synthesised from scratch for this project, no samples, CC0.
+
 The logo uses the Cerebras mark (from [lobe-icons](https://github.com/lobehub/lobe-icons), MIT) as a nod to the hackathon sponsor; Cerebras is a trademark of Cerebras Systems.
