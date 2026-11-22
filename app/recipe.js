@@ -114,27 +114,50 @@ function clearGuide() {
 function showGhost() {
   clearGuide();
   if (mode !== "paint" || paintIndex >= strokes.length) return;
+  // The guide is one continuous shape: a soft band at the real brush width,
+  // a thin solid centre line, and a dot where the stroke starts.
   const drawGhost = (stroke, next = false) => {
     const points = stroke.p;
+    const path = () => {
+      guideCtx.beginPath();
+      guideCtx.moveTo(points[0], points[1]);
+      for (let i = 2; i < points.length; i += 2) guideCtx.lineTo(points[i], points[i + 1]);
+    };
     guideCtx.save();
-    guideCtx.beginPath();
-    guideCtx.moveTo(points[0], points[1]);
-    for (let i = 2; i < points.length; i += 2) guideCtx.lineTo(points[i], points[i + 1]);
-    guideCtx.strokeStyle = stroke.c;
-    guideCtx.globalAlpha = next ? 0.16 : lessonMode ? 0.9 : 0.5;
-    guideCtx.lineWidth = next ? Math.max(1, stroke.s * 0.08) : lessonMode ? Math.max(2.4, stroke.s * 0.22) : Math.max(1.2, stroke.s * 0.12);
     guideCtx.lineCap = "round";
     guideCtx.lineJoin = "round";
-    guideCtx.setLineDash([Math.max(2, stroke.s * (next ? 0.18 : 0.28)), Math.max(3, stroke.s * 0.32)]);
-    guideCtx.stroke();
-    guideCtx.setLineDash([]);
+    guideCtx.strokeStyle = stroke.c;
     if (!next) {
-      // A dot marks where the stroke starts.
-      guideCtx.globalAlpha = lessonMode ? 1 : 0.75;
+      // A thin dark rim keeps the band visible even when its colour matches the canvas.
+      path();
+      guideCtx.globalAlpha = 0.35;
+      guideCtx.strokeStyle = "#252720";
+      guideCtx.lineWidth = Math.max(2, stroke.s * 0.9) + 3;
+      guideCtx.stroke();
+      guideCtx.strokeStyle = stroke.c;
+    }
+    path();
+    guideCtx.globalAlpha = next ? 0.12 : 0.55;
+    guideCtx.lineWidth = Math.max(2, stroke.s * 0.9);
+    guideCtx.stroke();
+    if (!next) {
+      path();
+      guideCtx.globalAlpha = 0.95;
+      guideCtx.strokeStyle = "#ffffff";
+      guideCtx.lineWidth = Math.max(1.5, Math.min(4, stroke.s * 0.08)) + 2;
+      guideCtx.stroke();
+      path();
+      guideCtx.strokeStyle = stroke.c;
+      guideCtx.lineWidth = Math.max(1.5, Math.min(4, stroke.s * 0.08));
+      guideCtx.stroke();
       guideCtx.beginPath();
-      guideCtx.arc(points[0], points[1], Math.max(2, stroke.s * (lessonMode ? 0.22 : 0.16)), 0, Math.PI * 2);
+      const r = Math.max(4, Math.min(10, stroke.s * 0.25));
+      guideCtx.arc(Math.min(Math.max(points[0], r + 2), guide.width - r - 2), Math.min(Math.max(points[1], r + 2), guide.height - r - 2), r, 0, Math.PI * 2);
       guideCtx.fillStyle = stroke.c;
       guideCtx.fill();
+      guideCtx.lineWidth = 2;
+      guideCtx.strokeStyle = "#ffffff";
+      guideCtx.stroke();
     }
     guideCtx.restore();
   };
@@ -162,7 +185,7 @@ function updatePaintUI() {
   $("stage-tip").hidden = !(lessonMode && stage?.tip);
   $("next-swatch").style.background = stroke.c;
   $("brush-size").textContent = `${stroke.s} px`;
-  $("canvas-status").textContent = paintIndex === 0 ? "Drag along the dashed line" : "";
+  $("canvas-status").textContent = paintIndex === 0 ? "Start at the dot and paint over the shaded stroke in one go" : "";
   showGhost();
 }
 
