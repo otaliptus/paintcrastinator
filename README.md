@@ -88,4 +88,4 @@ The paintings are public domain, except the Countach photograph (CC BY-SA 4.0) a
 
 The logo uses the Cerebras mark as a nod to the hackathon sponsor; Cerebras is a trademark of Cerebras Systems.
 
-No licence has been chosen for the code yet.
+The code is released under the [MIT License](LICENSE). The reference images and the paintings made from them are not covered by it: each keeps its own licence, listed in [CREDITS.md](CREDITS.md).
