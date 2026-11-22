@@ -577,7 +577,8 @@
       "url": "https://commons.wikimedia.org/wiki/File:Hiroshige,_Sudden_shower_over_Shin-%C5%8Chashi_bridge_and_Atake,_1857.jpg",
       "source": "Wikimedia Commons"
     },
-    "description": "Travellers hurry across a bridge under slanting rain."
+    "description": "Travellers hurry across a bridge under slanting rain.",
+    "reference": "../references/sudden-shower.jpg"
   },
   {
     "id": "whistlers-mother",
@@ -603,7 +604,8 @@
       "url": "https://commons.wikimedia.org/wiki/File:Whistlers_Mother_high_res.jpg",
       "source": "Wikimedia Commons"
     },
-    "description": "A seated figure in black, in profile against a grey wall."
+    "description": "A seated figure in black, in profile against a grey wall.",
+    "reference": "../references/whistlers-mother.jpg"
   },
   {
     "id": "american-gothic",
@@ -629,6 +631,7 @@
       "url": "https://commons.wikimedia.org/wiki/File:Grant_Wood_-_American_Gothic_-_Google_Art_Project.jpg",
       "source": "Wikimedia Commons"
     },
-    "description": "A farmer and his daughter before a house with a Gothic window."
+    "description": "A farmer and his daughter before a house with a Gothic window.",
+    "reference": "../references/american-gothic.jpg"
   }
 ]
