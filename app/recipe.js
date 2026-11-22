@@ -75,10 +75,29 @@ function clearStudy() {
 
 function setWatchCount(count) {
   pauseReplay();
-  clearStudy();
-  watchCount = Math.max(0, Math.min(strokes.length, Math.round(count)));
-  renderRecipe(ctx, recipe, 0, watchCount);
+  const target = Math.max(0, Math.min(strokes.length, Math.round(count)));
+  if (target === 0 || target < watchCount) {
+    // Going back: repaint from the start.
+    clearStudy();
+    renderRecipe(ctx, recipe, 0, target);
+  } else {
+    // Going forward: only paint the strokes in between.
+    renderRecipe(ctx, recipe, watchCount, target);
+  }
+  watchCount = target;
   updateWatchUI();
+}
+
+// Coalesce slider input to at most one repaint per frame.
+let pendingScrub = null;
+function scrubTo(value) {
+  const first = pendingScrub === null;
+  pendingScrub = value;
+  if (first) requestAnimationFrame(() => {
+    const target = pendingScrub;
+    pendingScrub = null;
+    setWatchCount(target);
+  });
 }
 
 function playReplay() {
@@ -334,7 +353,7 @@ $("watch-mode").addEventListener("click", () => setMode("watch"));
 $("paint-mode").addEventListener("click", () => setMode("paint"));
 $("play-button").addEventListener("click", playReplay);
 $("speed").addEventListener("input", () => { $("speed-output").textContent = `${$("speed").value}/s`; });
-$("scrubber").addEventListener("input", () => setWatchCount(Number($("scrubber").value)));
+$("scrubber").addEventListener("input", () => scrubTo(Number($("scrubber").value)));
 $("undo-button").addEventListener("click", () => {
   if (paintIndex > 0) {
     paintIndex -= 1;
