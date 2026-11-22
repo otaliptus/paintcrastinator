@@ -15,7 +15,7 @@ Every score is computed from the stored reference and the PNG emitted by the sam
 | The Scream | 5,000 | 0.59154 | 4.3729 | 0.53287 | **67.904** |
 | The Blue Marble | 5,000 | 0.44225 | 4.8302 | 0.53307 | **59.422** |
 | Sunflowers | 5,000 | 0.55177 | 3.7797 | 0.54525 | **66.258** |
-| The Snail | 500 | 0.77045 | 5.6534 | 0.36218 | **74.415** |
+| The Snail | 2,000 | 0.90918 | 2.2567 | 0.67372 | **88.757** |
 | Composition with Red, Blue and Yellow | 500 | 0.80781 | 4.6569 | 0.37060 | **77.194** |
 
 ## Icons — stroke-count selection
@@ -66,6 +66,8 @@ Modern colour adds two planner profiles. Sunflowers uses the painterly multiscal
 - **Composite:** 55% SSIM + 30% colour similarity + 15% edge similarity, reported on a 0–100 scale. Colour similarity is `clamp(1 - meanΔE/50, 0, 1)`. This is a project comparison index, not an external benchmark.
 
 Scores are rounded only for presentation. The full method and unrounded-input results are stored beside each recipe in `recipes/<id>.score.json`.
+
+Task 4 rebuilt The Snail as a 2,000-stroke cut-paper study: fourteen Lab colour clusters, one underlying white sheet, median flat colours, straight polygon-scan fills and inset 5–8 px edge strokes. Tiny fringe components were removed so the orange cutouts stay clean. The accepted render scores **88.757** and has straight sheet edges, sharp corners and a square black centre.
 
 <!-- START_HERE_REPORT -->
 ## Start here — short paint-along recipes

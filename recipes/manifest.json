@@ -247,5 +247,33 @@
       "licence": "Public domain",
       "url": "https://commons.wikimedia.org/wiki/File:The_Earth_seen_from_Apollo_17.jpg"
     }
+  },
+  {
+    "id": "the-snail",
+    "title": "The Snail",
+    "artist": "Henri Matisse",
+    "year": "1953",
+    "width": 960,
+    "height": 970,
+    "strokeCount": 2000,
+    "scores": {
+      "reference": "references/the-snail.jpg",
+      "render": "recipes/the-snail.png",
+      "ssim": 0.90918,
+      "mean_delta_e": 2.2567,
+      "edge_similarity": 0.67372,
+      "colour_similarity": 0.95487,
+      "similarity": 88.757,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Tate, London",
+      "licence": "Public domain in the EU",
+      "note": "Public domain in the EU; in copyright in some other countries.",
+      "source": "Tate",
+      "url": "https://www.tate.org.uk/art/artworks/matisse-the-snail-t00540"
+    },
+    "reference": "references/the-snail.jpg",
+    "description": "Matisse's cut-paper spiral rebuilt as discrete flat pieces: an orange ground, a straight-edged ivory sheet, coloured polygon fills and crisp inset edges, ending with the small shapes and black square."
   }
 ]
