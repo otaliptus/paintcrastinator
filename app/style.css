@@ -121,3 +121,8 @@ h1, h2, h3, p { margin-top: 0; }
 @media (prefers-reduced-motion: reduce) {
   .card-image, .card-original { transition: none; }
 }
+
+/* Paint aids: zoom transform on both canvases, pressed toggles */
+#painting-canvas, #guide-canvas { transform-origin: 0 0; transition: transform .35s ease; }
+.quiet-button.toggle[aria-pressed="true"] { border-color: var(--accent); background: var(--paper-light); color: var(--accent-dark); }
+@media (prefers-reduced-motion: reduce) { #painting-canvas, #guide-canvas { transition: none; } }

@@ -33,6 +33,9 @@ let paintIndex = 0;
 let userStrokes = [];
 let drawing = null;
 let lessonMode = false;
+let autoZoom = true;
+let steadyHand = true;
+const STEADY = 0.75; // how far a painted point is pulled onto the guide
 
 function boundariesFor(recipeData) {
   let cursor = 0;
@@ -196,6 +199,7 @@ function updatePaintUI() {
     $("brush-size").textContent = "";
     $("canvas-status").textContent = "";
     clearGuide();
+    applyZoom();
     return;
   }
   const stage = boundaries[stageIndexAt(paintIndex)];
@@ -206,6 +210,44 @@ function updatePaintUI() {
   $("brush-size").textContent = `${stroke.s} px`;
   $("canvas-status").textContent = paintIndex === 0 ? "Start at the dot and paint over the shaded stroke in one go" : "";
   showGhost();
+  applyZoom();
+}
+
+// Zoom the view so small strokes are at least ~16 px wide on screen.
+function applyZoom() {
+  const stroke = mode === "paint" ? strokes[paintIndex] : null;
+  let transform = "";
+  if (autoZoom && stroke) {
+    const scale = frame.clientWidth / recipe.width; // screen px per painting px
+    const onScreen = stroke.s * scale;
+    const zoom = Math.min(4, Math.max(1, 16 / onScreen));
+    if (zoom > 1.15) {
+      const xs = stroke.p.filter((_, i) => i % 2 === 0), ys = stroke.p.filter((_, i) => i % 2 === 1);
+      const cx = (Math.min(...xs) + Math.max(...xs)) / 2 * scale;
+      const cy = (Math.min(...ys) + Math.max(...ys)) / 2 * scale;
+      const fw = frame.clientWidth, fh = frame.clientHeight;
+      const tx = Math.min(0, Math.max(fw - fw * zoom, fw / 2 - cx * zoom));
+      const ty = Math.min(0, Math.max(fh - fh * zoom, fh / 2 - cy * zoom));
+      transform = `translate(${tx}px, ${ty}px) scale(${zoom})`;
+    }
+  }
+  canvas.style.transform = guide.style.transform = transform;
+}
+
+// Pull a point most of the way onto the nearest point of the guide stroke.
+function steady(x, y) {
+  if (!steadyHand) return [x, y];
+  const p = strokes[paintIndex].p;
+  let best = [p[0], p[1]], bestD = Infinity;
+  for (let i = 0; i + 3 < p.length || i === 0; i += 2) {
+    const ax = p[i], ay = p[i + 1], bx = p[i + 2] ?? ax, by = p[i + 3] ?? ay;
+    const dx = bx - ax, dy = by - ay, len = dx * dx + dy * dy;
+    const t = len ? Math.max(0, Math.min(1, ((x - ax) * dx + (y - ay) * dy) / len)) : 0;
+    const qx = ax + dx * t, qy = ay + dy * t, d = (qx - x) ** 2 + (qy - y) ** 2;
+    if (d < bestD) { bestD = d; best = [qx, qy]; }
+    if (p.length < 4) break;
+  }
+  return [x + (best[0] - x) * STEADY, y + (best[1] - y) * STEADY];
 }
 
 function setMode(nextMode) {
@@ -228,6 +270,7 @@ function setMode(nextMode) {
   } else {
     watchCount = 0;
     updateWatchUI();
+    applyZoom();
   }
 }
 
@@ -243,7 +286,7 @@ function beginPaint(event) {
   if (mode !== "paint" || paintIndex >= strokes.length || drawing) return;
   event.preventDefault();
   canvas.setPointerCapture(event.pointerId);
-  const [x, y] = eventPoint(event);
+  const [x, y] = steady(...eventPoint(event));
   const guideStroke = strokes[paintIndex];
   drawing = { pointerId: event.pointerId, points: [x, y] };
   paintStroke(ctx, { p: [x, y, x + 0.01, y], c: guideStroke.c, s: guideStroke.s, o: guideStroke.o });
@@ -253,7 +296,7 @@ function beginPaint(event) {
 function movePaint(event) {
   if (!drawing || event.pointerId !== drawing.pointerId) return;
   event.preventDefault();
-  const [x, y] = eventPoint(event);
+  const [x, y] = steady(...eventPoint(event));
   const points = drawing.points;
   const ax = points[points.length - 2];
   const ay = points[points.length - 1];
@@ -350,6 +393,16 @@ async function load() {
 }
 
 $("watch-mode").addEventListener("click", () => setMode("watch"));
+$("zoom-toggle").addEventListener("click", () => {
+  autoZoom = !autoZoom;
+  $("zoom-toggle").setAttribute("aria-pressed", String(autoZoom));
+  applyZoom();
+});
+$("steady-toggle").addEventListener("click", () => {
+  steadyHand = !steadyHand;
+  $("steady-toggle").setAttribute("aria-pressed", String(steadyHand));
+});
+addEventListener("resize", () => applyZoom());
 $("paint-mode").addEventListener("click", () => setMode("paint"));
 $("play-button").addEventListener("click", playReplay);
 $("speed").addEventListener("input", () => { $("speed-output").textContent = `${$("speed").value}/s`; });

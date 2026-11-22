@@ -1,10 +1,10 @@
 {
   "reference": "references/van-gogh-self-portrait.jpg",
-  "render": "recipes/van-gogh-self-portrait.png",
-  "ssim": 0.42387,
-  "mean_delta_e": 6.3552,
-  "edge_similarity": 0.50099,
-  "colour_similarity": 0.8729,
-  "similarity": 57.014,
+  "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/van-gogh-self-portrait-claude.png",
+  "ssim": 0.48924,
+  "mean_delta_e": 5.4425,
+  "edge_similarity": 0.5492,
+  "colour_similarity": 0.89115,
+  "similarity": 61.881,
   "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
 }
