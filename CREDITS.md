@@ -29,3 +29,4 @@ The original five masterwork reference images and their artists remain identifie
 
 - **_Sunset over a Still Sea_:** Generated for Painting Cookbook, CC0. Reference drawn in Python with Pillow/NumPy at 960 px wide; [CC0 dedication](https://creativecommons.org/publicdomain/zero/1.0/).
 - **_Orange Ball on a Table_:** Generated for Painting Cookbook, CC0. Reference drawn in Python with Pillow/NumPy at 960 px wide; [CC0 dedication](https://creativecommons.org/publicdomain/zero/1.0/).
+- **_Three Hills in Morning Haze_:** Generated for Painting Cookbook, CC0. Reference drawn in Python with Pillow/NumPy at 960 px wide; [CC0 dedication](https://creativecommons.org/publicdomain/zero/1.0/).

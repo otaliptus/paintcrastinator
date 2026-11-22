@@ -9,7 +9,7 @@ import json
 from pathlib import Path
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
 STAGES = [
@@ -29,10 +29,16 @@ META = {
         "description": "One orange ball explains form in a handful of dabs: warm upper-left light, a deep core shadow, a quieter reflected edge and a cast shadow anchoring it to the table.",
         "lessonTip": "Teaches form: paint the light side, core shadow, reflected light and cast shadow—not just an orange circle.",
     },
+    "lesson-hills": {
+        "title": "Three Hills in Morning Haze", "artist": "Painting Cookbook lesson", "year": "2026",
+        "description": "Three overlapping hill bands demonstrate aerial perspective: the distant ridge is pale and quiet, the middle hill is cooler and darker, and the nearest slope carries the deepest green under a pale morning sky.",
+        "lessonTip": "Teaches aerial perspective: distant shapes are lighter and quieter; nearer hills become darker and clearer.",
+    },
 }
 CREDIT = {
     "lesson-sky": {"author": "Painting Cookbook", "licence": "CC0", "source": "CC0 dedication", "url": "https://creativecommons.org/publicdomain/zero/1.0/", "note": "Generated for Painting Cookbook, CC0"},
     "lesson-sphere": {"author": "Painting Cookbook", "licence": "CC0", "source": "CC0 dedication", "url": "https://creativecommons.org/publicdomain/zero/1.0/", "note": "Generated for Painting Cookbook, CC0"},
+    "lesson-hills": {"author": "Painting Cookbook", "licence": "CC0", "source": "CC0 dedication", "url": "https://creativecommons.org/publicdomain/zero/1.0/", "note": "Generated for Painting Cookbook, CC0"},
 }
 
 
@@ -174,7 +180,64 @@ def lesson_sphere():
     return recipe
 
 
-BUILDERS = {"lesson-sky": lesson_sky, "lesson-sphere": lesson_sphere}
+def lesson_hills():
+    """Thirty-one calm marks make three value-separated overlapping ridges."""
+    pid = "lesson-hills"
+    width, height = 960, 600
+    x = np.arange(width, dtype=float)
+
+    def ridge(base, long_amp, long_period, short_amp, short_period, phase):
+        return base + long_amp * np.sin(x / long_period + phase) + short_amp * np.sin(x / short_period + phase * 0.37)
+
+    definitions = [
+        ("far", ridge(250, 28, 170, 12, 61, 0.4), "#aebdac", 66),
+        ("middle", ridge(350, 42, 190, 17, 85, 1.0), "#7f967f", 76),
+        ("near", ridge(462, 34, 150, 14, 63, 2.0), "#476955", 86),
+    ]
+    top = rgb("#dce9e5")[None, :]
+    bottom = rgb("#f1e5cd")[None, :]
+    yy = np.arange(height, dtype=float)[:, None]
+    sky_values = top * (1 - yy / height) + bottom * (yy / height)
+    pixels = np.repeat(sky_values[:, None, :], width, axis=1)
+    reference = Image.fromarray(np.uint8(np.clip(pixels, 0, 255)), "RGB")
+    draw = ImageDraw.Draw(reference)
+    for _, top_y, c, _ in definitions:
+        polygon = [(int(xx), int(round(y))) for xx, y in zip(x, top_y)] + [(width - 1, height), (0, height)]
+        draw.polygon(polygon, fill=c)
+    reference.save(ROOT / "references" / f"{pid}.png")
+
+    recipe = recipe_shell(pid, width, height, "#eee2cb")
+    blocking, form, refinement, detail = [], [], [], []
+    for y in np.linspace(20, 410, 7):
+        blocking.append(stroke([-20, y, width + 20, y], colour(sky_values[int(y)]), 112, 0.96))
+
+    for index, (_, top_y, c, diameter) in enumerate(definitions):
+        # Broad contour strokes establish each overlap before the next ridge.
+        contour_path = []
+        for xx in np.linspace(0, width, 10):
+            contour_path.extend([xx, float(np.interp(xx, x, top_y))])
+        form.append(stroke(contour_path, c, diameter, 1.0))
+        lane_min = float(top_y.min() + diameter * 0.42)
+        for y in np.arange(lane_min, height + 20, 50):
+            inside = y >= top_y
+            padded = np.pad(inside.astype(np.uint8), (1, 1))
+            changes = np.diff(padded)
+            starts = np.flatnonzero(changes == 1)
+            ends = np.flatnonzero(changes == 255)
+            for start_x, end_x in zip(starts, ends):
+                if end_x - start_x > 5:
+                    form.append(stroke([start_x - 3, y, end_x + 3, y], c, diameter, 1.0))
+        # A fine crest pass clarifies the silhouette without adding detail noise.
+        target = detail if index == 2 else refinement
+        target.append(stroke(contour_path, c, 24 if index == 0 else 28, 1.0))
+
+    add_stages(recipe, [blocking, form, refinement, detail])
+    recipe["planner"] = "31 hand-paintable marks: seven quiet sky blends, horizontal hill fills and one broad plus one fine crest stroke for each overlapping value band"
+    assert 30 <= recipe["strokeCount"] <= 60
+    return recipe
+
+
+BUILDERS = {"lesson-sky": lesson_sky, "lesson-sphere": lesson_sphere, "lesson-hills": lesson_hills}
 
 
 def main():

@@ -58,6 +58,35 @@
     "lessonTip": "Teaches form: paint the light side, core shadow, reflected light and cast shadow—not just an orange circle."
   },
   {
+    "id": "lesson-hills",
+    "title": "Three Hills in Morning Haze",
+    "artist": "Painting Cookbook lesson",
+    "year": "2026",
+    "width": 960,
+    "height": 600,
+    "strokeCount": 31,
+    "scores": {
+      "reference": "references/lesson-hills.png",
+      "render": "recipes/lesson-hills.png",
+      "ssim": 0.85205,
+      "mean_delta_e": 2.7578,
+      "edge_similarity": 0.02661,
+      "colour_similarity": 0.94484,
+      "similarity": 75.607,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Painting Cookbook",
+      "licence": "CC0",
+      "source": "CC0 dedication",
+      "url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "note": "Generated for Painting Cookbook, CC0"
+    },
+    "description": "Three overlapping hill bands demonstrate aerial perspective: the distant ridge is pale and quiet, the middle hill is cooler and darker, and the nearest slope carries the deepest green under a pale morning sky.",
+    "reference": "references/lesson-hills.png",
+    "lessonTip": "Teaches aerial perspective: distant shapes are lighter and quieter; nearer hills become darker and clearer."
+  },
+  {
     "id": "mona-lisa",
     "title": "Mona Lisa",
     "artist": "Leonardo da Vinci",

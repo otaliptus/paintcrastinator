@@ -1,0 +1,10 @@
+{
+  "reference": "references/lesson-hills.png",
+  "render": "recipes/lesson-hills.png",
+  "ssim": 0.85205,
+  "mean_delta_e": 2.7578,
+  "edge_similarity": 0.02661,
+  "colour_similarity": 0.94484,
+  "similarity": 75.607,
+  "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+}

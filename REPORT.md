@@ -78,6 +78,7 @@ These recipes are ordered from easiest to hardest and selected by visual recogni
 |---|---:|---:|---:|
 | Sunset over a Still Sea | 20 | ≈ 1 min | **86.248** |
 | Orange Ball on a Table | 48 | ≈ 3 min | **81.887** |
+| Three Hills in Morning Haze | 31 | ≈ 2 min | **75.607** |
 
 ### Budget trials
 
@@ -85,5 +86,6 @@ These recipes are ordered from easiest to hardest and selected by visual recogni
 |---|---|---:|
 | Sunset over a Still Sea | 20 → 86.248 | **20** |
 | Orange Ball on a Table | 48 → 81.887 | **48** |
+| Three Hills in Morning Haze | 31 → 75.607 | **31** |
 
 The generated lesson references are original Pillow/NumPy images dedicated CC0. The five painting references use their source credits in the manifest and CREDITS.md.
