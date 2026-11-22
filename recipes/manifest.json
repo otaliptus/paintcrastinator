@@ -415,6 +415,33 @@
     "reference": "../references/fighting-temeraire.jpg"
   },
   {
+    "id": "the-kiss",
+    "title": "The Kiss",
+    "artist": "Gustav Klimt",
+    "year": "1907–08",
+    "width": 960,
+    "height": 963,
+    "strokeCount": 2500,
+    "scores": {
+      "reference": "references/the-kiss.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/the-kiss-claude.png",
+      "ssim": 0.5575,
+      "mean_delta_e": 3.2746,
+      "edge_similarity": 0.5793,
+      "colour_similarity": 0.93451,
+      "similarity": 67.387,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Gustav Klimt",
+      "licence": "Public domain",
+      "source": "Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:The_Kiss_-_Gustav_Klimt_-_Google_Cultural_Institute.jpg"
+    },
+    "description": "Gold cloaks, patterned robes and tender faces emerge above flowers.",
+    "reference": "../references/the-kiss.jpg"
+  },
+  {
     "id": "lesson-sky",
     "title": "Sunset over a Still Sea",
     "artist": "Painting Cookbook lesson",
