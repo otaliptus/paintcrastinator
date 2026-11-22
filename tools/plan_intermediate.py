@@ -204,7 +204,7 @@ def plan(pid):
         fine.append(stripes(region, pid, min(3.8, max(1.8, narrow * 0.18)), True))
     edge_sets = [contours(region) for region in regions]
     stage_sets = [broad, medium, edge_sets, fine]
-    modes = ["area", "area", "edges", "small"]
+    modes = ["area", "edges", "edges", "small"]
     result = []
     for index, ((stage_id, label), count) in enumerate(zip(STAGES, counts)):
         strokes = allocate(stage_sets[index], regions, count, modes[index])
