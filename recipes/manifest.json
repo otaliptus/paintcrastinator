@@ -253,6 +253,33 @@
     "reference": "../references/the-snail.jpg"
   },
   {
+    "id": "almond-blossom",
+    "title": "Almond Blossom",
+    "artist": "Vincent van Gogh",
+    "year": "1890",
+    "width": 960,
+    "height": 754,
+    "strokeCount": 1300,
+    "scores": {
+      "reference": "references/almond-blossom.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/almond-blossom-claude.png",
+      "ssim": 0.51663,
+      "mean_delta_e": 5.1018,
+      "edge_similarity": 0.49198,
+      "colour_similarity": 0.89796,
+      "similarity": 62.734,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Vincent van Gogh",
+      "licence": "Public domain",
+      "source": "Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:Vincent_van_Gogh_-_Almond_Blossom_-_VGM_F671.jpg"
+    },
+    "description": "Turquoise sky surrounds dark curling branches and delicate white blossoms.",
+    "reference": "../references/almond-blossom.jpg"
+  },
+  {
     "id": "lesson-sky",
     "title": "Sunset over a Still Sea",
     "artist": "Painting Cookbook lesson",
