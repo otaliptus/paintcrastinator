@@ -370,7 +370,7 @@ async function load() {
   boundaries = boundariesFor(recipe);
   if (!strokes.length) throw new Error("This recipe has no strokes.");
   lessonMode = strokes.length < 1000;
-  document.title = `${recipe.title} — PaintProxy`;
+  document.title = `${recipe.title} — Paintcrastinator`;
   $("painting-title").textContent = recipe.title;
   const lesson = id.startsWith("lesson-");
   $("artist-line").textContent = lesson ? "Lesson" : `${recipe.artist} · ${recipe.year}`;
