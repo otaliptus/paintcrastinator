@@ -1,10 +1,10 @@
 {
   "reference": "references/girl-with-a-pearl-earring.jpg",
-  "render": "recipes/girl-with-a-pearl-earring.png",
-  "ssim": 0.69257,
-  "mean_delta_e": 3.0105,
-  "edge_similarity": 0.59997,
-  "colour_similarity": 0.93979,
-  "similarity": 75.285,
+  "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/girl-with-a-pearl-earring-claude.png",
+  "ssim": 0.77775,
+  "mean_delta_e": 1.9136,
+  "edge_similarity": 0.71904,
+  "colour_similarity": 0.96173,
+  "similarity": 82.414,
   "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
 }
