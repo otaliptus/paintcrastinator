@@ -1,10 +1,10 @@
 {
   "reference": "references/great-wave.jpg",
-  "render": "recipes/great-wave.png",
-  "ssim": 0.51041,
-  "mean_delta_e": 5.4931,
-  "edge_similarity": 0.56423,
-  "colour_similarity": 0.89014,
-  "similarity": 63.24,
+  "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/great-wave-claude.png",
+  "ssim": 0.61823,
+  "mean_delta_e": 3.749,
+  "edge_similarity": 0.62178,
+  "colour_similarity": 0.92502,
+  "similarity": 71.08,
   "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
 }
