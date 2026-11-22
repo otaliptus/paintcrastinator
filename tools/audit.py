@@ -9,9 +9,11 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 MASTERWORK_IDS = ["mona-lisa", "girl-with-a-pearl-earring", "starry-night", "great-wave", "van-gogh-self-portrait"]
 ICON_IDS = ["countach", "breakfast-at-tiffanys", "marilyn-1953", "the-scream", "blue-marble"]
+MODERN_IDS = ["sunflowers", "the-snail", "mondrian-1930"]
 PHOTO_IDS = {"countach", "breakfast-at-tiffanys", "marilyn-1953", "blue-marble"}
-IDS = MASTERWORK_IDS + ICON_IDS
-SIZES = {"mona-lisa": (960, 1431), "girl-with-a-pearl-earring": (960, 1137), "starry-night": (960, 760), "great-wave": (960, 645), "van-gogh-self-portrait": (960, 1213), "countach": (960, 508), "breakfast-at-tiffanys": (960, 1201), "marilyn-1953": (960, 1048), "the-scream": (960, 1191), "blue-marble": (960, 961)}
+FLAT_IDS = {"the-snail", "mondrian-1930"}
+IDS = MASTERWORK_IDS + ICON_IDS + MODERN_IDS
+SIZES = {"mona-lisa": (960, 1431), "girl-with-a-pearl-earring": (960, 1137), "starry-night": (960, 760), "great-wave": (960, 645), "van-gogh-self-portrait": (960, 1213), "countach": (960, 508), "breakfast-at-tiffanys": (960, 1201), "marilyn-1953": (960, 1048), "the-scream": (960, 1191), "blue-marble": (960, 961), "sunflowers": (960, 1221), "the-snail": (960, 970), "mondrian-1930": (960, 973)}
 manifest = json.loads((ROOT / "recipes" / "manifest.json").read_text())
 assert {entry["id"] for entry in manifest} == set(IDS)
 summary = []
@@ -42,6 +44,14 @@ for pid in IDS:
     elif pid in PHOTO_IDS:
         assert 1500 <= count <= 5000 and recipe["profile"] == "photo"
         assert recipe["credit"]["author"] and recipe["credit"]["licence"] and recipe["credit"]["url"].startswith("https://commons.wikimedia.org/")
+    elif pid in FLAT_IDS:
+        assert 500 <= count <= 5000 and recipe["profile"] == "flat"
+        assert all(len(stroke["p"]) == 4 for stage in recipe["stages"] for stroke in stage["strokes"])
+        assert all(stroke["o"] == 1 for stage in recipe["stages"] for stroke in stage["strokes"])
+        assert recipe["credit"]["author"] and recipe["credit"]["licence"]
+    elif pid == "sunflowers":
+        assert 2500 <= count <= 5000 and recipe["profile"] == "painterly"
+        assert recipe["credit"]["licence"] == "Public domain"
     else:
         assert 1500 <= count <= 5000 and recipe.get("profile") != "photo"
         assert recipe["credit"]["licence"] == "Public domain"
@@ -49,8 +59,10 @@ for pid in IDS:
     for key in ["ssim", "mean_delta_e", "edge_similarity", "similarity"]:
         assert scores[key] == recipe["scores"][key]
     assert next(entry for entry in manifest if entry["id"] == pid)["scores"] == scores
-    if pid in ICON_IDS:
+    if pid in ICON_IDS or pid in MODERN_IDS:
         assert next(entry for entry in manifest if entry["id"] == pid)["credit"] == recipe["credit"]
+    if pid == "the-snail":
+        assert recipe["credit"]["note"] == "Public domain in the EU; in copyright in some other countries."
     summary.append({"id": pid, "dimensions": SIZES[pid], "stages": stage_counts, "strokes": count, "similarity": scores["similarity"]})
 
 brush = (ROOT / "app" / "brush.js").read_text()

@@ -17,6 +17,9 @@ const descriptions = {
   "marilyn-1953": "Platinum waves frame a face built from soft light and a few decisive accents. Eyes, lips and the hairline receive the smallest, sharpest strokes.",
   "the-scream": "Swirling bands of sky press against the bridge's stark diagonals. A lone figure gathers from pulsing colour and a few dark, insistent contours.",
   "blue-marble": "A luminous disc suspended in pure black. White cloud currents and ochre lands follow the turning surface of the Earth.",
+  "sunflowers": "A still life built from radiating petals and thick, sunlit colour. Follow the flower heads before the vase's soft blue line and signature.",
+  "the-snail": "Cut-paper colour turns in on itself. Flat, exact colour shapes settle onto an orange border, followed by straight strokes along their crisp edges.",
+  "mondrian-1930": "A measured grid of red, blue, yellow and white. Long black bars hold the structure while flat colour and straight edge marks bring each plane into focus.",
 };
 
 let recipe;
@@ -319,7 +322,8 @@ async function load() {
   }
   strokes = flattenStages(recipe);
   boundaries = boundariesFor(recipe);
-  if (strokes.length < 1500 || strokes.length > 6000 || strokes.length !== recipe.strokeCount) throw new Error("This recipe has an invalid stroke budget.");
+  const minimumStrokes = recipe.profile === "flat" ? 500 : id === "sunflowers" ? 2500 : 1500;
+  if (strokes.length < minimumStrokes || strokes.length > 6000 || strokes.length !== recipe.strokeCount) throw new Error("This recipe has an invalid stroke budget.");
   document.title = `${recipe.title} — Painting Cookbook`;
   $("painting-title").textContent = recipe.title;
   $("artist-line").textContent = `${recipe.artist} · ${recipe.year}`;
@@ -371,8 +375,9 @@ function showReferenceCredit(credit) {
   const source = document.createElement("a");
   source.className = "reference-source";
   source.href = credit.url;
-  source.textContent = "via Wikimedia Commons";
+  source.textContent = `via ${credit.source || "Wikimedia Commons"}`;
   element.append(source);
+  if (credit.note) element.append(document.createTextNode(`. ${credit.note}`));
   element.hidden = false;
 }
 

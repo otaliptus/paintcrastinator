@@ -6,7 +6,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MASTERWORK_IDS = ["mona-lisa", "girl-with-a-pearl-earring", "starry-night", "great-wave", "van-gogh-self-portrait"]
 ICON_IDS = ["countach", "breakfast-at-tiffanys", "marilyn-1953", "the-scream", "blue-marble"]
-IDS = MASTERWORK_IDS + ICON_IDS
+MODERN_IDS = ["sunflowers", "the-snail", "mondrian-1930"]
+IDS = MASTERWORK_IDS + ICON_IDS + MODERN_IDS
 manifest = []
 rows = []
 for pid in IDS:
@@ -53,6 +54,27 @@ if budget_path.exists():
         delta = values[str(selected)] - values["5000"]
         title = next(entry["title"] for entry in manifest if entry["id"] == pid)
         lines.append(f"| {title} | {values['1500']:.3f} | {values['2500']:.3f} | {values['5000']:.3f} | **{selected:,}** | {delta:+.3f} |")
+modern_budget_path = ROOT / "verification" / "modern-budget-scores.json"
+if modern_budget_path.exists():
+    budgets = json.loads(modern_budget_path.read_text())
+    budget_values = [500, 1000, 1500, 2500, 5000]
+    lines += [
+        "",
+        "## Modern colour — stroke-count selection",
+        "",
+        "Each new work was planned, rendered and scored independently at every listed budget. The shipped recipe is the smallest within 2.0 composite points of its 5,000-stroke result: a 2,500-stroke floor for painterly Sunflowers and a 500-stroke floor for the flat profile. Flat candidates keep one identical 500-stroke coverage/finish core; larger budgets add only blocking underpaint, directly testing whether redundant coverage improves the result.",
+        "",
+        "| Painting | 500 strokes | 1,000 strokes | 1,500 strokes | 2,500 strokes | 5,000 strokes | Shipped | Δ from 5,000 |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|",
+    ]
+    for pid in MODERN_IDS:
+        result = budgets[pid]
+        values = result["scores"]
+        selected = result["selected"]
+        cells = [f"{values[str(budget)]:.3f}" if str(budget) in values else "—" for budget in budget_values]
+        delta = values[str(selected)] - values["5000"]
+        title = next(entry["title"] for entry in manifest if entry["id"] == pid)
+        lines.append(f"| {title} | {' | '.join(cells)} | **{selected:,}** | {delta:+.3f} |")
 initial = {"Mona Lisa": 74.413, "Girl with a Pearl Earring": 75.200, "The Starry Night": 52.886, "The Great Wave off Kanagawa": 62.995, "Self-Portrait": 56.791}
 lines += [
     "",
@@ -72,6 +94,8 @@ for title, count, scores in rows:
 lines += [
     "",
     "The textured works remain deliberately painterly approximations: their uncorrelated high-frequency canvas texture limits SSIM even when large forms and colours are recognisable. The score comparison and visual check therefore both informed candidate rejection.",
+    "",
+    "Modern colour adds two planner profiles. Sunflowers uses the painterly multiscale tangent field with radial petal impasto and softer vase/signature transitions. The Snail and Mondrian use deterministic CIE Lab region segmentation, exact regional mean colours, straight mask-clipped fills and straight contour strokes; neither uses texture noise. Mondrian's elongated dark components use full-length vertical or horizontal strokes rather than dabs.",
     "",
     "## Method",
     "",

@@ -27,6 +27,9 @@ META = {
     "marilyn-1953": ("Marilyn Monroe", "Studio publicity still (Photoplay)", "1953"),
     "the-scream": ("The Scream", "Edvard Munch", "1893"),
     "blue-marble": ("The Blue Marble", "Photo: NASA, Apollo 17 crew", "1972"),
+    "sunflowers": ("Sunflowers", "Vincent van Gogh", "1888"),
+    "the-snail": ("The Snail", "Henri Matisse", "1953"),
+    "mondrian-1930": ("Composition with Red, Blue and Yellow", "Piet Mondrian", "1930"),
 }
 CREDITS = {
     "countach": {"author": "Palauenc05", "licence": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:Lamborghini_Countach_LP_5000S_1983.jpg"},
@@ -34,10 +37,14 @@ CREDITS = {
     "marilyn-1953": {"author": "Studio publicity still (Photoplay)", "licence": "Public domain", "url": "https://commons.wikimedia.org/wiki/File:Marilyn_Monroe,_Photoplay_1953_(cropped).jpg"},
     "the-scream": {"author": "Edvard Munch", "licence": "Public domain", "url": "https://commons.wikimedia.org/wiki/File:Edvard_Munch,_1893,_The_Scream,_oil,_tempera_and_pastel_on_cardboard,_91_x_73_cm,_National_Gallery_of_Norway.jpg"},
     "blue-marble": {"author": "NASA, Apollo 17 crew", "licence": "Public domain", "url": "https://commons.wikimedia.org/wiki/File:The_Earth_seen_from_Apollo_17.jpg"},
+    "sunflowers": {"author": "Vincent van Gogh", "licence": "Public domain", "url": "https://commons.wikimedia.org/wiki/File:Vincent_van_Gogh_-_Sunflowers_(1888,_National_Gallery_London).jpg"},
+    "the-snail": {"author": "Tate, London", "licence": "Public domain in the EU", "note": "Public domain in the EU; in copyright in some other countries.", "source": "Tate", "url": "https://www.tate.org.uk/art/artworks/matisse-the-snail-t00540"},
+    "mondrian-1930": {"author": "Piet Mondrian", "licence": "Public domain", "url": "https://commons.wikimedia.org/wiki/File:Piet_Mondriaan,_1930_-_Mondrian_Composition_II_in_Red,_Blue,_and_Yellow.jpg"},
 }
 CAR_IDS = {"countach"}
 PHOTO_IDS = {"countach", "breakfast-at-tiffanys", "marilyn-1953", "blue-marble"}
 ICON_IDS = ["countach", "breakfast-at-tiffanys", "marilyn-1953", "the-scream", "blue-marble"]
+FLAT_IDS = {"mondrian-1930", "the-snail"}
 STAGE_INFO = [
     ("blocking", "Blocking in"),
     ("form", "Form and color"),
@@ -112,6 +119,19 @@ def flow_vector(pid, x, y, w, h):
             vx += spin * -dy / math.sqrt(r2) * weight
             vy += spin * dx / math.sqrt(r2) * weight
         return np.array([vx, vy])
+    if pid == "sunflowers":
+        # Petal marks radiate from the nearest flower centre. Elsewhere the
+        # painterly tangent field remains dominant, leaving vase and signature
+        # transitions comparatively soft.
+        if ny < 0.57 and 0.12 < nx < 0.90:
+            centres = [(0.29, 0.18), (0.54, 0.15), (0.72, 0.27), (0.37, 0.36), (0.64, 0.43), (0.32, 0.50)]
+            cx, cy = min(centres, key=lambda centre: (nx - centre[0]) ** 2 + ((ny - centre[1]) * REF_H / REF_W) ** 2)
+            dx, dy = nx - cx, (ny - cy) * REF_H / REF_W
+            length = math.hypot(dx, dy)
+            if length > 0.006:
+                return np.array([dx / length + 0.12, dy / length])
+            return np.array([1.0, 0.2])
+        return np.array([1.0, 0.06 * math.sin(ny * 12)])
     if pid == "van-gogh-self-portrait":
         if ny < 0.18 or nx < 0.24 or (nx > 0.82 and ny < 0.62):
             angle = 0.9 + 0.5 * math.sin(nx * 17 + ny * 11)
@@ -386,6 +406,9 @@ def residual_weight(reference, render):
 
 def plan(pid, residual_render=None, seed=1729, strokes=5000):
     global REF_W, REF_H, TANGENTS, COHERENCE, GX, GY
+    if pid in FLAT_IDS:
+        from plan_flat import flat_plan
+        return flat_plan(pid, *META[pid], CREDITS[pid], strokes)
     rng = np.random.default_rng(seed + sum(ord(c) for c in pid))
     reference_path = ROOT / "references" / f"{pid}.jpg"
     reference = np.asarray(Image.open(reference_path).convert("RGB"), dtype=np.float32) / 255.0
@@ -428,7 +451,7 @@ def plan(pid, residual_render=None, seed=1729, strokes=5000):
         opacity = [(0.85, 1.0), (0.80, 0.99), (0.78, 0.98), (0.80, 0.99)]
 
     counts = scaled_counts(counts, strokes)
-    if photo and strokes != 5000:
+    if (photo or pid == "sunflowers") and strokes != 5000:
         # Reduced recipes need enough paint area to cover the large flat regions.
         # Fine marks keep their original sizes so wheels and facial features stay crisp.
         budget_scale = min(1.35, (5000 / strokes) ** 0.22)
@@ -465,6 +488,9 @@ def plan(pid, residual_render=None, seed=1729, strokes=5000):
     if photo:
         recipe["profile"] = "photo"
         recipe["planner"] += "; centred photographic subject/detail weighting"
+    if pid == "sunflowers":
+        recipe["profile"] = "painterly"
+        recipe["planner"] += "; radial petal impasto and soft vase/signature transitions"
     if pid in CREDITS:
         recipe["credit"] = CREDITS[pid]
     if pid == "blue-marble":
@@ -492,6 +518,12 @@ def plan(pid, residual_render=None, seed=1729, strokes=5000):
                 weight = portrait_weight(reference, field, weight, index, pid)
         if pid == "blue-marble":
             weight = blue_marble_weight(reference, fields[index], weight, disc_mask, index)
+        if pid == "sunflowers" and index >= 1:
+            yy, xx = np.mgrid[0:REF_H, 0:REF_W]
+            petal_zone = np.clip((0.59 - yy / REF_H) / 0.10, 0, 1)
+            red, green, blue = fields[index][..., 0], fields[index][..., 1], fields[index][..., 2]
+            yellow = np.clip((red + green) * 0.5 - blue, 0, 0.65) * petal_zone
+            weight *= 1.0 + yellow * (1.0 if index == 1 else 2.0)
         strokes = []
         if pid == "breakfast-at-tiffanys" and index >= 1 and residual is None:
             figure_count = round(count * (0.55 if index == 1 else 0.70))
@@ -540,11 +572,13 @@ def main():
     parser.add_argument("--residual", type=Path, help="Existing render; distribute a 5000-stroke fine repair variant by image error")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--seed", type=int, default=1729)
-    parser.add_argument("--strokes", type=int, default=5000, help="Total stroke budget, scaled proportionally across four stages (1,500–5,000)")
+    parser.add_argument("--strokes", type=int, default=5000, help="Total stroke budget scaled across four stages (flat: 500–5,000; Sunflowers: 2,500–5,000; others: 1,500–5,000)")
     args = parser.parse_args()
     ids = list(META) if args.painting == "all" else [args.painting]
-    if not 1500 <= args.strokes <= 5000:
-        parser.error("--strokes must be between 1,500 and 5,000")
+    for pid in ids:
+        minimum = 500 if pid in FLAT_IDS else 2500 if pid == "sunflowers" else 1500
+        if not minimum <= args.strokes <= 5000:
+            parser.error(f"--strokes must be between {minimum:,} and 5,000 for {pid}")
     for pid in ids:
         recipe = plan(pid, args.residual, args.seed, args.strokes)
         output = args.output or ROOT / "recipes" / f"{pid}.json"

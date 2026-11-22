@@ -31,18 +31,21 @@ async function loadAllCards(page) {
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 watch(page);
 await page.goto(`${base}/index.html`, { waitUntil: "networkidle" });
-assert.equal(await page.locator(".painting-card").count(), 10);
-assert.equal(await page.locator(".shelf").count(), 2);
+assert.equal(await page.locator(".painting-card").count(), 13);
+assert.equal(await page.locator(".shelf").count(), 3);
 assert.equal(await page.locator("#masterworks-gallery .painting-card").count(), 5);
 assert.equal(await page.locator("#icons-gallery .painting-card").count(), 5);
 assert.equal(await page.locator("#icons-heading").textContent(), "Icons");
+assert.equal(await page.locator("#modern-heading").textContent(), "Modern colour");
+assert.equal(await page.locator("#modern-gallery .painting-card").count(), 3);
+assert.deepEqual(await page.locator("#modern-gallery .card-title").allTextContents(), ["Sunflowers", "The Snail", "Composition with Red, Blue and Yellow"]);
 const manifest = JSON.parse(fs.readFileSync("recipes/manifest.json", "utf8"));
 const expectedTotal = manifest.reduce((sum, recipe) => sum + recipe.strokeCount, 0);
 assert.equal(await page.locator("#stroke-total").textContent(), expectedTotal.toLocaleString());
-assert.match(await page.locator('meta[name="description"]').getAttribute("content"), /a car, two film stars, a painting and the Earth/);
+assert.match(await page.locator('meta[name="description"]').getAttribute("content"), /three modern colour studies—from Sunflowers to Matisse and Mondrian/);
 await loadAllCards(page);
 assert.equal(await page.locator(".card-image").evaluateAll((images) => images.every((image) => image.complete && image.naturalWidth > 0)), true);
-checks.push("two shelves, ten library cards, dynamic stroke total and all offline thumbnails loaded");
+checks.push("three shelves, thirteen library cards, Modern colour order, dynamic stroke total and all offline thumbnails loaded");
 await page.locator(".original-toggle").first().click();
 assert.match(await page.locator(".card-image").first().getAttribute("src"), /references\/mona-lisa\.jpg$/);
 await page.locator(".original-toggle").first().click();
@@ -132,13 +135,30 @@ assert.equal(await page.locator("#top-stroke-counter").textContent(), `${countac
 await page.screenshot({ path: path.join(out, "recipe-countach-desktop.png"), fullPage: true });
 checks.push("variable-budget replay, finish-stage, exact stage boundary and full scrub reach the new recipe total");
 
-for (const id of ["girl-with-a-pearl-earring", "starry-night", "great-wave", "van-gogh-self-portrait", "breakfast-at-tiffanys", "marilyn-1953", "the-scream", "blue-marble"]) {
+const mondrian = JSON.parse(fs.readFileSync("recipes/mondrian-1930.json", "utf8"));
+assert.ok(mondrian.strokeCount < 1500);
+assert.equal(mondrian.profile, "flat");
+await page.goto(`${base}/recipe.html?id=mondrian-1930`, { waitUntil: "networkidle" });
+await page.locator("#study").waitFor({ state: "visible" });
+assert.equal(await page.locator("#top-stroke-counter").textContent(), `0 / ${mondrian.strokeCount.toLocaleString()} strokes`);
+assert.equal(await page.locator("#scrubber").getAttribute("max"), String(mondrian.strokeCount));
+await page.locator("#scrubber").evaluate((input) => { input.value = input.max; input.dispatchEvent(new Event("input", { bubbles: false })); });
+assert.equal(await counter(page), mondrian.strokeCount);
+assert.equal(await page.locator("#top-stroke-counter").textContent(), `${mondrian.strokeCount.toLocaleString()} / ${mondrian.strokeCount.toLocaleString()} strokes`);
+checks.push("Modern colour shelf and its sub-1,500 Mondrian recipe counter, scrubber and replay total");
+
+for (const id of ["girl-with-a-pearl-earring", "starry-night", "great-wave", "van-gogh-self-portrait", "breakfast-at-tiffanys", "marilyn-1953", "the-scream", "blue-marble", "sunflowers", "the-snail"]) {
   await page.goto(`${base}/recipe.html?id=${id}`, { waitUntil: "networkidle" });
   await page.locator("#study").waitFor({ state: "visible" });
   assert.equal(await counter(page), 0);
   assert.equal(await page.locator("#reference-image").evaluate((image) => image.complete && image.naturalWidth > 0), true);
 }
-checks.push("all ten recipe pages render with references and no missing data");
+checks.push("all thirteen recipe pages render with references and no missing data");
+await page.goto(`${base}/recipe.html?id=the-snail`, { waitUntil: "networkidle" });
+await page.locator("#study").waitFor({ state: "visible" });
+assert.match(await page.locator("#reference-credit").textContent(), /Tate, London, Public domain in the EU, via Tate\. Public domain in the EU; in copyright in some other countries\./);
+assert.equal(await page.locator("#reference-credit .reference-source").getAttribute("href"), "https://www.tate.org.uk/art/artworks/matisse-the-snail-t00540");
+checks.push("The Snail carries its Tate source and territory-specific copyright note");
 await page.goto(`${base}/recipe.html?id=the-scream`, { waitUntil: "networkidle" });
 await page.locator("#study").waitFor({ state: "visible" });
 const screamTotal = JSON.parse(fs.readFileSync("recipes/the-scream.json", "utf8")).strokeCount;

@@ -14,6 +14,9 @@ Every score is computed from the stored reference and the PNG emitted by the sam
 | Marilyn Monroe | 5,000 | 0.68283 | 3.0103 | 0.58975 | **74.596** |
 | The Scream | 5,000 | 0.59154 | 4.3729 | 0.53287 | **67.904** |
 | The Blue Marble | 5,000 | 0.44225 | 4.8302 | 0.53307 | **59.422** |
+| Sunflowers | 5,000 | 0.55177 | 3.7797 | 0.54525 | **66.258** |
+| The Snail | 500 | 0.77045 | 5.6534 | 0.36218 | **74.415** |
+| Composition with Red, Blue and Yellow | 500 | 0.80781 | 4.6569 | 0.37060 | **77.194** |
 
 ## Icons — stroke-count selection
 
@@ -26,6 +29,16 @@ Each Icon was planned, rendered and scored independently at all three budgets. T
 | Marilyn Monroe | 63.387 | 67.144 | 74.596 | **5,000** | +0.000 |
 | The Scream | 51.160 | 60.814 | 67.904 | **5,000** | +0.000 |
 | The Blue Marble | 51.616 | 54.951 | 59.422 | **5,000** | +0.000 |
+
+## Modern colour — stroke-count selection
+
+Each new work was planned, rendered and scored independently at every listed budget. The shipped recipe is the smallest within 2.0 composite points of its 5,000-stroke result: a 2,500-stroke floor for painterly Sunflowers and a 500-stroke floor for the flat profile. Flat candidates keep one identical 500-stroke coverage/finish core; larger budgets add only blocking underpaint, directly testing whether redundant coverage improves the result.
+
+| Painting | 500 strokes | 1,000 strokes | 1,500 strokes | 2,500 strokes | 5,000 strokes | Shipped | Δ from 5,000 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Sunflowers | — | — | — | 60.391 | 66.258 | **5,000** | +0.000 |
+| The Snail | 74.415 | 74.132 | 74.102 | 74.083 | 74.047 | **500** | +0.368 |
+| Composition with Red, Blue and Yellow | 77.194 | 77.542 | 77.580 | 77.586 | 77.559 | **500** | -0.365 |
 
 ## What changed, and what helped
 
@@ -42,6 +55,8 @@ After viewing every reference/render pair, a residual-targeted replacement of th
 | Self-Portrait | 56.791 | 57.014 | +0.223 |
 
 The textured works remain deliberately painterly approximations: their uncorrelated high-frequency canvas texture limits SSIM even when large forms and colours are recognisable. The score comparison and visual check therefore both informed candidate rejection.
+
+Modern colour adds two planner profiles. Sunflowers uses the painterly multiscale tangent field with radial petal impasto and softer vase/signature transitions. The Snail and Mondrian use deterministic CIE Lab region segmentation, exact regional mean colours, straight mask-clipped fills and straight contour strokes; neither uses texture noise. Mondrian's elongated dark components use full-length vertical or horizontal strokes rather than dabs.
 
 ## Method
 

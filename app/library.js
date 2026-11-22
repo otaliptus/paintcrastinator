@@ -1,15 +1,16 @@
 const gallery = document.getElementById("gallery");
 const MASTERWORKS = new Set(["mona-lisa", "girl-with-a-pearl-earring", "starry-night", "great-wave", "van-gogh-self-portrait"]);
+const MODERN = new Set(["sunflowers", "the-snail", "mondrian-1930"]);
 
 function creditText(credit) {
-  return `${credit.licence === "CC BY-SA 4.0" ? "Photo by " : ""}${credit.author}, ${credit.licence}, via Wikimedia Commons`;
+  return `${credit.licence === "CC BY-SA 4.0" ? "Photo by " : ""}${credit.author}, ${credit.licence}, via ${credit.source || "Wikimedia Commons"}${credit.note ? `. ${credit.note}` : ""}`;
 }
 
 function creditCaption(credit) {
   if (!credit) return "";
   const author = credit.licence === "CC BY-SA 4.0" ? `Photo by ${credit.author}` : credit.author;
   const licence = credit.licence === "CC BY-SA 4.0" ? `<a href="https://creativecommons.org/licenses/by-sa/4.0/">${credit.licence}</a>` : credit.licence;
-  return `<p class="card-credit">${author}, ${licence}, <a href="${credit.url}">via Wikimedia Commons</a></p>`;
+  return `<p class="card-credit">${author}, ${licence}, <a href="${credit.url}">via ${credit.source || "Wikimedia Commons"}</a>${credit.note ? `. ${credit.note}` : ""}</p>`;
 }
 
 function card(recipe, index) {
@@ -47,9 +48,11 @@ async function loadLibrary() {
     if (!response.ok) throw new Error(`Collection returned ${response.status}`);
     const recipes = await response.json();
     const masterworks = recipes.filter((recipe) => MASTERWORKS.has(recipe.id));
-    const icons = recipes.filter((recipe) => !MASTERWORKS.has(recipe.id));
+    const modern = recipes.filter((recipe) => MODERN.has(recipe.id));
+    const icons = recipes.filter((recipe) => !MASTERWORKS.has(recipe.id) && !MODERN.has(recipe.id));
     document.getElementById("masterworks-gallery").replaceChildren(...masterworks.map(card));
     document.getElementById("icons-gallery").replaceChildren(...icons.map(card));
+    document.getElementById("modern-gallery").replaceChildren(...modern.map(card));
     document.getElementById("painting-count").textContent = recipes.length;
     document.getElementById("stroke-total").textContent = recipes.reduce((sum, recipe) => sum + recipe.strokeCount, 0).toLocaleString();
   } catch (error) {

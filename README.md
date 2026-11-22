@@ -1,6 +1,6 @@
 # Painting Cookbook
 
-Ten studies, each recreated by **1,500–5,000 soft-round brush strokes** in four stages: five masterworks and five Icons—a Countach, two film stars, The Scream and the Blue Marble. The static app uses vanilla JavaScript and Canvas 2D; planning and scoring use Python.
+Thirteen studies, each recreated by **500–5,000 soft-round brush strokes** in four stages: five masterworks, five Icons, and three Modern colour works by Van Gogh, Matisse and Mondrian. The static app uses vanilla JavaScript and Canvas 2D; planning and scoring use Python.
 
 ## Run the app
 
@@ -20,7 +20,7 @@ Open <http://localhost:4173/app/>.
 
 ## Offline pipeline
 
-The bundled Playwright Core is imported from `/app/node_modules/playwright-core`. Its Chromium runtime must be available. The planning/scoring commands use this environment's `/home/node/.openclaw/venv/bin/python` with NumPy, SciPy, scikit-image and Pillow.
+The bundled Playwright Core is imported from `/app/node_modules/playwright-core`. Its Chromium runtime must be available. The planning/scoring commands use this environment's `/home/node/.openclaw/venv/bin/python` with NumPy, SciPy, scikit-image, Pillow and OpenCV.
 
 ```bash
 # Discover a four-stage, deterministic 5,000-stroke vector recipe.
@@ -37,6 +37,9 @@ node tools/render.mjs --all
 /home/node/.openclaw/venv/bin/python tools/score.py \
   references/mona-lisa.jpg recipes/mona-lisa.png \
   --output recipes/mona-lisa.score.json
+
+# Independently measure all Modern colour budgets and select the smallest within 2.0 points of 5,000.
+/home/node/.openclaw/venv/bin/python tools/measure-modern.py
 
 # Write the library manifest and REPORT.md.
 /home/node/.openclaw/venv/bin/python tools/finalize.py
@@ -86,7 +89,7 @@ The engine stamps a tinted radial-alpha falloff at quarter-diameter spacing alon
 
 ## Planner
 
-`tools/plan.py` uses deterministic randomness, progressively less blurred multiscale colour fields, structure-tensor tangent/coherence estimates and grid-free importance sampling. Painting-specific weak-structure flow adds circular wind to Starry Night, curved wave contours to Great Wave, sky bands and straight bridge diagonals to The Scream, and tangent-following cloud swirls to Blue Marble. Audrey Hepburn's figure receives 70% of refinement/detail strokes while the patterned screen becomes sparse, soft pale blocks; Blue Marble uses a brightness-derived disc mask and path constraints to keep space black. Later short marks respond to edge energy. Residual passes use the shared-engine render as feedback; saved baselines prevent a worse candidate from replacing a better recipe.
+`tools/plan.py` uses deterministic randomness, progressively less blurred multiscale colour fields, structure-tensor tangent/coherence estimates and grid-free importance sampling. Painting-specific weak-structure flow adds circular wind to Starry Night, curved wave contours to Great Wave, sky bands and straight bridge diagonals to The Scream, tangent-following cloud swirls to Blue Marble, and radial petal impasto to Sunflowers. The flat profile used by The Snail and Mondrian segments CIE Lab colours into connected regions, assigns each region's exact mean colour, lays straight mask-clipped fills and sharpens contours with straight strokes—without texture noise. Their 500-stroke coverage/finish core stays fixed in larger candidates, whose extra marks are blocking underpaint; this makes the budget sweep a direct test of redundant coverage. Audrey Hepburn's figure receives 70% of refinement/detail strokes while the patterned screen becomes sparse, soft pale blocks; Blue Marble uses a brightness-derived disc mask and path constraints to keep space black. Later short marks respond to edge energy. Residual passes use the shared-engine render as feedback; saved baselines prevent a worse candidate from replacing a better recipe.
 
 ## Scores
 
@@ -100,10 +103,10 @@ With the local server running:
 node tools/test-app.mjs
 ```
 
-The Playwright suite checks two shelves and ten cards, original toggling, variable-budget replay/pause, exact stage boundaries, full scrubbing, pointer painting and live score, undo/restart, every recipe/reference, linked credits, mobile layout and touch painting. It fails on any browser console error or uncaught page error. Desktop/mobile screenshots are written to `verification/`, including the required library and The Scream desktop views.
+The Playwright suite checks three shelves and thirteen cards, Modern colour ordering and a sub-1,500-stroke counter, original toggling, variable-budget replay/pause, exact stage boundaries, full scrubbing, pointer painting and live score, undo/restart, every recipe/reference, linked credits and copyright notes, mobile layout and touch painting. It fails on any browser console error or uncaught page error. Desktop/mobile screenshots are written to `verification/`, including the required library and The Scream desktop views.
 
 ## Icons
 
 Five Icon studies use independently measured 1,500, 2,500 and 5,000-stroke candidates; REPORT.md records every composite and the selected budget.
 The Countach photograph is credited by photographer, CC BY-SA 4.0 licence and Wikimedia source. The two publicity photographs, The Scream and the NASA/Apollo 17 photograph carry public-domain credits and sources in the library, recipe pages and CREDITS.md.
-Use `tools/measure-photos.py` to rerun the budget sweep, then `tools/finalize.py` to refresh score metadata and the manifest.
+Use `tools/measure-photos.py` to rerun the Icons sweep and `tools/measure-modern.py` for the new shelf, then `tools/finalize.py` to refresh score metadata and the manifest. `tools/contact-modern.py` writes the three-pair reference/render contact sheet.

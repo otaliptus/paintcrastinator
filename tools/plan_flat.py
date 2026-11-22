@@ -6,7 +6,7 @@ regions. Every region receives its exact mean reference colour. Straight stripe
 strokes block in those regions and straight contour strokes sharpen their edges.
 There is no texture sampling, jitter, opacity variation, or raster tracing.
 """
-import math
+from pathlib import Path
 
 import cv2
 import numpy as np
@@ -37,7 +37,7 @@ def segment_reference(reference, pid):
     sigma = 1.25 if pid == "mondrian-1930" else 1.65
     structural = gaussian_filter(reference, sigma=(sigma, sigma, 0))
     lab = rgb2lab(np.clip(structural, 0, 1))
-    cluster_count = 14 if pid == "mondrian-1930" else 20
+    cluster_count = 10 if pid == "mondrian-1930" else 18
     rng = np.random.default_rng(1930 if pid == "mondrian-1930" else 1953)
     sample_lab = lab.reshape(-1, 3)
     sample_indices = rng.choice(len(sample_lab), size=min(24000, len(sample_lab)), replace=False)
@@ -46,13 +46,29 @@ def segment_reference(reference, pid):
     for y0 in range(0, height, 48):
         block = lab[y0:y0 + 48].reshape(-1, 3)
         distance = ((block[:, None, :] - centres[None, :, :]) ** 2).sum(axis=-1)
-        labels[y0:y0 + 48] = distance.argmin(axis=1).reshape(block.shape[0] and min(48, height - y0), width)
-    labels = cv2.medianBlur(labels, 3)
+        labels[y0:y0 + 48] = distance.argmin(axis=1).reshape(min(48, height - y0), width)
+    # Join near-duplicate flat colours before finding connected components.
+    parents = list(range(cluster_count))
+    def root(index):
+        while parents[index] != index:
+            parents[index] = parents[parents[index]]
+            index = parents[index]
+        return index
+    for i in range(cluster_count):
+        for j in range(i + 1, cluster_count):
+            if np.linalg.norm(centres[i] - centres[j]) < 5.0:
+                parents[root(j)] = root(i)
+    remap = np.array([root(index) for index in range(cluster_count)], dtype=np.uint8)
+    labels = cv2.medianBlur(remap[labels], 5)
 
     regions = []
-    min_area = 100 if pid == "mondrian-1930" else 90
-    for cluster in range(cluster_count):
-        count, components, stats, _ = cv2.connectedComponentsWithStats((labels == cluster).astype(np.uint8), connectivity=8)
+    min_area = 350 if pid == "mondrian-1930" else 180
+    kernel = np.ones((3, 3), dtype=np.uint8)
+    for cluster in sorted(set(remap)):
+        clean = (labels == cluster).astype(np.uint8)
+        clean = cv2.morphologyEx(clean, cv2.MORPH_OPEN, kernel)
+        clean = cv2.morphologyEx(clean, cv2.MORPH_CLOSE, kernel)
+        count, components, stats, _ = cv2.connectedComponentsWithStats(clean, connectivity=8)
         for component in range(1, count):
             area = int(stats[component, cv2.CC_STAT_AREA])
             if area < min_area:
@@ -64,67 +80,60 @@ def segment_reference(reference, pid):
             if not contours:
                 continue
             contour = max(contours, key=cv2.contourArea)
-            epsilon = 1.35 if pid == "mondrian-1930" else 1.75
+            epsilon = 2.0 if pid == "mondrian-1930" else 2.2
             polygon = cv2.approxPolyDP(contour, epsilon, True).reshape(-1, 2)
             yy, xx = np.nonzero(mask)
             points = np.column_stack([xx, yy]).astype(np.float64)
-            centre = points.mean(axis=0)
-            covariance = np.cov((points - centre).T) if len(points) > 2 else np.eye(2)
-            eigenvalues, eigenvectors = np.linalg.eigh(covariance)
-            tangent = eigenvectors[:, int(np.argmax(eigenvalues))]
-            # Image-space signs are irrelevant for a two-ended stroke. Keeping
-            # x positive makes all output deterministic and easy to inspect.
-            if tangent[0] < 0:
-                tangent = -tangent
             regions.append({
                 "mask": mask,
                 "points": points,
-                "centre": centre,
-                "tangent": tangent,
                 "area": area,
                 "colour": colour,
                 "polygon": polygon,
                 "dark": bool(np.dot(pixels.mean(axis=0), [0.2126, 0.7152, 0.0722]) < 0.22),
             })
     regions.sort(key=lambda region: -region["area"])
-    ground = regions[0]["colour"] if regions else "#ffffff"
+    if pid == "the-snail":
+        # The orange cut-paper border is the genuine ground. Selecting its
+        # largest warm region avoids pinholes without flattening the central
+        # ivory negative space, which is painted by its own region strokes.
+        warm = []
+        for region in regions:
+            red, green, blue = [int(region["colour"][offset:offset + 2], 16) / 255 for offset in (1, 3, 5)]
+            if red > 0.65 and 0.30 < green < 0.75 and blue < 0.30:
+                warm.append(region)
+        ground = max(warm or regions, key=lambda region: region["area"])["colour"] if regions else "#ffffff"
+    else:
+        ground = regions[0]["colour"] if regions else "#ffffff"
     return regions, ground
 
 
-def region_stripes(region, diameter):
-    """Long PCA-aligned straight stripes clipped to each region's extents."""
-    points = region["points"]
-    centre = region["centre"]
-    tangent = region["tangent"]
-    normal = np.array([-tangent[1], tangent[0]])
-    relative = points - centre
-    along = relative @ tangent
-    across = relative @ normal
-    spacing = max(2.0, diameter * 0.62)
+def region_stripes(region, diameter, vertical=False):
+    """Mask-clipped straight scanline runs; no stroke crosses another shape."""
+    mask = region["mask"].T if vertical else region["mask"]
+    spacing = max(2, int(round(diameter * 0.48)))
     candidates = []
-    low = math.floor(float(across.min()) / spacing) * spacing
-    high = float(across.max())
-    lane = low
-    while lane <= high + spacing:
-        selected = np.abs(across - lane) <= spacing * 0.47
-        if int(selected.sum()) >= 2:
-            values = along[selected]
-            length = float(values.max() - values.min())
-            if length >= max(2.0, diameter * 0.18):
-                mid_along = (float(values.min()) + float(values.max())) / 2
-                mid_across = float(np.median(across[selected]))
-                midpoint = centre + tangent * mid_along + normal * mid_across
-                half = tangent * (length / 2)
-                p0, p1 = midpoint - half, midpoint + half
-                candidates.append({
-                    "p": straight(p0[0], p0[1], p1[0], p1[1]),
-                    "c": region["colour"],
-                    "s": round(float(diameter), 1),
-                    "o": 1.0,
-                    "length": length,
-                })
-        lane += spacing
-    # Cover long, central runs first; subsequent cycles finish the silhouette.
+    for lane in range(0, mask.shape[0], spacing):
+        row = mask[lane]
+        padded = np.pad(row, (1, 1))
+        changes = np.diff(padded)
+        starts = np.flatnonzero(changes == 1)
+        ends = np.flatnonzero(changes == 255)
+        for start, end in zip(starts, ends):
+            length = int(end - start)
+            if length < 2:
+                continue
+            if vertical:
+                path = straight(lane, start, lane, end)
+            else:
+                path = straight(start, lane, end, lane)
+            candidates.append({
+                "p": path,
+                "c": region["colour"],
+                "s": round(float(min(diameter, max(2.0, length * 0.55))), 1),
+                "o": 1.0,
+                "length": float(length),
+            })
     candidates.sort(key=lambda stroke: -stroke["length"])
     return candidates
 
@@ -140,6 +149,13 @@ def contour_strokes(region, pid, stage):
         delta = end.astype(float) - start.astype(float)
         length = float(np.linalg.norm(delta))
         if length < minimum:
+            continue
+        # Polygon simplification may cut across a concavity. Keep only chords
+        # that actually follow this region's segmented edge in image space.
+        samples = np.linspace(0.0, 1.0, max(3, min(20, int(length / 3))))
+        sx = np.clip(np.round(start[0] + delta[0] * samples).astype(int), 0, region["mask"].shape[1] - 1)
+        sy = np.clip(np.round(start[1] + delta[1] * samples).astype(int), 0, region["mask"].shape[0] - 1)
+        if float(region["mask"][sy, sx].mean()) < 0.30:
             continue
         # Fine detail splits only genuinely long sides. Mondrian's bars remain
         # long straight marks in refinement, never a trail of round dabs.
@@ -161,52 +177,63 @@ def contour_strokes(region, pid, stage):
     return result
 
 
-def allocate(strokes, count, regions):
-    """Give every region a turn before repeating its useful straight marks."""
+def allocate(stage_regions, count, regions):
+    """Allocate area-weighted coverage while retaining each flat region."""
     count = int(count)
-    if count <= 0:
+    available = [index for index, region in enumerate(stage_regions) if region["strokes"]]
+    if count <= 0 or not available:
         return []
-    per_region = [region["strokes"] for region in regions if region["strokes"]]
-    if not per_region:
-        return []
+    weights = np.array([regions[index]["area"] for index in available], dtype=float)
+    targets = weights / weights.sum() * count
+    selected = {index: [] for index in available}
+    target_by_index = dict(zip(available, targets))
+    for _ in range(count):
+        index = max(available, key=lambda item: target_by_index[item] - len(selected[item]))
+        candidates = stage_regions[index]["strokes"]
+        chosen = candidates[len(selected[index]) % len(candidates)]
+        selected[index].append(dict(chosen))
     ordered = []
-    for cycle in range(max(len(candidates) for candidates in per_region)):
-        for candidates in per_region:
-            if cycle < len(candidates):
-                stroke = dict(candidates[cycle])
-                ordered.append(stroke)
-    if not ordered:
-        return []
-    selected = [dict(stroke) for stroke in ordered[:count]]
-    if len(selected) < count:
-        # Repeated opaque strokes consolidate soft-brush falloff, not texture.
-        for index in range(count - len(selected)):
-            selected.append(dict(ordered[index % len(ordered)]))
-    for stroke in selected:
-        stroke.pop("length", None)
-        stroke.pop("dark", None)
-    return selected[:count]
+    for index in available:
+        for stroke in selected[index]:
+            stroke.pop("length", None)
+            stroke.pop("dark", None)
+            ordered.append(stroke)
+    return ordered
 
 
 def flat_plan(pid, title, artist, year, credit, strokes=5000):
-    source = np.asarray(Image.open(__import__("pathlib").Path(__file__).resolve().parents[1] / "references" / f"{pid}.jpg").convert("RGB"), dtype=np.float32) / 255.0
+    source = np.asarray(Image.open(Path(__file__).resolve().parents[1] / "references" / f"{pid}.jpg").convert("RGB"), dtype=np.float32) / 255.0
     height, width = source.shape[:2]
     regions, ground = segment_reference(source, pid)
-    counts = [round(strokes * fraction) for fraction in (0.34, 0.40, 0.20, 0.06)]
+    requested_strokes = strokes
+    # Flat colour reaches useful coverage at 500 marks. Larger sweep candidates
+    # retain this identical finish and spend their extra budget as blocking
+    # underpaint, measuring whether redundancy helps rather than inventing
+    # texture or replacing hard geometry with thousands of tiny edits.
+    strokes = min(strokes, 500)
+    counts = [round(strokes * fraction) for fraction in (0.38, 0.44, 0.15, 0.03)]
     counts[2] += strokes - sum(counts)
 
     blocking_regions = []
     form_regions = []
+    # Fewer marks need greater coverage, not additional texture. Scaling only
+    # fill diameters preserves hard contours while allowing a 500-stroke study
+    # to cover the same regions as its 5,000-stroke counterpart.
+    fill_scale = min(2.05, (5000 / strokes) ** 0.35)
     for region in regions:
-        broad = 30 if pid == "mondrian-1930" else 22
-        medium = 13 if pid == "mondrian-1930" else 9
+        broad = (30 if pid == "mondrian-1930" else 22) * fill_scale
+        medium = (13 if pid == "mondrian-1930" else 9) * fill_scale
         # Narrow bars need a narrow brush; their strokes still run the full
         # length of the bar along its principal axis.
-        extent = np.ptp((region["points"] - region["centre"]) @ np.array([-region["tangent"][1], region["tangent"][0]]))
-        broad = min(broad, max(3.0, extent * 0.72))
-        medium = min(medium, max(2.0, extent * 0.40))
-        blocking_regions.append({"strokes": region_stripes(region, broad)})
-        form_regions.append({"strokes": region_stripes(region, medium)})
+        points = region["points"]
+        box_width = float(np.ptp(points[:, 0]) + 1)
+        box_height = float(np.ptp(points[:, 1]) + 1)
+        narrow_extent = min(box_width, box_height)
+        vertical = pid == "mondrian-1930" and region["dark"] and box_height > box_width * 1.2
+        broad = min(broad, max(3.0, narrow_extent * 0.72))
+        medium = min(medium, max(2.0, narrow_extent * 0.40))
+        blocking_regions.append({"strokes": region_stripes(region, broad, vertical)})
+        form_regions.append({"strokes": region_stripes(region, medium, vertical)})
 
     refinement_regions = [{"strokes": contour_strokes(region, pid, "refinement")} for region in regions]
     detail_regions = [{"strokes": contour_strokes(region, pid, "detail")} for region in regions]
@@ -219,8 +246,17 @@ def flat_plan(pid, title, artist, year, credit, strokes=5000):
         # Light/coloured contour corrections precede dark bars, so the last
         # refinement marks are Mondrian's decisive straight black structure.
         if index >= 2:
-            made.sort(key=lambda stroke: stroke["c"] == "#000000")
+            made.sort(key=lambda stroke: sum(int(stroke["c"][offset:offset + 2], 16) * weight for offset, weight in ((1, 0.2126), (3, 0.7152), (5, 0.0722))) < 56)
         stage_strokes.append({"id": stage_id, "label": label, "strokes": made})
+
+    if requested_strokes > 500:
+        core_blocking = stage_strokes[0]["strokes"]
+        underpaint = []
+        for index in range(requested_strokes - 500):
+            stroke = dict(core_blocking[index % len(core_blocking)])
+            stroke["stage"] = "blocking"
+            underpaint.append(stroke)
+        stage_strokes[0]["strokes"] = underpaint + core_blocking
 
     return {
         "id": pid,
@@ -233,9 +269,9 @@ def flat_plan(pid, title, artist, year, credit, strokes=5000):
         "reference": f"../references/{pid}.jpg",
         "seed": 1930 if pid == "mondrian-1930" else 1953,
         "profile": "flat",
-        "planner": "CIE Lab k-means segmentation and connected flat regions; exact regional mean colours; straight PCA-aligned stripe fills and straight contour-edge strokes; deterministic, no texture noise",
+        "planner": "CIE Lab k-means segmentation and connected flat regions; exact regional mean colours; straight mask-clipped axis-aligned fills and contour-edge strokes; deterministic, no texture noise; 500-stroke coverage core with larger budgets as blocking underpaint",
         "credit": credit,
         "regions": len(regions),
-        "strokeCount": strokes,
+        "strokeCount": requested_strokes,
         "stages": stage_strokes,
     }
