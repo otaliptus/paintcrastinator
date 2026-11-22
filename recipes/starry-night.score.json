@@ -1,10 +1,10 @@
 {
   "reference": "references/starry-night.jpg",
   "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/starry-night-claude.png",
-  "ssim": 0.44258,
-  "mean_delta_e": 4.5279,
-  "edge_similarity": 0.55159,
-  "colour_similarity": 0.90944,
-  "similarity": 59.899,
+  "ssim": 0.6372,
+  "mean_delta_e": 3.3062,
+  "edge_similarity": 0.68698,
+  "colour_similarity": 0.93388,
+  "similarity": 73.367,
   "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
 }

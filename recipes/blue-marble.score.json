@@ -1,10 +1,10 @@
 {
   "reference": "references/blue-marble.jpg",
   "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/blue-marble-claude.png",
-  "ssim": 0.5541,
-  "mean_delta_e": 2.8538,
-  "edge_similarity": 0.63026,
-  "colour_similarity": 0.94292,
-  "similarity": 68.217,
+  "ssim": 0.67182,
+  "mean_delta_e": 1.9196,
+  "edge_similarity": 0.74967,
+  "colour_similarity": 0.96161,
+  "similarity": 77.043,
   "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
 }
