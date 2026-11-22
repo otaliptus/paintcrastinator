@@ -7,20 +7,20 @@ const frame = $("canvas-frame");
 const ctx = canvas.getContext("2d", { alpha: false });
 const guideCtx = guide.getContext("2d");
 const descriptions = {
-  "mona-lisa": "Veils of earth and gold gather into a famously elusive expression. Broad masses give way to small, contour-following touches.",
-  "girl-with-a-pearl-earring": "A quiet study of darkness, woven colour and one luminous highlight. Follow the headcloth before resolving the face and pearl.",
-  "starry-night": "The sky is built from moving currents rather than flat blue. Curved marks gather into eddies, stars and the dark vertical accent below.",
-  "great-wave": "Flat colour becomes motion through nested contours and crisp foam marks. Small late strokes carry the rhythm of the woodblock printed lines.",
-  "van-gogh-self-portrait": "A close, direct likeness assembled from directional colour. Background strokes and facial marks retain the energy of the painted surface.",
-  "countach": "A wedge drawn in one breath: red planes, black glass and a theatrical rear wing. Chrome-bright wheels and a taut silhouette carry the final marks.",
-  "breakfast-at-tiffanys": "A near-black silhouette against a screen of soft pale blocks. Face, hair bun, long gloves and the slender cigarette holder receive the decisive marks.",
-  "marilyn-1953": "Platinum waves frame a face built from soft light and a few decisive accents. Eyes, lips and the hairline receive the smallest, sharpest strokes.",
-  "the-scream": "Swirling bands of sky press against the bridge's stark diagonals. A lone figure gathers from pulsing colour and a few dark, insistent contours.",
-  "blue-marble": "A luminous disc suspended in pure black. White cloud currents and ochre lands follow the turning surface of the Earth.",
-  "sunflowers": "A still life built from radiating petals and thick, sunlit colour. Follow the flower heads before the vase's soft blue line and signature.",
-  "the-snail": "Cut-paper colour turns in on itself. Flat, exact colour shapes settle onto an orange border, followed by straight strokes along their crisp edges.",
-  "mondrian-1930": "A measured grid of red, blue, yellow and white. Long black bars hold the structure while flat colour and straight edge marks bring each plane into focus.",
+  "mona-lisa": "Veils of earth and gold gather into a famously elusive expression.",
+  "girl-with-a-pearl-earring": "A quiet study of darkness, woven colour and one luminous highlight.",
+  "starry-night": "The sky is built from moving currents rather than flat blue.",
+  "great-wave": "Flat colour becomes motion through nested contours and crisp foam.",
+  "van-gogh-self-portrait": "A close, direct likeness assembled from directional colour.",
+  "countach": "A wedge drawn in one breath: red planes, black glass and a theatrical rear wing.",
+  "marilyn-1953": "Platinum waves frame a face built from soft light and a few decisive accents.",
+  "the-scream": "Swirling bands of sky press against the bridge's stark diagonals.",
+  "blue-marble": "A luminous disc in pure black, wrapped in white cloud currents.",
+  "sunflowers": "A still life built from radiating petals and thick, sunlit colour.",
+  "the-snail": "Cut-paper colour turning in on itself, on an orange border.",
+  "mondrian-1930": "A measured grid of red, blue, yellow and white held by black bars.",
 };
+const firstSentence = (text) => (text || "").split(/(?<=[.!?])\s/)[0];
 
 let recipe;
 let strokes = [];
@@ -32,48 +32,40 @@ let animationId = 0;
 let paintIndex = 0;
 let userStrokes = [];
 let drawing = null;
-let referenceReady = false;
 let lessonMode = false;
-const referenceScoreCanvas = document.createElement("canvas");
-const paintingScoreCanvas = document.createElement("canvas");
 
 function boundariesFor(recipeData) {
   let cursor = 0;
   return recipeData.stages.map((stage) => {
     const start = cursor;
     cursor += stage.strokes.length;
-    return { start, end: cursor, id: stage.id, label: stage.label, tip: stage.tip };
+    return { start, end: cursor, label: stage.label, tip: stage.tip };
   });
 }
 
-function stageAt(count) {
-  if (count === 0) return -1;
-  const index = boundaries.findIndex((stage) => count <= stage.end && count > stage.start);
+function stageIndexAt(count) {
+  const index = boundaries.findIndex((stage) => count >= stage.start && count < stage.end);
   return index < 0 ? boundaries.length - 1 : index;
 }
 
+const counterText = (count) => `${count.toLocaleString()} / ${strokes.length.toLocaleString()}`;
+
 function updateWatchUI() {
   const total = strokes.length;
-  const stageIndex = stageAt(watchCount);
-  $("stroke-counter").textContent = `${watchCount.toLocaleString()} / ${total.toLocaleString()} strokes`;
-  $("top-stroke-counter").textContent = `${watchCount.toLocaleString()} / ${total.toLocaleString()} strokes`;
-  $("reference-progress").value = watchCount;
-  $("reference-percent").textContent = `${Math.round(watchCount / total * 100)}%`;
-  $("reference-stage").textContent = watchCount === 0 ? "Blank canvas" : watchCount === total ? "Finished study" : boundaries[stageIndex]?.label;
+  const stageIndex = watchCount === 0 ? -1 : stageIndexAt(watchCount - 1);
+  $("stroke-counter").textContent = counterText(watchCount);
   $("scrubber").value = watchCount;
-  $("stage-name").textContent = watchCount === 0 ? "Blank canvas" : boundaries[stageIndex]?.label || "Fine details";
-  $("stage-kicker").textContent = watchCount === total ? "FINISHED STUDY" : watchCount === 0 ? "READY TO REPLAY" : `REPLAY · STAGE ${stageIndex + 1}`;
-  $("play-button").innerHTML = playing ? "❚❚ <span>Pause</span>" : watchCount === total ? "▶ <span>Replay</span>" : "▶ <span>Play</span>";
-  $("play-button").setAttribute("aria-label", playing ? "Pause painting replay" : "Play painting replay");
+  $("stage-name").textContent = watchCount === 0 ? "Blank canvas" : watchCount === total ? "Finished" : boundaries[stageIndex]?.label || "";
+  $("play-button").textContent = playing ? "❚❚ Pause" : watchCount === total ? "▶ Replay" : "▶ Play";
   [...$("stage-buttons").children].forEach((button, index) => button.classList.toggle("active", index === stageIndex));
-  $("canvas-status").textContent = mode === "watch" && watchCount === 0 ? "Press play, or choose a stage" : "";
+  $("canvas-status").textContent = "";
 }
 
 function pauseReplay() {
   playing = false;
   if (animationId) cancelAnimationFrame(animationId);
   animationId = 0;
-  updateWatchUI();
+  if (mode === "watch") updateWatchUI();
 }
 
 function clearStudy() {
@@ -90,10 +82,7 @@ function setWatchCount(count) {
 }
 
 function playReplay() {
-  if (playing) {
-    pauseReplay();
-    return;
-  }
+  if (playing) return pauseReplay();
   if (watchCount >= strokes.length) setWatchCount(0);
   playing = true;
   let last = performance.now();
@@ -111,10 +100,7 @@ function playReplay() {
       watchCount = stop;
       updateWatchUI();
     }
-    if (watchCount >= strokes.length) {
-      pauseReplay();
-      return;
-    }
+    if (watchCount >= strokes.length) return pauseReplay();
     animationId = requestAnimationFrame(tick);
   };
   updateWatchUI();
@@ -123,7 +109,6 @@ function playReplay() {
 
 function clearGuide() {
   guideCtx.clearRect(0, 0, guide.width, guide.height);
-  guide.dataset.ghostStrokes = "0";
 }
 
 function showGhost() {
@@ -136,7 +121,7 @@ function showGhost() {
     guideCtx.moveTo(points[0], points[1]);
     for (let i = 2; i < points.length; i += 2) guideCtx.lineTo(points[i], points[i + 1]);
     guideCtx.strokeStyle = stroke.c;
-    guideCtx.globalAlpha = next ? 0.16 : lessonMode ? 0.90 : 0.48;
+    guideCtx.globalAlpha = next ? 0.16 : lessonMode ? 0.9 : 0.5;
     guideCtx.lineWidth = next ? Math.max(1, stroke.s * 0.08) : lessonMode ? Math.max(2.4, stroke.s * 0.22) : Math.max(1.2, stroke.s * 0.12);
     guideCtx.lineCap = "round";
     guideCtx.lineJoin = "round";
@@ -144,6 +129,7 @@ function showGhost() {
     guideCtx.stroke();
     guideCtx.setLineDash([]);
     if (!next) {
+      // A dot marks where the stroke starts.
       guideCtx.globalAlpha = lessonMode ? 1 : 0.75;
       guideCtx.beginPath();
       guideCtx.arc(points[0], points[1], Math.max(2, stroke.s * (lessonMode ? 0.22 : 0.16)), 0, Math.PI * 2);
@@ -154,41 +140,29 @@ function showGhost() {
   };
   if (lessonMode && strokes[paintIndex + 1]) drawGhost(strokes[paintIndex + 1], true);
   drawGhost(strokes[paintIndex]);
-  guide.dataset.ghostStrokes = lessonMode && strokes[paintIndex + 1] ? "2" : "1";
-  guide.dataset.lessonGhost = String(lessonMode);
-  $("canvas-status").textContent = "Drag along the dashed guide";
 }
 
-function updateGuideUI() {
+function updatePaintUI() {
   const stroke = strokes[paintIndex];
-  $("stroke-counter").textContent = `${paintIndex.toLocaleString()} / ${strokes.length.toLocaleString()} strokes`;
-  $("top-stroke-counter").textContent = `${paintIndex.toLocaleString()} / ${strokes.length.toLocaleString()} strokes`;
-  $("reference-progress").value = paintIndex;
-  $("reference-percent").textContent = `${Math.round(paintIndex / strokes.length * 100)}%`;
-  const activeStageIndex = paintIndex >= strokes.length ? boundaries.length - 1 : boundaries.findIndex((boundary) => paintIndex >= boundary.start && paintIndex < boundary.end);
-  $("reference-stage").textContent = paintIndex >= strokes.length ? "Your painted version" : boundaries[activeStageIndex]?.label;
-  $("skip-button").disabled = paintIndex >= strokes.length;
+  $("stroke-counter").textContent = counterText(paintIndex);
+  $("undo-button").disabled = paintIndex === 0;
+  $("skip-button").disabled = !stroke;
   if (!stroke) {
-    $("stage-kicker").textContent = "STUDY COMPLETE";
-    $("stage-name").textContent = "Your painted version";
-    $("guide-number").textContent = "complete";
-    $("guide-instruction").textContent = "Every guided mark is painted";
-    $("brush-size").textContent = "✓";
+    $("stage-name").textContent = "Finished — well done";
+    $("stage-tip").hidden = true;
     $("next-swatch").style.background = "var(--sage)";
-    $("canvas-status").textContent = "Study complete — beautiful work";
-    $("undo-button").disabled = paintIndex === 0;
+    $("brush-size").textContent = "";
+    $("canvas-status").textContent = "";
     clearGuide();
     return;
   }
-  const stageIndex = boundaries.findIndex((boundary) => paintIndex >= boundary.start && paintIndex < boundary.end);
-  $("stage-kicker").textContent = `PAINT ALONG · STAGE ${stageIndex + 1}`;
-  $("stage-name").textContent = boundaries[stageIndex]?.label || "Guided study";
-  $("guide-number").textContent = `${paintIndex + 1} of ${strokes.length}`;
-  $("guide-instruction").textContent = "Colour and size are supplied";
-  $("stage-tip").textContent = boundaries[stageIndex]?.tip || "Follow the current stroke; the faint mark shows what comes next.";
-  $("brush-size").textContent = `${stroke.s} px brush`;
+  const stage = boundaries[stageIndexAt(paintIndex)];
+  $("stage-name").textContent = stage?.label || "";
+  $("stage-tip").textContent = stage?.tip || "";
+  $("stage-tip").hidden = !(lessonMode && stage?.tip);
   $("next-swatch").style.background = stroke.c;
-  $("undo-button").disabled = paintIndex === 0;
+  $("brush-size").textContent = `${stroke.s} px`;
+  $("canvas-status").textContent = paintIndex === 0 ? "Drag along the dashed line" : "";
   showGhost();
 }
 
@@ -202,17 +176,13 @@ function setMode(nextMode) {
   $("paint-mode").setAttribute("aria-pressed", String(isPaint));
   $("watch-controls").hidden = isPaint;
   $("paint-controls").hidden = !isPaint;
+  $("stage-tip").hidden = true;
   frame.classList.toggle("painting", isPaint);
-  frame.classList.toggle("lesson-mode", isPaint && lessonMode);
-  $("stage-tip").hidden = !(isPaint && lessonMode);
-  $("mode-hint").textContent = isPaint ? "Your gesture. The recipe's colour and brush." : "From the first broad mark to the final detail.";
   clearStudy();
   if (isPaint) {
     paintIndex = 0;
     userStrokes = [];
-    $("live-score").textContent = "—";
-    updateGuideUI();
-    updateLiveScore();
+    updatePaintUI();
   } else {
     watchCount = 0;
     updateWatchUI();
@@ -235,7 +205,7 @@ function beginPaint(event) {
   const guideStroke = strokes[paintIndex];
   drawing = { pointerId: event.pointerId, points: [x, y] };
   paintStroke(ctx, { p: [x, y, x + 0.01, y], c: guideStroke.c, s: guideStroke.s, o: guideStroke.o });
-  $("canvas-status").textContent = "Painting…";
+  $("canvas-status").textContent = "";
 }
 
 function movePaint(event) {
@@ -259,38 +229,13 @@ function finishPaint(event) {
   drawing = null;
   if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
   paintIndex += 1;
-  updateGuideUI();
-  updateLiveScore();
+  updatePaintUI();
 }
 
 function repaintUserStrokes() {
   clearStudy();
   userStrokes.forEach((stroke) => paintStroke(ctx, stroke));
-  updateGuideUI();
-  updateLiveScore();
-}
-
-function prepareReferenceScore() {
-  const scale = 96 / Math.max(recipe.width, recipe.height);
-  const width = Math.max(1, Math.round(recipe.width * scale));
-  const height = Math.max(1, Math.round(recipe.height * scale));
-  referenceScoreCanvas.width = paintingScoreCanvas.width = width;
-  referenceScoreCanvas.height = paintingScoreCanvas.height = height;
-  const referenceCtx = referenceScoreCanvas.getContext("2d", { willReadFrequently: true });
-  referenceCtx.drawImage($("reference-image"), 0, 0, width, height);
-  referenceReady = true;
-}
-
-function updateLiveScore() {
-  if (!referenceReady) return;
-  const scoreCtx = paintingScoreCanvas.getContext("2d", { willReadFrequently: true });
-  scoreCtx.drawImage(canvas, 0, 0, paintingScoreCanvas.width, paintingScoreCanvas.height);
-  const a = referenceScoreCanvas.getContext("2d").getImageData(0, 0, referenceScoreCanvas.width, referenceScoreCanvas.height).data;
-  const b = scoreCtx.getImageData(0, 0, paintingScoreCanvas.width, paintingScoreCanvas.height).data;
-  let difference = 0;
-  for (let i = 0; i < a.length; i += 4) difference += Math.abs(a[i] - b[i]) + Math.abs(a[i + 1] - b[i + 1]) + Math.abs(a[i + 2] - b[i + 2]);
-  const similarity = Math.max(0, 100 * (1 - difference / (a.length / 4 * 3 * 255)));
-  $("live-score").textContent = `${similarity.toFixed(1)}%`;
+  updatePaintUI();
 }
 
 function buildStageButtons() {
@@ -298,58 +243,56 @@ function buildStageButtons() {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "stage-button";
-    button.innerHTML = `<span>0${index + 1}</span>${stage.label}`;
-    button.setAttribute("aria-label", `Show painting through ${stage.label}, ${stage.end} strokes`);
+    button.innerHTML = `<span>${index + 1}</span>${stage.label}`;
+    button.setAttribute("aria-label", `Show the painting up to ${stage.label}`);
     button.addEventListener("click", () => setWatchCount(stage.end));
     return button;
   }));
 }
 
-function buildPalette() {
-  const colours = [];
-  const stride = Math.max(1, Math.floor(strokes.length / 80));
-  for (let i = 0; i < strokes.length && colours.length < 6; i += stride) {
-    if (!colours.includes(strokes[i].c)) colours.push(strokes[i].c);
+// One short credit line: "[Photo: name, ]licence · source".
+function showReferenceCredit(credit) {
+  const element = $("reference-credit");
+  element.replaceChildren();
+  element.hidden = !credit;
+  if (!credit) return;
+  if (credit.licence === "CC BY-SA 4.0") {
+    const licence = document.createElement("a");
+    licence.href = "https://creativecommons.org/licenses/by-sa/4.0/";
+    licence.textContent = credit.licence;
+    element.append(document.createTextNode(`Photo: ${credit.author}, `), licence);
+  } else {
+    element.append(document.createTextNode(credit.licence));
   }
-  $("recipe-palette").replaceChildren(...colours.map((colour) => {
-    const dot = document.createElement("span");
-    dot.className = "palette-dot";
-    dot.style.background = colour;
-    dot.title = colour;
-    return dot;
-  }));
+  const source = document.createElement("a");
+  source.href = credit.url;
+  source.textContent = credit.source || "Wikimedia Commons";
+  element.append(document.createTextNode(" · "), source);
 }
 
 async function load() {
   const id = new URLSearchParams(location.search).get("id");
-  if (!id || !/^[a-z0-9-]+$/.test(id)) throw new Error("A valid painting id is required.");
+  if (!id || !/^[a-z0-9-]+$/.test(id)) throw new Error("No painting was chosen.");
   const [recipeResponse, manifestResponse] = await Promise.all([fetch(`../recipes/${id}.json`), fetch("../recipes/manifest.json")]);
   if (!recipeResponse.ok) throw new Error(`Recipe returned ${recipeResponse.status}`);
   recipe = await recipeResponse.json();
   if (manifestResponse.ok) {
-    const manifest = await manifestResponse.json();
-    const entry = manifest.find((item) => item.id === id);
-    recipe.scores = entry?.scores;
+    const entry = (await manifestResponse.json()).find((item) => item.id === id);
     recipe.credit = entry?.credit || recipe.credit;
+    recipe.reference = recipe.reference || entry?.reference;
   }
   strokes = flattenStages(recipe);
   boundaries = boundariesFor(recipe);
+  if (!strokes.length) throw new Error("This recipe has no strokes.");
   lessonMode = strokes.length < 1000;
-  const minimumStrokes = lessonMode ? 1 : recipe.profile === "flat" ? 500 : id === "sunflowers" ? 2500 : 1500;
-  if (strokes.length < minimumStrokes || strokes.length > 6000 || strokes.length !== recipe.strokeCount) throw new Error("This recipe has an invalid stroke budget.");
   document.title = `${recipe.title} — Painting Cookbook`;
   $("painting-title").textContent = recipe.title;
-  $("artist-line").textContent = `${recipe.artist} · ${recipe.year}`;
-  $("lesson-tip").hidden = !recipe.lessonTip;
-  $("lesson-tip").textContent = recipe.lessonTip || "";
-  $("recipe-score").textContent = recipe.scores?.similarity ?? "—";
-  $("reference-progress").max = strokes.length;
-  $("reference-image").src = recipe.reference || `../references/${id}.jpg`;
-  $("reference-image").alt = `Original ${recipe.title} by ${recipe.artist}`;
-  $("reference-caption").textContent = `${recipe.title}, ${recipe.artist}, ${recipe.year}. Original reference; not a painting layer.`;
-  showReferenceCredit(recipe.credit);
-  $("study-description").textContent = recipe.description || descriptions[id] || "A stroke-by-stroke study in layered colour and gesture.";
-  $("stat-strokes").textContent = strokes.length.toLocaleString();
+  const lesson = id.startsWith("lesson-");
+  $("artist-line").textContent = lesson ? "Lesson" : `${recipe.artist} · ${recipe.year}`;
+  $("reference-image").src = `../${(recipe.reference || `references/${id}.jpg`).replace(/^(\.\.\/)+/, "")}`;
+  $("reference-image").alt = `Original: ${recipe.title}`;
+  showReferenceCredit(lesson ? null : recipe.credit);
+  $("study-description").textContent = recipe.lessonTip || firstSentence(descriptions[id] || recipe.description);
   $("scrubber").max = strokes.length;
   const defaultSpeed = Math.max(10, Math.min(500, Math.round(strokes.length / 20 / 10) * 10));
   $("speed").value = defaultSpeed;
@@ -357,49 +300,17 @@ async function load() {
   canvas.width = guide.width = recipe.width;
   canvas.height = guide.height = recipe.height;
   frame.style.aspectRatio = `${recipe.width} / ${recipe.height}`;
+  // Fit the whole canvas in the window: limit its width by the available height.
+  frame.style.maxWidth = `calc((100vh - 330px) * ${(recipe.width / recipe.height).toFixed(4)})`;
   buildStageButtons();
-  buildPalette();
   setWatchCount(0);
   $("study").hidden = false;
-  try {
-    await $("reference-image").decode();
-    prepareReferenceScore();
-  } catch {
-    // Painting remains fully usable if only the optional live metric cannot load.
-    $("live-score").textContent = "Unavailable";
-  }
-}
-
-function showReferenceCredit(credit) {
-  const element = $("reference-credit");
-  element.replaceChildren();
-  if (!credit) {
-    element.hidden = true;
-    return;
-  }
-  const photographic = credit.licence === "CC BY-SA 4.0";
-  element.append(document.createTextNode(`${photographic ? "Photo by " : ""}${credit.author}, `));
-  if (photographic) {
-    const licence = document.createElement("a");
-    licence.href = "https://creativecommons.org/licenses/by-sa/4.0/";
-    licence.textContent = credit.licence;
-    element.append(licence, document.createTextNode(", "));
-  } else {
-    element.append(document.createTextNode(`${credit.licence}, `));
-  }
-  const source = document.createElement("a");
-  source.className = "reference-source";
-  source.href = credit.url;
-  source.textContent = `via ${credit.source || "Wikimedia Commons"}`;
-  element.append(source);
-  if (credit.note) element.append(document.createTextNode(`. ${credit.note}`));
-  element.hidden = false;
 }
 
 $("watch-mode").addEventListener("click", () => setMode("watch"));
 $("paint-mode").addEventListener("click", () => setMode("paint"));
 $("play-button").addEventListener("click", playReplay);
-$("speed").addEventListener("input", () => $("speed-output").textContent = `${$("speed").value}/s`);
+$("speed").addEventListener("input", () => { $("speed-output").textContent = `${$("speed").value}/s`; });
 $("scrubber").addEventListener("input", () => setWatchCount(Number($("scrubber").value)));
 $("undo-button").addEventListener("click", () => {
   if (paintIndex > 0) {
@@ -410,15 +321,14 @@ $("undo-button").addEventListener("click", () => {
 });
 $("skip-button").addEventListener("click", () => {
   if (mode !== "paint" || paintIndex >= strokes.length) return;
-  const stage = boundaries.find((boundary) => paintIndex >= boundary.start && paintIndex < boundary.end);
+  const stage = boundaries[stageIndexAt(paintIndex)];
   while (paintIndex < stage.end) {
     const stroke = strokes[paintIndex];
     paintStroke(ctx, stroke);
     userStrokes.push(stroke);
     paintIndex += 1;
   }
-  updateGuideUI();
-  updateLiveScore();
+  updatePaintUI();
 });
 $("restart-button").addEventListener("click", () => {
   paintIndex = 0;

@@ -3,104 +3,73 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A stroke-by-stroke interactive Painting Cookbook study.">
-  <title>Painting study — Painting Cookbook</title>
+  <meta name="description" content="Watch it painted, or paint it yourself one stroke at a time.">
+  <title>Painting Cookbook</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="recipe-page">
   <header class="site-header wrap recipe-header">
-    <a class="brand" href="index.html" aria-label="Back to Painting Cookbook collection">
+    <a class="brand" href="index.html" aria-label="Back to all paintings">
       <span class="brand-mark" aria-hidden="true"></span>
       <span>Painting <em>Cookbook</em></span>
     </a>
-    <div class="header-actions">
-      <span id="top-stroke-counter" class="top-stroke-counter">0 / 0 strokes</span>
-      <a class="back-link" href="index.html">← Collection</a>
-    </div>
+    <a class="back-link" href="index.html">← All paintings</a>
   </header>
 
   <main id="study" class="study wrap" hidden>
     <div class="study-heading">
-      <div>
-        <p id="artist-line" class="eyebrow"></p>
-        <h1 id="painting-title"></h1>
-        <p id="lesson-tip" class="lesson-tip" hidden></p>
-      </div>
-      <div class="similarity-badge" title="Offline similarity from structural, colour and edge measurements">
-        <strong id="recipe-score">—</strong><span>similarity<br>index</span>
-      </div>
+      <h1 id="painting-title"></h1>
+      <p id="artist-line" class="artist-line"></p>
     </div>
 
     <div class="studio-layout">
-      <section class="workspace" aria-label="Painting workspace">
-        <div class="mode-bar">
-          <div class="segmented" role="group" aria-label="Interaction mode">
-            <button id="watch-mode" class="mode-button active" type="button" aria-pressed="true">Watch</button>
-            <button id="paint-mode" class="mode-button" type="button" aria-pressed="false">Paint Along</button>
-          </div>
-          <p id="mode-hint">From the first broad mark to the final detail.</p>
+      <section class="workspace" aria-label="Painting">
+        <div class="segmented" role="group" aria-label="Mode">
+          <button id="watch-mode" class="mode-button active" type="button" aria-pressed="true">Watch</button>
+          <button id="paint-mode" class="mode-button" type="button" aria-pressed="false">Paint</button>
         </div>
 
         <div id="canvas-frame" class="canvas-frame">
-          <canvas id="painting-canvas" aria-label="Interactive painting canvas"></canvas>
+          <canvas id="painting-canvas" aria-label="Painting canvas"></canvas>
           <canvas id="guide-canvas" aria-hidden="true"></canvas>
-          <div id="canvas-status" class="canvas-status">Ready</div>
+          <div id="canvas-status" class="canvas-status"></div>
+        </div>
+
+        <div class="stage-caption">
+          <strong id="stage-name"></strong>
+          <span id="stroke-counter"></span>
         </div>
         <p id="stage-tip" class="stage-tip" hidden></p>
 
-        <div class="stage-caption">
-          <div><span id="stage-kicker">FINISHED STUDY</span><strong id="stage-name">Fine details</strong></div>
-          <span id="stroke-counter">0 / 0 strokes</span>
-        </div>
-
-        <div id="watch-controls" class="controls watch-controls">
+        <div id="watch-controls" class="controls">
           <div class="playback-row">
-            <button id="play-button" class="primary-button" type="button" aria-label="Play painting replay">▶ <span>Replay</span></button>
-            <label class="speed-control" for="speed">Speed <input id="speed" type="range" min="10" max="500" step="10" value="10"><output id="speed-output" for="speed">—/s</output></label>
+            <button id="play-button" class="primary-button" type="button">▶ Play</button>
+            <input id="scrubber" class="scrubber" type="range" min="0" max="1" step="1" value="0" aria-label="Progress">
+            <label class="speed-control" for="speed" title="Strokes per second"><input id="speed" type="range" min="10" max="500" step="10" value="10" aria-label="Speed"><output id="speed-output" for="speed"></output></label>
           </div>
-          <label class="sr-only" for="scrubber">Replay progress</label>
-          <input id="scrubber" class="scrubber" type="range" min="0" max="1" step="1" value="0">
-          <div id="stage-buttons" class="stage-buttons" aria-label="Jump to a painting stage"></div>
+          <div id="stage-buttons" class="stage-buttons" aria-label="Jump to a stage"></div>
         </div>
 
-        <div id="paint-controls" class="controls paint-controls" hidden>
-          <div class="next-stroke-card">
-            <span id="next-swatch" class="next-swatch" aria-hidden="true"></span>
-            <div><small>GHOST STROKE <span id="guide-number"></span></small><strong id="guide-instruction">Colour and size are supplied</strong></div>
-            <span id="brush-size"></span>
-          </div>
+        <div id="paint-controls" class="controls" hidden>
           <div class="paint-actions">
-            <span class="live-score">Live colour match <strong id="live-score">—</strong></span>
-            <button id="skip-button" class="quiet-button skip-button" type="button">Finish this stage</button>
+            <span id="next-swatch" class="next-swatch" title="Colour of the next stroke" aria-hidden="true"></span>
+            <span id="brush-size" class="brush-size"></span>
             <button id="undo-button" class="quiet-button" type="button">Undo</button>
+            <button id="skip-button" class="quiet-button" type="button">Skip stage</button>
             <button id="restart-button" class="quiet-button" type="button">Restart</button>
           </div>
         </div>
       </section>
 
-      <aside class="reference-panel" aria-label="Original painting reference">
-        <div class="reference-heading"><span>REFERENCE</span><span>THE ORIGINAL</span></div>
-        <img id="reference-image" alt="Original painting reference">
-        <p id="reference-caption"></p>
+      <aside class="reference-panel" aria-label="Original">
+        <img id="reference-image" alt="">
         <p id="reference-credit" class="reference-credit" hidden></p>
-        <div class="reference-progress">
-          <div><span id="reference-stage">Blank canvas</span><strong id="reference-percent">0%</strong></div>
-          <progress id="reference-progress" max="1" value="0" aria-label="Stroke progress"></progress>
-        </div>
-        <div class="study-notes">
-          <p id="study-description"></p>
-          <div id="recipe-palette" class="recipe-palette" aria-label="Colours in this stroke recipe"></div>
-          <dl class="study-stats">
-            <div><dt>Marks</dt><dd id="stat-strokes"></dd></div>
-            <div><dt>Layers</dt><dd>4</dd></div>
-            <div><dt>Brush</dt><dd>Soft round</dd></div>
-          </dl>
-        </div>
+        <p id="study-description" class="study-description"></p>
       </aside>
     </div>
   </main>
   <main id="load-error" class="load-error wrap" hidden>
-    <p class="eyebrow">Studio note</p><h1>This study could not be opened.</h1><p id="error-message"></p><a class="text-link" href="index.html">Return to the collection →</a>
+    <h1>This painting could not be opened.</h1><p id="error-message"></p><a class="back-link" href="index.html">← All paintings</a>
   </main>
   <script type="module" src="recipe.js"></script>
 </body>
