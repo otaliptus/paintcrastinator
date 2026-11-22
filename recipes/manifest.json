@@ -527,60 +527,6 @@
     "reference": "../references/nocturne-battersea.jpg"
   },
   {
-    "id": "the-dance",
-    "title": "Dance",
-    "artist": "Henri Matisse",
-    "year": "1910",
-    "width": 960,
-    "height": 632,
-    "strokeCount": 450,
-    "scores": {
-      "reference": "references/the-dance.jpg",
-      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/the-dance-claude.png",
-      "ssim": 0.77239,
-      "mean_delta_e": 2.9978,
-      "edge_similarity": 0.47499,
-      "colour_similarity": 0.94004,
-      "similarity": 77.807,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    },
-    "credit": {
-      "author": "Henri Matisse",
-      "licence": "Public domain",
-      "url": "https://commons.wikimedia.org/wiki/File:Henri_Matisse_-_Dance_1910.jpg",
-      "source": "Wikimedia Commons"
-    },
-    "description": "Five figures in a ring on flat blue and green.",
-    "reference": "../references/the-dance.jpg"
-  },
-  {
-    "id": "whistlers-mother",
-    "title": "Arrangement in Grey and Black (Whistler's Mother)",
-    "artist": "James McNeill Whistler",
-    "year": "1871",
-    "width": 960,
-    "height": 854,
-    "strokeCount": 450,
-    "scores": {
-      "reference": "references/whistlers-mother.jpg",
-      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/whistlers-mother-claude.png",
-      "ssim": 0.81492,
-      "mean_delta_e": 1.7614,
-      "edge_similarity": 0.55452,
-      "colour_similarity": 0.96477,
-      "similarity": 82.082,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    },
-    "credit": {
-      "author": "James McNeill Whistler",
-      "licence": "Public domain",
-      "url": "https://commons.wikimedia.org/wiki/File:Whistlers_Mother_high_res.jpg",
-      "source": "Wikimedia Commons"
-    },
-    "description": "A seated figure in black, in profile against a grey wall.",
-    "reference": "../references/whistlers-mother.jpg"
-  },
-  {
     "id": "basket-of-apples",
     "title": "The Basket of Apples",
     "artist": "Paul Cézanne",
@@ -608,32 +554,6 @@
     "reference": "../references/basket-of-apples.jpg"
   },
   {
-    "id": "american-gothic",
-    "title": "American Gothic",
-    "artist": "Grant Wood",
-    "year": "1930",
-    "width": 960,
-    "height": 1158,
-    "strokeCount": 450,
-    "scores": {
-      "reference": "references/american-gothic.jpg",
-      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/american-gothic-claude.png",
-      "ssim": 0.69521,
-      "mean_delta_e": 3.0348,
-      "edge_similarity": 0.54363,
-      "colour_similarity": 0.9393,
-      "similarity": 74.57,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    },
-    "credit": {
-      "author": "Grant Wood",
-      "licence": "Public domain",
-      "url": "https://commons.wikimedia.org/wiki/File:Grant_Wood_-_American_Gothic_-_Google_Art_Project.jpg",
-      "source": "Wikimedia Commons"
-    },
-    "description": "A farmer and his daughter before a house with a Gothic window."
-  },
-  {
     "id": "sudden-shower",
     "title": "Sudden Shower over Shin-Ōhashi Bridge",
     "artist": "Utagawa Hiroshige",
@@ -658,5 +578,57 @@
       "source": "Wikimedia Commons"
     },
     "description": "Travellers hurry across a bridge under slanting rain."
+  },
+  {
+    "id": "whistlers-mother",
+    "title": "Arrangement in Grey and Black (Whistler's Mother)",
+    "artist": "James McNeill Whistler",
+    "year": "1871",
+    "width": 960,
+    "height": 854,
+    "strokeCount": 600,
+    "scores": {
+      "reference": "references/whistlers-mother.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/whistlers-mother-claude.png",
+      "ssim": 0.83026,
+      "mean_delta_e": 1.7868,
+      "edge_similarity": 0.62461,
+      "colour_similarity": 0.96426,
+      "similarity": 83.961,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "James McNeill Whistler",
+      "licence": "Public domain",
+      "url": "https://commons.wikimedia.org/wiki/File:Whistlers_Mother_high_res.jpg",
+      "source": "Wikimedia Commons"
+    },
+    "description": "A seated figure in black, in profile against a grey wall."
+  },
+  {
+    "id": "american-gothic",
+    "title": "American Gothic",
+    "artist": "Grant Wood",
+    "year": "1930",
+    "width": 960,
+    "height": 1158,
+    "strokeCount": 600,
+    "scores": {
+      "reference": "references/american-gothic.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/american-gothic-claude.png",
+      "ssim": 0.72812,
+      "mean_delta_e": 3.2207,
+      "edge_similarity": 0.62794,
+      "colour_similarity": 0.93559,
+      "similarity": 77.533,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Grant Wood",
+      "licence": "Public domain",
+      "url": "https://commons.wikimedia.org/wiki/File:Grant_Wood_-_American_Gothic_-_Google_Art_Project.jpg",
+      "source": "Wikimedia Commons"
+    },
+    "description": "A farmer and his daughter before a house with a Gothic window."
   }
 ]
