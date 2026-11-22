@@ -253,6 +253,33 @@
     "reference": "../references/the-snail.jpg"
   },
   {
+    "id": "mondrian-1930",
+    "title": "Composition with Red, Blue and Yellow",
+    "artist": "Piet Mondrian",
+    "year": "1930",
+    "width": 960,
+    "height": 973,
+    "strokeCount": 450,
+    "scores": {
+      "reference": "references/mondrian-1930.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/mondrian-1930-claude.png",
+      "ssim": 0.88303,
+      "mean_delta_e": 1.9951,
+      "edge_similarity": 0.68092,
+      "colour_similarity": 0.9601,
+      "similarity": 87.583,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Piet Mondrian",
+      "licence": "Public domain",
+      "url": "https://commons.wikimedia.org/wiki/File:Piet_Mondriaan,_1930_-_Mondrian_Composition_II_in_Red,_Blue,_and_Yellow.jpg",
+      "source": "Wikimedia Commons"
+    },
+    "description": "A measured grid of red, blue, yellow and white held by black bars.",
+    "reference": "../references/mondrian-1930.jpg"
+  },
+  {
     "id": "almond-blossom",
     "title": "Almond Blossom",
     "artist": "Vincent van Gogh",
@@ -313,7 +340,7 @@
     "year": "c. 1818",
     "width": 960,
     "height": 1231,
-    "strokeCount": 1800,
+    "strokeCount": 2400,
     "scores": {
       "reference": "references/wanderer-sea-of-fog.jpg",
       "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/wanderer-sea-of-fog-claude.png",
@@ -332,6 +359,33 @@
     },
     "description": "A lone dark figure overlooks layered fog and distant mountains.",
     "reference": "../references/wanderer-sea-of-fog.jpg"
+  },
+  {
+    "id": "cafe-terrace",
+    "title": "Café Terrace at Night",
+    "artist": "Vincent van Gogh",
+    "year": "1888",
+    "width": 960,
+    "height": 1261,
+    "strokeCount": 2500,
+    "scores": {
+      "reference": "references/cafe-terrace.jpg",
+      "render": "recipes/cafe-terrace.png",
+      "ssim": 0.3082,
+      "mean_delta_e": 7.4742,
+      "edge_similarity": 0.33597,
+      "colour_similarity": 0.85052,
+      "similarity": 47.506,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Vincent van Gogh",
+      "licence": "Public domain",
+      "source": "Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:Van_Gogh_-_Terrasse_des_Caf%C3%A9s_an_der_Place_du_Forum_in_Arles_am_Abend1.jpeg"
+    },
+    "description": "A glowing yellow terrace anchors a deep blue starlit night.",
+    "reference": "../references/cafe-terrace.jpg"
   },
   {
     "id": "lesson-sky",
@@ -415,7 +469,8 @@
       "url": "https://commons.wikimedia.org/wiki/File:Monet_-_Impression,_Sunrise.jpg",
       "source": "Wikimedia Commons"
     },
-    "description": "The harbour dissolves into mist around one orange sun."
+    "description": "The harbour dissolves into mist around one orange sun.",
+    "reference": "../references/impression-sunrise.jpg"
   },
   {
     "id": "wheatfield-crows",
@@ -441,7 +496,8 @@
       "url": "https://commons.wikimedia.org/wiki/File:Vincent_van_Gogh_-_Wheatfield_with_crows_-_Google_Art_Project.jpg",
       "source": "Wikimedia Commons"
     },
-    "description": "A stormy sky over gold wheat, three paths and a flight of crows."
+    "description": "A stormy sky over gold wheat, three paths and a flight of crows.",
+    "reference": "../references/wheatfield-crows.jpg"
   },
   {
     "id": "nocturne-battersea",
@@ -467,7 +523,8 @@
       "url": "https://commons.wikimedia.org/wiki/File:James_McNeill_Whistler_-_Nocturne_en_bleu_et_or.jpg",
       "source": "Wikimedia Commons"
     },
-    "description": "A night river in blue-green, with one dark bridge pier."
+    "description": "A night river in blue-green, with one dark bridge pier.",
+    "reference": "../references/nocturne-battersea.jpg"
   },
   {
     "id": "the-dance",
@@ -493,7 +550,8 @@
       "url": "https://commons.wikimedia.org/wiki/File:Henri_Matisse_-_Dance_1910.jpg",
       "source": "Wikimedia Commons"
     },
-    "description": "Five figures in a ring on flat blue and green."
+    "description": "Five figures in a ring on flat blue and green.",
+    "reference": "../references/the-dance.jpg"
   },
   {
     "id": "red-fuji",
@@ -519,33 +577,8 @@
       "url": "https://commons.wikimedia.org/wiki/File:Katsushika_Hokusai_-_Fine_Wind,_Clear_Morning_(Gaif%C5%AB_kaisei)_-_Google_Art_Project.jpg",
       "source": "Wikimedia Commons"
     },
-    "description": "Mount Fuji glows red at dawn under a sky of small clouds."
-  },
-  {
-    "id": "mondrian-1930",
-    "title": "Composition with Red, Blue and Yellow",
-    "artist": "Piet Mondrian",
-    "year": "1930",
-    "width": 960,
-    "height": 973,
-    "strokeCount": 450,
-    "scores": {
-      "reference": "references/mondrian-1930.jpg",
-      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/mondrian-1930-claude.png",
-      "ssim": 0.88303,
-      "mean_delta_e": 1.9951,
-      "edge_similarity": 0.68092,
-      "colour_similarity": 0.9601,
-      "similarity": 87.583,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    },
-    "credit": {
-      "author": "Piet Mondrian",
-      "licence": "Public domain",
-      "url": "https://commons.wikimedia.org/wiki/File:Piet_Mondriaan,_1930_-_Mondrian_Composition_II_in_Red,_Blue,_and_Yellow.jpg",
-      "source": "Wikimedia Commons"
-    },
-    "description": "A measured grid of red, blue, yellow and white held by black bars."
+    "description": "Mount Fuji glows red at dawn under a sky of small clouds.",
+    "reference": "../references/red-fuji.jpg"
   },
   {
     "id": "basket-of-apples",
@@ -571,7 +604,8 @@
       "url": "https://commons.wikimedia.org/wiki/File:Le_panier_de_pommes,_par_Paul_C%C3%A9zanne.jpg",
       "source": "Wikimedia Commons"
     },
-    "description": "Apples, a bottle and a cloth built from blocky planes of colour."
+    "description": "Apples, a bottle and a cloth built from blocky planes of colour.",
+    "reference": "../references/basket-of-apples.jpg"
   },
   {
     "id": "sudden-shower",
@@ -597,6 +631,7 @@
       "url": "https://commons.wikimedia.org/wiki/File:Hiroshige,_Sudden_shower_over_Shin-%C5%8Chashi_bridge_and_Atake,_1857.jpg",
       "source": "Wikimedia Commons"
     },
-    "description": "Travellers hurry across a bridge under slanting rain."
+    "description": "Travellers hurry across a bridge under slanting rain.",
+    "reference": "../references/sudden-shower.jpg"
   }
 ]

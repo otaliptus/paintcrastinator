@@ -1,0 +1,10 @@
+{
+  "reference": "references/cafe-terrace.jpg",
+  "render": "recipes/cafe-terrace.png",
+  "ssim": 0.3082,
+  "mean_delta_e": 7.4742,
+  "edge_similarity": 0.33597,
+  "colour_similarity": 0.85052,
+  "similarity": 47.506,
+  "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+}
