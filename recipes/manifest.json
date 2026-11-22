@@ -1,5 +1,285 @@
 [
   {
+    "id": "mona-lisa",
+    "title": "Mona Lisa",
+    "artist": "Leonardo da Vinci",
+    "year": "c. 1503–1519",
+    "width": 960,
+    "height": 1431,
+    "strokeCount": 5000,
+    "scores": {
+      "reference": "references/mona-lisa.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/mona-lisa-claude.png",
+      "ssim": 0.74131,
+      "mean_delta_e": 2.4708,
+      "edge_similarity": 0.66657,
+      "colour_similarity": 0.95058,
+      "similarity": 79.288,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "reference": "../references/mona-lisa.jpg"
+  },
+  {
+    "id": "girl-with-a-pearl-earring",
+    "title": "Girl with a Pearl Earring",
+    "artist": "Johannes Vermeer",
+    "year": "c. 1665",
+    "width": 960,
+    "height": 1137,
+    "strokeCount": 5000,
+    "scores": {
+      "reference": "references/girl-with-a-pearl-earring.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/girl-with-a-pearl-earring-claude.png",
+      "ssim": 0.77775,
+      "mean_delta_e": 1.9136,
+      "edge_similarity": 0.71904,
+      "colour_similarity": 0.96173,
+      "similarity": 82.414,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "reference": "../references/girl-with-a-pearl-earring.jpg"
+  },
+  {
+    "id": "starry-night",
+    "title": "The Starry Night",
+    "artist": "Vincent van Gogh",
+    "year": "1889",
+    "width": 960,
+    "height": 760,
+    "strokeCount": 5000,
+    "scores": {
+      "reference": "references/starry-night.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/starry-night-claude.png",
+      "ssim": 0.44258,
+      "mean_delta_e": 4.5279,
+      "edge_similarity": 0.55159,
+      "colour_similarity": 0.90944,
+      "similarity": 59.899,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "reference": "../references/starry-night.jpg"
+  },
+  {
+    "id": "great-wave",
+    "title": "The Great Wave off Kanagawa",
+    "artist": "Katsushika Hokusai",
+    "year": "c. 1830–1832",
+    "width": 960,
+    "height": 645,
+    "strokeCount": 5000,
+    "scores": {
+      "reference": "references/great-wave.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/great-wave-claude.png",
+      "ssim": 0.61823,
+      "mean_delta_e": 3.749,
+      "edge_similarity": 0.62178,
+      "colour_similarity": 0.92502,
+      "similarity": 71.08,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "reference": "../references/great-wave.jpg"
+  },
+  {
+    "id": "van-gogh-self-portrait",
+    "title": "Self-Portrait",
+    "artist": "Vincent van Gogh",
+    "year": "1887",
+    "width": 960,
+    "height": 1213,
+    "strokeCount": 5000,
+    "scores": {
+      "reference": "references/van-gogh-self-portrait.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/van-gogh-self-portrait-claude.png",
+      "ssim": 0.48924,
+      "mean_delta_e": 5.4425,
+      "edge_similarity": 0.5492,
+      "colour_similarity": 0.89115,
+      "similarity": 61.881,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "reference": "../references/van-gogh-self-portrait.jpg"
+  },
+  {
+    "id": "countach",
+    "title": "Lamborghini Countach LP5000 S",
+    "artist": "Photo: Palauenc05",
+    "year": "1983",
+    "width": 960,
+    "height": 508,
+    "strokeCount": 5000,
+    "scores": {
+      "reference": "references/countach.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/countach-claude.png",
+      "ssim": 0.53176,
+      "mean_delta_e": 3.8798,
+      "edge_similarity": 0.64136,
+      "colour_similarity": 0.9224,
+      "similarity": 66.539,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Palauenc05",
+      "licence": "CC BY-SA 4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Lamborghini_Countach_LP_5000S_1983.jpg"
+    },
+    "reference": "../references/countach.jpg"
+  },
+  {
+    "id": "marilyn-1953",
+    "title": "Marilyn Monroe",
+    "artist": "Studio publicity still (Photoplay)",
+    "year": "1953",
+    "width": 960,
+    "height": 1048,
+    "strokeCount": 5000,
+    "scores": {
+      "reference": "references/marilyn-1953.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/marilyn-1953-claude.png",
+      "ssim": 0.79763,
+      "mean_delta_e": 1.6956,
+      "edge_similarity": 0.71613,
+      "colour_similarity": 0.96609,
+      "similarity": 83.594,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Studio publicity still (Photoplay)",
+      "licence": "Public domain",
+      "url": "https://commons.wikimedia.org/wiki/File:Marilyn_Monroe,_Photoplay_1953_(cropped).jpg"
+    },
+    "reference": "../references/marilyn-1953.jpg"
+  },
+  {
+    "id": "the-scream",
+    "title": "The Scream",
+    "artist": "Edvard Munch",
+    "year": "1893",
+    "width": 960,
+    "height": 1191,
+    "strokeCount": 5000,
+    "scores": {
+      "reference": "references/the-scream.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/the-scream-claude.png",
+      "ssim": 0.69764,
+      "mean_delta_e": 3.0563,
+      "edge_similarity": 0.61935,
+      "colour_similarity": 0.93887,
+      "similarity": 75.827,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Edvard Munch",
+      "licence": "Public domain",
+      "url": "https://commons.wikimedia.org/wiki/File:Edvard_Munch,_1893,_The_Scream,_oil,_tempera_and_pastel_on_cardboard,_91_x_73_cm,_National_Gallery_of_Norway.jpg"
+    },
+    "reference": "../references/the-scream.jpg"
+  },
+  {
+    "id": "blue-marble",
+    "title": "The Blue Marble",
+    "artist": "Photo: NASA, Apollo 17 crew",
+    "year": "1972",
+    "width": 960,
+    "height": 961,
+    "strokeCount": 5000,
+    "scores": {
+      "reference": "references/blue-marble.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/blue-marble-claude.png",
+      "ssim": 0.5541,
+      "mean_delta_e": 2.8538,
+      "edge_similarity": 0.63026,
+      "colour_similarity": 0.94292,
+      "similarity": 68.217,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "NASA, Apollo 17 crew",
+      "licence": "Public domain",
+      "url": "https://commons.wikimedia.org/wiki/File:The_Earth_seen_from_Apollo_17.jpg"
+    },
+    "reference": "../references/blue-marble.jpg"
+  },
+  {
+    "id": "sunflowers",
+    "title": "Sunflowers",
+    "artist": "Vincent van Gogh",
+    "year": "1888",
+    "width": 960,
+    "height": 1221,
+    "strokeCount": 5000,
+    "scores": {
+      "reference": "references/sunflowers.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/sunflowers-claude.png",
+      "ssim": 0.65467,
+      "mean_delta_e": 2.5097,
+      "edge_similarity": 0.63623,
+      "colour_similarity": 0.94981,
+      "similarity": 74.044,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Vincent van Gogh",
+      "licence": "Public domain",
+      "url": "https://commons.wikimedia.org/wiki/File:Vincent_van_Gogh_-_Sunflowers_(1888,_National_Gallery_London).jpg"
+    },
+    "reference": "../references/sunflowers.jpg"
+  },
+  {
+    "id": "the-snail",
+    "title": "The Snail",
+    "artist": "Henri Matisse",
+    "year": "1953",
+    "width": 960,
+    "height": 970,
+    "strokeCount": 2000,
+    "scores": {
+      "reference": "references/the-snail.jpg",
+      "render": "recipes/the-snail.png",
+      "ssim": 0.90918,
+      "mean_delta_e": 2.2567,
+      "edge_similarity": 0.67372,
+      "colour_similarity": 0.95487,
+      "similarity": 88.757,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Tate, London",
+      "licence": "Public domain in the EU",
+      "note": "Public domain in the EU; in copyright in some other countries.",
+      "source": "Tate",
+      "url": "https://www.tate.org.uk/art/artworks/matisse-the-snail-t00540"
+    },
+    "description": "Matisse's cut-paper spiral rebuilt as discrete flat pieces: an orange ground, a straight-edged ivory sheet, coloured polygon fills and crisp inset edges, ending with the small shapes and black square.",
+    "reference": "../references/the-snail.jpg"
+  },
+  {
+    "id": "almond-blossom",
+    "title": "Almond Blossom",
+    "artist": "Vincent van Gogh",
+    "year": "1890",
+    "width": 960,
+    "height": 754,
+    "strokeCount": 1300,
+    "scores": {
+      "reference": "references/almond-blossom.jpg",
+      "render": "recipes/almond-blossom.png",
+      "ssim": 0.4722,
+      "mean_delta_e": 6.2162,
+      "edge_similarity": 0.39921,
+      "colour_similarity": 0.87568,
+      "similarity": 58.229,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Vincent van Gogh",
+      "licence": "Public domain",
+      "source": "Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:Vincent_van_Gogh_-_Almond_Blossom_-_VGM_F671.jpg"
+    },
+    "description": "Turquoise sky surrounds dark curling branches and delicate white blossoms.",
+    "reference": "../references/almond-blossom.jpg"
+  },
+  {
     "id": "lesson-sky",
     "title": "Sunset over a Still Sea",
     "artist": "Painting Cookbook lesson",
@@ -25,7 +305,7 @@
       "note": "Generated for Painting Cookbook, CC0"
     },
     "description": "A sunset distilled to long horizontal bands above a flat, dark sea. Overlapping broad strokes make the colour transitions; two restrained horizon marks finish the scene.",
-    "reference": "references/lesson-sky.png",
+    "reference": "../references/lesson-sky.png",
     "lessonTip": "Teaches blending: overlap long, quiet strokes and let neighbouring colours meet softly."
   },
   {
@@ -54,250 +334,7 @@
       "note": "Generated for Painting Cookbook, CC0"
     },
     "description": "Three overlapping hill bands demonstrate aerial perspective: the distant ridge is pale and quiet, the middle hill is cooler and darker, and the nearest slope carries the deepest green under a pale morning sky.",
-    "reference": "references/lesson-hills.png",
+    "reference": "../references/lesson-hills.png",
     "lessonTip": "Teaches aerial perspective: distant shapes are lighter and quieter; nearer hills become darker and clearer."
-  },
-  {
-    "id": "mona-lisa",
-    "title": "Mona Lisa",
-    "artist": "Leonardo da Vinci",
-    "year": "c. 1503–1519",
-    "width": 960,
-    "height": 1431,
-    "strokeCount": 5000,
-    "scores": {
-      "reference": "references/mona-lisa.jpg",
-      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/mona-lisa-claude.png",
-      "ssim": 0.74131,
-      "mean_delta_e": 2.4708,
-      "edge_similarity": 0.66657,
-      "colour_similarity": 0.95058,
-      "similarity": 79.288,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    }
-  },
-  {
-    "id": "girl-with-a-pearl-earring",
-    "title": "Girl with a Pearl Earring",
-    "artist": "Johannes Vermeer",
-    "year": "c. 1665",
-    "width": 960,
-    "height": 1137,
-    "strokeCount": 5000,
-    "scores": {
-      "reference": "references/girl-with-a-pearl-earring.jpg",
-      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/girl-with-a-pearl-earring-claude.png",
-      "ssim": 0.77775,
-      "mean_delta_e": 1.9136,
-      "edge_similarity": 0.71904,
-      "colour_similarity": 0.96173,
-      "similarity": 82.414,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    }
-  },
-  {
-    "id": "starry-night",
-    "title": "The Starry Night",
-    "artist": "Vincent van Gogh",
-    "year": "1889",
-    "width": 960,
-    "height": 760,
-    "strokeCount": 5000,
-    "scores": {
-      "reference": "references/starry-night.jpg",
-      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/starry-night-claude.png",
-      "ssim": 0.44258,
-      "mean_delta_e": 4.5279,
-      "edge_similarity": 0.55159,
-      "colour_similarity": 0.90944,
-      "similarity": 59.899,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    }
-  },
-  {
-    "id": "great-wave",
-    "title": "The Great Wave off Kanagawa",
-    "artist": "Katsushika Hokusai",
-    "year": "c. 1830–1832",
-    "width": 960,
-    "height": 645,
-    "strokeCount": 5000,
-    "scores": {
-      "reference": "references/great-wave.jpg",
-      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/great-wave-claude.png",
-      "ssim": 0.61823,
-      "mean_delta_e": 3.749,
-      "edge_similarity": 0.62178,
-      "colour_similarity": 0.92502,
-      "similarity": 71.08,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    }
-  },
-  {
-    "id": "van-gogh-self-portrait",
-    "title": "Self-Portrait",
-    "artist": "Vincent van Gogh",
-    "year": "1887",
-    "width": 960,
-    "height": 1213,
-    "strokeCount": 5000,
-    "scores": {
-      "reference": "references/van-gogh-self-portrait.jpg",
-      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/van-gogh-self-portrait-claude.png",
-      "ssim": 0.48924,
-      "mean_delta_e": 5.4425,
-      "edge_similarity": 0.5492,
-      "colour_similarity": 0.89115,
-      "similarity": 61.881,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    }
-  },
-  {
-    "id": "countach",
-    "title": "Lamborghini Countach LP5000 S",
-    "artist": "Photo: Palauenc05",
-    "year": "1983",
-    "width": 960,
-    "height": 508,
-    "strokeCount": 5000,
-    "scores": {
-      "reference": "references/countach.jpg",
-      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/countach-claude.png",
-      "ssim": 0.53176,
-      "mean_delta_e": 3.8798,
-      "edge_similarity": 0.64136,
-      "colour_similarity": 0.9224,
-      "similarity": 66.539,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    },
-    "credit": {
-      "author": "Palauenc05",
-      "licence": "CC BY-SA 4.0",
-      "url": "https://commons.wikimedia.org/wiki/File:Lamborghini_Countach_LP_5000S_1983.jpg"
-    }
-  },
-  {
-    "id": "marilyn-1953",
-    "title": "Marilyn Monroe",
-    "artist": "Studio publicity still (Photoplay)",
-    "year": "1953",
-    "width": 960,
-    "height": 1048,
-    "strokeCount": 5000,
-    "scores": {
-      "reference": "references/marilyn-1953.jpg",
-      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/marilyn-1953-claude.png",
-      "ssim": 0.79763,
-      "mean_delta_e": 1.6956,
-      "edge_similarity": 0.71613,
-      "colour_similarity": 0.96609,
-      "similarity": 83.594,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    },
-    "credit": {
-      "author": "Studio publicity still (Photoplay)",
-      "licence": "Public domain",
-      "url": "https://commons.wikimedia.org/wiki/File:Marilyn_Monroe,_Photoplay_1953_(cropped).jpg"
-    }
-  },
-  {
-    "id": "the-scream",
-    "title": "The Scream",
-    "artist": "Edvard Munch",
-    "year": "1893",
-    "width": 960,
-    "height": 1191,
-    "strokeCount": 5000,
-    "scores": {
-      "reference": "references/the-scream.jpg",
-      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/the-scream-claude.png",
-      "ssim": 0.69764,
-      "mean_delta_e": 3.0563,
-      "edge_similarity": 0.61935,
-      "colour_similarity": 0.93887,
-      "similarity": 75.827,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    },
-    "credit": {
-      "author": "Edvard Munch",
-      "licence": "Public domain",
-      "url": "https://commons.wikimedia.org/wiki/File:Edvard_Munch,_1893,_The_Scream,_oil,_tempera_and_pastel_on_cardboard,_91_x_73_cm,_National_Gallery_of_Norway.jpg"
-    }
-  },
-  {
-    "id": "blue-marble",
-    "title": "The Blue Marble",
-    "artist": "Photo: NASA, Apollo 17 crew",
-    "year": "1972",
-    "width": 960,
-    "height": 961,
-    "strokeCount": 5000,
-    "scores": {
-      "reference": "references/blue-marble.jpg",
-      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/blue-marble-claude.png",
-      "ssim": 0.5541,
-      "mean_delta_e": 2.8538,
-      "edge_similarity": 0.63026,
-      "colour_similarity": 0.94292,
-      "similarity": 68.217,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    },
-    "credit": {
-      "author": "NASA, Apollo 17 crew",
-      "licence": "Public domain",
-      "url": "https://commons.wikimedia.org/wiki/File:The_Earth_seen_from_Apollo_17.jpg"
-    }
-  },
-  {
-    "id": "sunflowers",
-    "title": "Sunflowers",
-    "artist": "Vincent van Gogh",
-    "year": "1888",
-    "width": 960,
-    "height": 1221,
-    "strokeCount": 5000,
-    "scores": {
-      "reference": "references/sunflowers.jpg",
-      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/sunflowers-claude.png",
-      "ssim": 0.65467,
-      "mean_delta_e": 2.5097,
-      "edge_similarity": 0.63623,
-      "colour_similarity": 0.94981,
-      "similarity": 74.044,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    },
-    "credit": {
-      "author": "Vincent van Gogh",
-      "licence": "Public domain",
-      "url": "https://commons.wikimedia.org/wiki/File:Vincent_van_Gogh_-_Sunflowers_(1888,_National_Gallery_London).jpg"
-    }
-  },
-  {
-    "id": "the-snail",
-    "title": "The Snail",
-    "artist": "Henri Matisse",
-    "year": "1953",
-    "width": 960,
-    "height": 970,
-    "strokeCount": 2000,
-    "scores": {
-      "reference": "references/the-snail.jpg",
-      "render": "recipes/the-snail.png",
-      "ssim": 0.90918,
-      "mean_delta_e": 2.2567,
-      "edge_similarity": 0.67372,
-      "colour_similarity": 0.95487,
-      "similarity": 88.757,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    },
-    "credit": {
-      "author": "Tate, London",
-      "licence": "Public domain in the EU",
-      "note": "Public domain in the EU; in copyright in some other countries.",
-      "source": "Tate",
-      "url": "https://www.tate.org.uk/art/artworks/matisse-the-snail-t00540"
-    },
-    "reference": "references/the-snail.jpg",
-    "description": "Matisse's cut-paper spiral rebuilt as discrete flat pieces: an orange ground, a straight-edged ivory sheet, coloured polygon fills and crisp inset edges, ending with the small shapes and black square."
   }
 ]
