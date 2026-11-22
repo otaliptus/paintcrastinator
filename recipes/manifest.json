@@ -185,13 +185,13 @@
     "height": 1048,
     "strokeCount": 5000,
     "scores": {
-      "reference": "/home/node/.openclaw/workspace/painting-cookbook/references/marilyn-1953.jpg",
-      "render": "/home/node/.openclaw/workspace/painting-cookbook/recipes/variants/marilyn-1953-5000.png",
-      "ssim": 0.68283,
-      "mean_delta_e": 3.0103,
-      "edge_similarity": 0.58975,
-      "colour_similarity": 0.93979,
-      "similarity": 74.596,
+      "reference": "references/marilyn-1953.jpg",
+      "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/marilyn-1953-claude.png",
+      "ssim": 0.79763,
+      "mean_delta_e": 1.6956,
+      "edge_similarity": 0.71613,
+      "colour_similarity": 0.96609,
+      "similarity": 83.594,
       "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
     },
     "credit": {
