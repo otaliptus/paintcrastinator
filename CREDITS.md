@@ -23,3 +23,9 @@ The library and recipe pages carry these credits wherever the corresponding refe
 - **_The Snail_ (1953):** Henri Matisse; Tate, London, Public domain in the EU, [via Tate](https://www.tate.org.uk/art/artworks/matisse-the-snail-t00540). Public domain in the EU; in copyright in some other countries. Matisse died in 1954; the work remains in copyright in the US.
 
 The original five masterwork reference images and their artists remain identified in their recipes and on their recipe pages.
+
+<!-- START_HERE_CREDITS -->
+## Start here references
+
+- **_Sunset over a Still Sea_:** Generated for Painting Cookbook, CC0. Reference drawn in Python with Pillow/NumPy at 960 px wide; [CC0 dedication](https://creativecommons.org/publicdomain/zero/1.0/).
+- **_Orange Ball on a Table_:** Generated for Painting Cookbook, CC0. Reference drawn in Python with Pillow/NumPy at 960 px wide; [CC0 dedication](https://creativecommons.org/publicdomain/zero/1.0/).

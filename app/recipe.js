@@ -33,6 +33,7 @@ let paintIndex = 0;
 let userStrokes = [];
 let drawing = null;
 let referenceReady = false;
+let lessonMode = false;
 const referenceScoreCanvas = document.createElement("canvas");
 const paintingScoreCanvas = document.createElement("canvas");
 
@@ -41,7 +42,7 @@ function boundariesFor(recipeData) {
   return recipeData.stages.map((stage) => {
     const start = cursor;
     cursor += stage.strokes.length;
-    return { start, end: cursor, id: stage.id, label: stage.label };
+    return { start, end: cursor, id: stage.id, label: stage.label, tip: stage.tip };
   });
 }
 
@@ -122,31 +123,39 @@ function playReplay() {
 
 function clearGuide() {
   guideCtx.clearRect(0, 0, guide.width, guide.height);
+  guide.dataset.ghostStrokes = "0";
 }
 
 function showGhost() {
   clearGuide();
   if (mode !== "paint" || paintIndex >= strokes.length) return;
-  const stroke = strokes[paintIndex];
-  const points = stroke.p;
-  guideCtx.save();
-  guideCtx.beginPath();
-  guideCtx.moveTo(points[0], points[1]);
-  for (let i = 2; i < points.length; i += 2) guideCtx.lineTo(points[i], points[i + 1]);
-  guideCtx.strokeStyle = stroke.c;
-  guideCtx.globalAlpha = 0.48;
-  guideCtx.lineWidth = Math.max(1.2, stroke.s * 0.12);
-  guideCtx.lineCap = "round";
-  guideCtx.lineJoin = "round";
-  guideCtx.setLineDash([Math.max(2, stroke.s * 0.28), Math.max(3, stroke.s * 0.32)]);
-  guideCtx.stroke();
-  guideCtx.setLineDash([]);
-  guideCtx.globalAlpha = 0.75;
-  guideCtx.beginPath();
-  guideCtx.arc(points[0], points[1], Math.max(2, stroke.s * 0.16), 0, Math.PI * 2);
-  guideCtx.fillStyle = stroke.c;
-  guideCtx.fill();
-  guideCtx.restore();
+  const drawGhost = (stroke, next = false) => {
+    const points = stroke.p;
+    guideCtx.save();
+    guideCtx.beginPath();
+    guideCtx.moveTo(points[0], points[1]);
+    for (let i = 2; i < points.length; i += 2) guideCtx.lineTo(points[i], points[i + 1]);
+    guideCtx.strokeStyle = stroke.c;
+    guideCtx.globalAlpha = next ? 0.16 : lessonMode ? 0.90 : 0.48;
+    guideCtx.lineWidth = next ? Math.max(1, stroke.s * 0.08) : lessonMode ? Math.max(2.4, stroke.s * 0.22) : Math.max(1.2, stroke.s * 0.12);
+    guideCtx.lineCap = "round";
+    guideCtx.lineJoin = "round";
+    guideCtx.setLineDash([Math.max(2, stroke.s * (next ? 0.18 : 0.28)), Math.max(3, stroke.s * 0.32)]);
+    guideCtx.stroke();
+    guideCtx.setLineDash([]);
+    if (!next) {
+      guideCtx.globalAlpha = lessonMode ? 1 : 0.75;
+      guideCtx.beginPath();
+      guideCtx.arc(points[0], points[1], Math.max(2, stroke.s * (lessonMode ? 0.22 : 0.16)), 0, Math.PI * 2);
+      guideCtx.fillStyle = stroke.c;
+      guideCtx.fill();
+    }
+    guideCtx.restore();
+  };
+  if (lessonMode && strokes[paintIndex + 1]) drawGhost(strokes[paintIndex + 1], true);
+  drawGhost(strokes[paintIndex]);
+  guide.dataset.ghostStrokes = lessonMode && strokes[paintIndex + 1] ? "2" : "1";
+  guide.dataset.lessonGhost = String(lessonMode);
   $("canvas-status").textContent = "Drag along the dashed guide";
 }
 
@@ -176,6 +185,7 @@ function updateGuideUI() {
   $("stage-name").textContent = boundaries[stageIndex]?.label || "Guided study";
   $("guide-number").textContent = `${paintIndex + 1} of ${strokes.length}`;
   $("guide-instruction").textContent = "Colour and size are supplied";
+  $("stage-tip").textContent = boundaries[stageIndex]?.tip || "Follow the current stroke; the faint mark shows what comes next.";
   $("brush-size").textContent = `${stroke.s} px brush`;
   $("next-swatch").style.background = stroke.c;
   $("undo-button").disabled = paintIndex === 0;
@@ -193,6 +203,8 @@ function setMode(nextMode) {
   $("watch-controls").hidden = isPaint;
   $("paint-controls").hidden = !isPaint;
   frame.classList.toggle("painting", isPaint);
+  frame.classList.toggle("lesson-mode", isPaint && lessonMode);
+  $("stage-tip").hidden = !(isPaint && lessonMode);
   $("mode-hint").textContent = isPaint ? "Your gesture. The recipe's colour and brush." : "From the first broad mark to the final detail.";
   clearStudy();
   if (isPaint) {
@@ -322,18 +334,21 @@ async function load() {
   }
   strokes = flattenStages(recipe);
   boundaries = boundariesFor(recipe);
-  const minimumStrokes = recipe.profile === "flat" ? 500 : id === "sunflowers" ? 2500 : 1500;
+  lessonMode = strokes.length < 1000;
+  const minimumStrokes = lessonMode ? 1 : recipe.profile === "flat" ? 500 : id === "sunflowers" ? 2500 : 1500;
   if (strokes.length < minimumStrokes || strokes.length > 6000 || strokes.length !== recipe.strokeCount) throw new Error("This recipe has an invalid stroke budget.");
   document.title = `${recipe.title} — Painting Cookbook`;
   $("painting-title").textContent = recipe.title;
   $("artist-line").textContent = `${recipe.artist} · ${recipe.year}`;
+  $("lesson-tip").hidden = !recipe.lessonTip;
+  $("lesson-tip").textContent = recipe.lessonTip || "";
   $("recipe-score").textContent = recipe.scores?.similarity ?? "—";
   $("reference-progress").max = strokes.length;
-  $("reference-image").src = `../references/${id}.jpg`;
+  $("reference-image").src = recipe.reference || `../references/${id}.jpg`;
   $("reference-image").alt = `Original ${recipe.title} by ${recipe.artist}`;
   $("reference-caption").textContent = `${recipe.title}, ${recipe.artist}, ${recipe.year}. Original reference; not a painting layer.`;
   showReferenceCredit(recipe.credit);
-  $("study-description").textContent = descriptions[id] || "A stroke-by-stroke study in layered colour and gesture.";
+  $("study-description").textContent = recipe.description || descriptions[id] || "A stroke-by-stroke study in layered colour and gesture.";
   $("stat-strokes").textContent = strokes.length.toLocaleString();
   $("scrubber").max = strokes.length;
   const defaultSpeed = Math.max(10, Math.min(500, Math.round(strokes.length / 20 / 10) * 10));

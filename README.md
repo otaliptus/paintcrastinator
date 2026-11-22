@@ -1,6 +1,6 @@
 # Painting Cookbook
 
-Thirteen studies, each recreated by **500–5,000 soft-round brush strokes** in four stages: five masterworks, five Icons, and three Modern colour works by Van Gogh, Matisse and Mondrian. The static app uses vanilla JavaScript and Canvas 2D; planning and scoring use Python.
+A stroke-by-stroke collection recreated with soft-round brush recipes in four stages. The **Start here** shelf adds three generated lessons and five recognisable paintings in short, hand-paintable recipes (tens to hundreds of strokes), followed by the original masterworks, Icons and Modern colour studies. The static app uses vanilla JavaScript and Canvas 2D; planning and scoring use Python.
 
 ## Run the app
 
@@ -15,7 +15,7 @@ Open <http://localhost:4173/app/>.
 
 - The library thumbnails are **recipe renders**, not reference photos. “View original” explicitly swaps a thumbnail to the reference and back.
 - Every recipe page starts blank. **Watch** builds the painting through the recipe; a per-recipe default speed completes in about 20 seconds. Play/pause, speed, continuous scrubbing, and four exact stage jumps are available.
-- **Paint Along** starts from blank. Drag or touch along each dashed ghost path. The gesture is yours; the recipe supplies colour, size and opacity. Every completed pointer stroke advances the counter. “Finish this stage” auto-paints the rest of the current stage. Live colour match compares reduced-resolution RGB against the reference.
+- **Paint Along** starts from blank. Drag or touch along each dashed ghost path. The gesture is yours; the recipe supplies colour, size and opacity. Every completed pointer stroke advances the counter. Recipes under 1,000 strokes use lesson mode: only a larger, brighter current ghost and a faint next ghost appear, with a one-line stage tip. The three generated lessons also state what they teach under their titles. “Finish this stage” auto-paints the rest of the current stage. Live colour match compares reduced-resolution RGB against the reference.
 - The original image is used only in the reference panel, explicit library toggle, and offscreen live-score calculation. It is never painted onto either visible painting canvas.
 
 ## Offline pipeline
@@ -103,7 +103,7 @@ With the local server running:
 node tools/test-app.mjs
 ```
 
-The Playwright suite checks three shelves and thirteen cards, Modern colour ordering and a sub-1,500-stroke counter, original toggling, variable-budget replay/pause, exact stage boundaries, full scrubbing, pointer painting and live score, undo/restart, every recipe/reference, linked credits and copyright notes, mobile layout and touch painting. It fails on any browser console error or uncaught page error. Desktop/mobile screenshots are written to `verification/`, including the required library and The Scream desktop views.
+The Playwright suite checks the Start here shelf first, manifest-driven counts, estimated Paint Along times, a sub-150-stroke lesson counter, current/next lesson ghosts, Modern colour ordering, original toggling, variable-budget replay/pause, exact stage boundaries, full scrubbing, pointer painting and live score, undo/restart, every completed recipe/reference, linked credits and copyright notes, mobile layout and touch painting. It fails on any browser console error or uncaught page error. Desktop/mobile screenshots are written to `verification/`, including the required library, Sphere lesson and The Scream desktop views.
 
 ## Icons
 

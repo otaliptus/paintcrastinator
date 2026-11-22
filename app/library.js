@@ -1,6 +1,12 @@
 const gallery = document.getElementById("gallery");
+const START_HERE = ["lesson-sky", "lesson-sphere", "lesson-hills", "impression-sunrise", "nocturne-battersea", "sudden-shower", "composition-viii", "basket-of-apples"];
 const MASTERWORKS = new Set(["mona-lisa", "girl-with-a-pearl-earring", "starry-night", "great-wave", "van-gogh-self-portrait"]);
 const MODERN = new Set(["sunflowers", "the-snail", "mondrian-1930"]);
+const START_SET = new Set(START_HERE);
+
+function referencePath(recipe) {
+  return `../${recipe.reference || `references/${recipe.id}.jpg`}`;
+}
 
 function creditText(credit) {
   return `${credit.licence === "CC BY-SA 4.0" ? "Photo by " : ""}${credit.author}, ${credit.licence}, via ${credit.source || "Wikimedia Commons"}${credit.note ? `. ${credit.note}` : ""}`;
@@ -13,10 +19,11 @@ function creditCaption(credit) {
   return `<p class="card-credit">${author}, ${licence}, <a href="${credit.url}">via ${credit.source || "Wikimedia Commons"}</a>${credit.note ? `. ${credit.note}` : ""}</p>`;
 }
 
-function card(recipe, index) {
+function card(recipe, index, startHere = false) {
   const article = document.createElement("article");
-  article.className = "painting-card";
+  article.className = `painting-card${startHere ? " start-here-card" : ""}`;
   const score = recipe.scores?.similarity ?? "—";
+  const minutes = Math.max(1, Math.round(recipe.strokeCount * 4 / 60));
   article.innerHTML = `
     <div class="card-image-wrap"${recipe.credit ? ` title="${creditText(recipe.credit)}"` : ""}>
       <a class="card-image-link" href="recipe.html?id=${encodeURIComponent(recipe.id)}" aria-label="Open ${recipe.title} study">
@@ -25,7 +32,7 @@ function card(recipe, index) {
       <span class="card-score"><strong>${score}</strong> / 100</span>
     </div>
     <div class="card-info">
-      <div><h3 class="card-title"><a href="recipe.html?id=${encodeURIComponent(recipe.id)}">${recipe.title}</a></h3><p class="card-artist">${recipe.artist} · ${recipe.year}<br>${recipe.strokeCount.toLocaleString()} stroke recipe</p></div>
+      <div><h3 class="card-title"><a href="recipe.html?id=${encodeURIComponent(recipe.id)}">${recipe.title}</a></h3><p class="card-artist">${recipe.artist} · ${recipe.year}<br>${recipe.strokeCount.toLocaleString()} stroke${recipe.strokeCount === 1 ? "" : "s"}${startHere ? ` · <span class="card-time">≈ ${minutes} min paint along</span>` : ""}</p>${startHere && recipe.lessonTip ? `<p class="card-lesson-tip">${recipe.lessonTip}</p>` : ""}</div>
       <a class="open-study" href="recipe.html?id=${encodeURIComponent(recipe.id)}" aria-label="Open ${recipe.title}">↗</a>
       <button class="original-toggle" type="button" aria-pressed="false">View original</button>
       ${creditCaption(recipe.credit)}
@@ -36,7 +43,7 @@ function card(recipe, index) {
     const original = button.getAttribute("aria-pressed") !== "true";
     button.setAttribute("aria-pressed", String(original));
     button.textContent = original ? "View brush study" : "View original";
-    image.src = original ? `../references/${recipe.id}.jpg` : `../recipes/${recipe.id}.png`;
+    image.src = original ? referencePath(recipe) : `../recipes/${recipe.id}.png`;
     image.alt = `${original ? "Original" : "Soft-brush reconstruction of"} ${recipe.title}`;
   });
   return article;
@@ -47,14 +54,18 @@ async function loadLibrary() {
     const response = await fetch("../recipes/manifest.json");
     if (!response.ok) throw new Error(`Collection returned ${response.status}`);
     const recipes = await response.json();
+    const startHere = START_HERE.map((id) => recipes.find((recipe) => recipe.id === id)).filter(Boolean);
     const masterworks = recipes.filter((recipe) => MASTERWORKS.has(recipe.id));
     const modern = recipes.filter((recipe) => MODERN.has(recipe.id));
-    const icons = recipes.filter((recipe) => !MASTERWORKS.has(recipe.id) && !MODERN.has(recipe.id));
+    const icons = recipes.filter((recipe) => !START_SET.has(recipe.id) && !MASTERWORKS.has(recipe.id) && !MODERN.has(recipe.id));
+    document.getElementById("start-here-gallery").replaceChildren(...startHere.map((recipe, index) => card(recipe, index, true)));
     document.getElementById("masterworks-gallery").replaceChildren(...masterworks.map(card));
     document.getElementById("icons-gallery").replaceChildren(...icons.map(card));
     document.getElementById("modern-gallery").replaceChildren(...modern.map(card));
     document.getElementById("painting-count").textContent = recipes.length;
+    document.getElementById("hero-study-count").textContent = recipes.length;
     document.getElementById("stroke-total").textContent = recipes.reduce((sum, recipe) => sum + recipe.strokeCount, 0).toLocaleString();
+    document.querySelector('meta[name="description"]').content = `Watch brushstrokes rebuild ${recipes.length} studies, then paint along one guided stroke at a time. Start with ${startHere.length} short, hand-paintable lessons and paintings.`;
   } catch (error) {
     gallery.innerHTML = `<p class="gallery-error">The collection could not be loaded. Serve this folder over HTTP and try again.<br><small>${error.message}</small></p>`;
   }

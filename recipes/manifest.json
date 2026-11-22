@@ -1,5 +1,34 @@
 [
   {
+    "id": "lesson-sky",
+    "title": "Sunset over a Still Sea",
+    "artist": "Painting Cookbook lesson",
+    "year": "2026",
+    "width": 960,
+    "height": 600,
+    "strokeCount": 20,
+    "scores": {
+      "reference": "references/lesson-sky.png",
+      "render": "recipes/lesson-sky.png",
+      "ssim": 0.9377,
+      "mean_delta_e": 2.0841,
+      "edge_similarity": 0.39498,
+      "colour_similarity": 0.95832,
+      "similarity": 86.248,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Painting Cookbook",
+      "licence": "CC0",
+      "source": "CC0 dedication",
+      "url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "note": "Generated for Painting Cookbook, CC0"
+    },
+    "description": "A sunset distilled to long horizontal bands above a flat, dark sea. Overlapping broad strokes make the colour transitions; two restrained horizon marks finish the scene.",
+    "reference": "references/lesson-sky.png",
+    "lessonTip": "Teaches blending: overlap long, quiet strokes and let neighbouring colours meet softly."
+  },
+  {
     "id": "mona-lisa",
     "title": "Mona Lisa",
     "artist": "Leonardo da Vinci",
@@ -188,32 +217,6 @@
       "author": "NASA, Apollo 17 crew",
       "licence": "Public domain",
       "url": "https://commons.wikimedia.org/wiki/File:The_Earth_seen_from_Apollo_17.jpg"
-    }
-  },
-  {
-    "id": "the-snail",
-    "title": "The Snail",
-    "artist": "Henri Matisse",
-    "year": "1953",
-    "width": 960,
-    "height": 970,
-    "strokeCount": 500,
-    "scores": {
-      "reference": "/home/node/.openclaw/workspace/painting-cookbook/references/the-snail.jpg",
-      "render": "/home/node/.openclaw/workspace/painting-cookbook/recipes/variants/the-snail-500.png",
-      "ssim": 0.77045,
-      "mean_delta_e": 5.6534,
-      "edge_similarity": 0.36218,
-      "colour_similarity": 0.88693,
-      "similarity": 74.415,
-      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
-    },
-    "credit": {
-      "author": "Tate, London",
-      "licence": "Public domain in the EU",
-      "note": "Public domain in the EU; in copyright in some other countries.",
-      "source": "Tate",
-      "url": "https://www.tate.org.uk/art/artworks/matisse-the-snail-t00540"
     }
   }
 ]

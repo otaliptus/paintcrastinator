@@ -66,3 +66,22 @@ Modern colour adds two planner profiles. Sunflowers uses the painterly multiscal
 - **Composite:** 55% SSIM + 30% colour similarity + 15% edge similarity, reported on a 0–100 scale. Colour similarity is `clamp(1 - meanΔE/50, 0, 1)`. This is a project comparison index, not an external benchmark.
 
 Scores are rounded only for presentation. The full method and unrounded-input results are stored beside each recipe in `recipes/<id>.score.json`.
+
+<!-- START_HERE_REPORT -->
+## Start here — short paint-along recipes
+
+These recipes are ordered from easiest to hardest and selected by visual recognisability at a small stroke count, not by the earlier 2.0-point budget rule. Estimated Paint Along time uses about four seconds per stroke.
+
+| Recipe | Strokes | Paint Along | Composite / 100 |
+|---|---:|---:|---:|
+| Sunset over a Still Sea | 20 | ≈ 1 min | **86.248** |
+| Orange Ball on a Table | 48 | ≈ 3 min | **81.887** |
+
+### Budget trials
+
+| Recipe | Trial strokes → composite | Selected |
+|---|---|---:|
+| Sunset over a Still Sea | 20 → 86.248 | **20** |
+| Orange Ball on a Table | 48 → 81.887 | **48** |
+
+The generated lesson references are original Pillow/NumPy images dedicated CC0. The five painting references use their source credits in the manifest and CREDITS.md.

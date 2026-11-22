@@ -7,6 +7,9 @@ import { chromium } from "/app/node_modules/playwright-core/index.mjs";
 const base = process.env.APP_URL || "http://127.0.0.1:4173/app";
 const out = path.resolve("verification");
 fs.mkdirSync(out, { recursive: true });
+const manifest = JSON.parse(fs.readFileSync("recipes/manifest.json", "utf8"));
+const START_HERE = ["lesson-sky", "lesson-sphere", "lesson-hills", "impression-sunrise", "nocturne-battersea", "sudden-shower", "composition-viii", "basket-of-apples"];
+const expectedStart = START_HERE.filter((id) => manifest.some((recipe) => recipe.id === id));
 const browser = await chromium.launch({ headless: true });
 const errors = [];
 const checks = [];
@@ -31,25 +34,29 @@ async function loadAllCards(page) {
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 watch(page);
 await page.goto(`${base}/index.html`, { waitUntil: "networkidle" });
-assert.equal(await page.locator(".painting-card").count(), 13);
-assert.equal(await page.locator(".shelf").count(), 3);
+assert.equal(await page.locator(".painting-card").count(), manifest.length);
+assert.equal(await page.locator(".shelf").count(), 4);
+assert.equal(await page.locator(".shelf").first().getAttribute("aria-labelledby"), "start-here-heading");
+assert.deepEqual(await page.locator("#start-here-gallery .painting-card").evaluateAll((cards) => cards.map((card) => card.querySelector(".card-title a").getAttribute("href").split("=")[1])), expectedStart);
+assert.equal(await page.locator("#start-here-gallery .card-time").count(), expectedStart.length);
+assert.equal(await page.locator("#painting-count").textContent(), String(manifest.length));
+assert.equal(await page.locator("#hero-study-count").textContent(), String(manifest.length));
 assert.equal(await page.locator("#masterworks-gallery .painting-card").count(), 5);
 assert.equal(await page.locator("#icons-gallery .painting-card").count(), 5);
 assert.equal(await page.locator("#icons-heading").textContent(), "Icons");
 assert.equal(await page.locator("#modern-heading").textContent(), "Modern colour");
 assert.equal(await page.locator("#modern-gallery .painting-card").count(), 3);
 assert.deepEqual(await page.locator("#modern-gallery .card-title").allTextContents(), ["Sunflowers", "The Snail", "Composition with Red, Blue and Yellow"]);
-const manifest = JSON.parse(fs.readFileSync("recipes/manifest.json", "utf8"));
 const expectedTotal = manifest.reduce((sum, recipe) => sum + recipe.strokeCount, 0);
 assert.equal(await page.locator("#stroke-total").textContent(), expectedTotal.toLocaleString());
-assert.match(await page.locator('meta[name="description"]').getAttribute("content"), /three modern colour studies—from Sunflowers to Matisse and Mondrian/);
+assert.match(await page.locator('meta[name="description"]').getAttribute("content"), new RegExp(`rebuild ${manifest.length} studies`));
 await loadAllCards(page);
 assert.equal(await page.locator(".card-image").evaluateAll((images) => images.every((image) => image.complete && image.naturalWidth > 0)), true);
-checks.push("three shelves, thirteen library cards, Modern colour order, dynamic stroke total and all offline thumbnails loaded");
-await page.locator(".original-toggle").first().click();
-assert.match(await page.locator(".card-image").first().getAttribute("src"), /references\/mona-lisa\.jpg$/);
-await page.locator(".original-toggle").first().click();
-assert.match(await page.locator(".card-image").first().getAttribute("src"), /recipes\/mona-lisa\.png$/);
+checks.push("Start here shelf is first and ordered; every card has stroke/time data; counts and stroke total come from the manifest");
+await page.locator("#masterworks-gallery .original-toggle").first().click();
+assert.match(await page.locator("#masterworks-gallery .card-image").first().getAttribute("src"), /references\/mona-lisa\.jpg$/);
+await page.locator("#masterworks-gallery .original-toggle").first().click();
+assert.match(await page.locator("#masterworks-gallery .card-image").first().getAttribute("src"), /recipes\/mona-lisa\.png$/);
 checks.push("explicit library original toggle restores rendered thumbnail");
 await page.screenshot({ path: path.join(out, "library-desktop.png"), fullPage: true });
 
@@ -102,6 +109,30 @@ assert.equal(await counter(page), 0);
 checks.push("undo/restart reset painting; finish-stage auto-paints exactly to the next boundary");
 await page.screenshot({ path: path.join(out, "recipe-desktop.png"), fullPage: true });
 
+if (expectedStart.includes("lesson-sphere")) {
+  const sphere = JSON.parse(fs.readFileSync("recipes/lesson-sphere.json", "utf8"));
+  assert.ok(sphere.strokeCount < 150);
+  await page.goto(`${base}/recipe.html?id=lesson-sphere`, { waitUntil: "networkidle" });
+  await page.locator("#study").waitFor({ state: "visible" });
+  assert.equal(await page.locator("#lesson-tip").isVisible(), true);
+  await page.locator("#paint-mode").click();
+  assert.equal(await page.locator("#stroke-counter").textContent(), `0 / ${sphere.strokeCount} strokes`);
+  assert.equal(await page.locator("#canvas-frame").evaluate((frame) => frame.classList.contains("lesson-mode")), true);
+  assert.equal(await page.locator("#stage-tip").isVisible(), true);
+  assert.ok((await page.locator("#stage-tip").textContent()).length > 10);
+  assert.equal(await page.locator("#guide-canvas").getAttribute("data-lesson-ghost"), "true");
+  assert.equal(await page.locator("#guide-canvas").getAttribute("data-ghost-strokes"), "2");
+  const ghostPixels = await page.locator("#guide-canvas").evaluate((canvas) => {
+    const data = canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data;
+    let visible = 0;
+    for (let index = 3; index < data.length; index += 4) if (data[index] > 0) visible += 1;
+    return visible;
+  });
+  assert.ok(ghostPixels > 20);
+  await page.screenshot({ path: path.join(out, "recipe-lesson-sphere-desktop.png"), fullPage: true });
+  checks.push("lesson recipe counter is 0 / N with N < 150; lesson tip, stage tip, bright current ghost and faint next ghost are present");
+}
+
 await page.goto(`${base}/recipe.html?id=countach`, { waitUntil: "networkidle" });
 await page.locator("#study").waitFor({ state: "visible" });
 const countach = JSON.parse(fs.readFileSync("recipes/countach.json", "utf8"));
@@ -153,7 +184,13 @@ for (const id of ["girl-with-a-pearl-earring", "starry-night", "great-wave", "va
   assert.equal(await counter(page), 0);
   assert.equal(await page.locator("#reference-image").evaluate((image) => image.complete && image.naturalWidth > 0), true);
 }
-checks.push("all thirteen recipe pages render with references and no missing data");
+for (const id of expectedStart) {
+  await page.goto(`${base}/recipe.html?id=${id}`, { waitUntil: "networkidle" });
+  await page.locator("#study").waitFor({ state: "visible" });
+  assert.equal(await counter(page), 0);
+  assert.equal(await page.locator("#reference-image").evaluate((image) => image.complete && image.naturalWidth > 0), true);
+}
+checks.push("every legacy and completed Start here recipe renders with its reference and no missing data");
 await page.goto(`${base}/recipe.html?id=the-snail`, { waitUntil: "networkidle" });
 await page.locator("#study").waitFor({ state: "visible" });
 assert.match(await page.locator("#reference-credit").textContent(), /Tate, London, Public domain in the EU, via Tate\. Public domain in the EU; in copyright in some other countries\./);
