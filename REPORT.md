@@ -17,7 +17,9 @@ Every score is computed from the stored reference and the PNG emitted by the sam
 | Sunflowers | 5,000 | 0.65467 | 2.5097 | 0.63623 | **74.044** |
 | The Snail | 2,000 | 0.90918 | 2.2567 | 0.67372 | **88.757** |
 | Composition with Red, Blue and Yellow | 500 | 0.80781 | 4.6569 | 0.37060 | **77.194** |
-| Almond Blossom | 1,300 | 0.47220 | 6.2162 | 0.39921 | **58.229** |
+| Almond Blossom | 2,800 | 0.51663 | 5.1018 | 0.49198 | **62.734** |
+| Woman with a Parasol | 2,400 | 0.48400 | 5.5820 | 0.48418 | **60.534** |
+| Wanderer above the Sea of Fog | 1,800 | 0.64630 | 3.8929 | 0.46364 | **70.165** |
 | Sunset over a Still Sea | 20 | 0.93770 | 2.0841 | 0.39498 | **86.248** |
 | Orange Ball on a Table | 48 | 0.87977 | 2.8026 | 0.34544 | **81.887** |
 | Three Hills in Morning Haze | 31 | 0.85205 | 2.7578 | 0.02661 | **75.607** |

@@ -17,9 +17,9 @@ STAGES = [("blocking", "Blocking in"), ("form", "Form and colour"), ("refinement
 META = {
     "almond-blossom": ("Almond Blossom", "Vincent van Gogh", "1890", 1300, 24, "Turquoise sky surrounds dark curling branches and delicate white blossoms."),
     "woman-with-a-parasol": ("Woman with a Parasol", "Claude Monet", "1875", 1700, 30, "A windblown figure and child stand against a luminous summer sky."),
-    "wanderer-sea-of-fog": ("Wanderer above the Sea of Fog", "Caspar David Friedrich", "c. 1818", 1400, 26, "A lone dark figure overlooks layered fog and distant mountains."),
+    "wanderer-sea-of-fog": ("Wanderer above the Sea of Fog", "Caspar David Friedrich", "c. 1818", 1800, 26, "A lone dark figure overlooks layered fog and distant mountains."),
     "cafe-terrace": ("Café Terrace at Night", "Vincent van Gogh", "1888", 1900, 32, "A glowing yellow terrace anchors a deep blue starlit night."),
-    "fighting-temeraire": ("The Fighting Temeraire", "J. M. W. Turner", "1839", 1400, 26, "A ghostly ship follows a dark tug through radiant sunset waters."),
+    "fighting-temeraire": ("The Fighting Temeraire", "J. M. W. Turner", "1839", 1800, 26, "A ghostly ship follows a dark tug through radiant sunset waters."),
     "the-kiss": ("The Kiss", "Gustav Klimt", "1907–08", 1800, 34, "Gold cloaks, patterned robes and tender faces emerge above flowers."),
 }
 URLS = {
