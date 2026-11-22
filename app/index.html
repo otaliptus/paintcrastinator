@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Watch brushstrokes rebuild five masterworks and five cultural icons—a car, two film stars, a painting and the Earth—then paint along one guided stroke at a time.">
+  <title>Painting Cookbook — A studio for looking closer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="library-page">
+  <header class="site-header wrap">
+    <a class="brand" href="index.html" aria-label="Painting Cookbook home">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span>Painting <em>Cookbook</em></span>
+    </a>
+    <span class="edition">THE STROKE-BY-STROKE COLLECTION · № 01</span>
+  </header>
+
+  <main class="wrap">
+    <section class="hero" aria-labelledby="hero-title">
+      <div>
+        <p class="eyebrow">Ten studies. Four layers. One mark at a time.</p>
+        <h1 id="hero-title">Learn the painting,<br><i>one stroke at a time.</i></h1>
+      </div>
+      <div class="hero-note">
+        <p>Watch familiar canvases take shape, then follow a ghosted guide that supplies the colour and brush size. You bring the gesture.</p>
+        <a class="text-link" href="#collection">Enter the collection <span aria-hidden="true">↓</span></a>
+      </div>
+    </section>
+
+    <section id="collection" class="collection" aria-labelledby="collection-title">
+      <div class="section-heading">
+        <h2 id="collection-title">The collection</h2>
+        <p><span id="painting-count">10</span> studies · <span id="stroke-total">—</span> strokes</p>
+      </div>
+      <div id="gallery" class="gallery" aria-live="polite">
+        <section class="shelf" aria-labelledby="masterworks-heading">
+          <div class="shelf-heading"><h3 id="masterworks-heading">Masterworks</h3></div>
+          <div id="masterworks-gallery" class="shelf-grid"><p class="loading">Preparing the studio…</p></div>
+        </section>
+        <section class="shelf" aria-labelledby="icons-heading">
+          <div class="shelf-heading"><h3 id="icons-heading">Icons</h3></div>
+          <div id="icons-gallery" class="shelf-grid"><p class="loading">Preparing the studio…</p></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer wrap">
+    <p>A small digital studio for patient looking.</p>
+    <p>Hand-authored vector stroke recipes · Canvas 2D soft brush</p>
+  </footer>
+  <script type="module" src="library.js"></script>
+</body>
+</html>

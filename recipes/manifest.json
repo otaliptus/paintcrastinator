@@ -1,0 +1,193 @@
+[
+  {
+    "id": "mona-lisa",
+    "title": "Mona Lisa",
+    "artist": "Leonardo da Vinci",
+    "year": "c. 1503–1519",
+    "width": 960,
+    "height": 1431,
+    "strokeCount": 5000,
+    "scores": {
+      "reference": "references/mona-lisa.jpg",
+      "render": "recipes/mona-lisa.png",
+      "ssim": 0.67728,
+      "mean_delta_e": 3.2735,
+      "edge_similarity": 0.60844,
+      "colour_similarity": 0.93453,
+      "similarity": 74.413,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    }
+  },
+  {
+    "id": "girl-with-a-pearl-earring",
+    "title": "Girl with a Pearl Earring",
+    "artist": "Johannes Vermeer",
+    "year": "c. 1665",
+    "width": 960,
+    "height": 1137,
+    "strokeCount": 5000,
+    "scores": {
+      "reference": "references/girl-with-a-pearl-earring.jpg",
+      "render": "recipes/girl-with-a-pearl-earring.png",
+      "ssim": 0.69257,
+      "mean_delta_e": 3.0105,
+      "edge_similarity": 0.59997,
+      "colour_similarity": 0.93979,
+      "similarity": 75.285,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    }
+  },
+  {
+    "id": "starry-night",
+    "title": "The Starry Night",
+    "artist": "Vincent van Gogh",
+    "year": "1889",
+    "width": 960,
+    "height": 760,
+    "strokeCount": 5000,
+    "scores": {
+      "reference": "references/starry-night.jpg",
+      "render": "recipes/starry-night.png",
+      "ssim": 0.34555,
+      "mean_delta_e": 6.1323,
+      "edge_similarity": 0.52866,
+      "colour_similarity": 0.87735,
+      "similarity": 53.256,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    }
+  },
+  {
+    "id": "great-wave",
+    "title": "The Great Wave off Kanagawa",
+    "artist": "Katsushika Hokusai",
+    "year": "c. 1830–1832",
+    "width": 960,
+    "height": 645,
+    "strokeCount": 5000,
+    "scores": {
+      "reference": "references/great-wave.jpg",
+      "render": "recipes/great-wave.png",
+      "ssim": 0.51041,
+      "mean_delta_e": 5.4931,
+      "edge_similarity": 0.56423,
+      "colour_similarity": 0.89014,
+      "similarity": 63.24,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    }
+  },
+  {
+    "id": "van-gogh-self-portrait",
+    "title": "Self-Portrait",
+    "artist": "Vincent van Gogh",
+    "year": "1887",
+    "width": 960,
+    "height": 1213,
+    "strokeCount": 5000,
+    "scores": {
+      "reference": "references/van-gogh-self-portrait.jpg",
+      "render": "recipes/van-gogh-self-portrait.png",
+      "ssim": 0.42387,
+      "mean_delta_e": 6.3552,
+      "edge_similarity": 0.50099,
+      "colour_similarity": 0.8729,
+      "similarity": 57.014,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    }
+  },
+  {
+    "id": "countach",
+    "title": "Lamborghini Countach LP5000 S",
+    "artist": "Photo: Palauenc05",
+    "year": "1983",
+    "width": 960,
+    "height": 508,
+    "strokeCount": 5000,
+    "scores": {
+      "reference": "/home/node/.openclaw/workspace/painting-cookbook/references/countach.jpg",
+      "render": "/home/node/.openclaw/workspace/painting-cookbook/recipes/variants/countach-5000.png",
+      "ssim": 0.40789,
+      "mean_delta_e": 6.5291,
+      "edge_similarity": 0.54646,
+      "colour_similarity": 0.86942,
+      "similarity": 56.714,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Palauenc05",
+      "licence": "CC BY-SA 4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Lamborghini_Countach_LP_5000S_1983.jpg"
+    }
+  },
+  {
+    "id": "marilyn-1953",
+    "title": "Marilyn Monroe",
+    "artist": "Studio publicity still (Photoplay)",
+    "year": "1953",
+    "width": 960,
+    "height": 1048,
+    "strokeCount": 5000,
+    "scores": {
+      "reference": "/home/node/.openclaw/workspace/painting-cookbook/references/marilyn-1953.jpg",
+      "render": "/home/node/.openclaw/workspace/painting-cookbook/recipes/variants/marilyn-1953-5000.png",
+      "ssim": 0.68283,
+      "mean_delta_e": 3.0103,
+      "edge_similarity": 0.58975,
+      "colour_similarity": 0.93979,
+      "similarity": 74.596,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Studio publicity still (Photoplay)",
+      "licence": "Public domain",
+      "url": "https://commons.wikimedia.org/wiki/File:Marilyn_Monroe,_Photoplay_1953_(cropped).jpg"
+    }
+  },
+  {
+    "id": "the-scream",
+    "title": "The Scream",
+    "artist": "Edvard Munch",
+    "year": "1893",
+    "width": 960,
+    "height": 1191,
+    "strokeCount": 5000,
+    "scores": {
+      "reference": "/home/node/.openclaw/workspace/painting-cookbook/references/the-scream.jpg",
+      "render": "/home/node/.openclaw/workspace/painting-cookbook/recipes/variants/the-scream-5000.png",
+      "ssim": 0.59154,
+      "mean_delta_e": 4.3729,
+      "edge_similarity": 0.53287,
+      "colour_similarity": 0.91254,
+      "similarity": 67.904,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "Edvard Munch",
+      "licence": "Public domain",
+      "url": "https://commons.wikimedia.org/wiki/File:Edvard_Munch,_1893,_The_Scream,_oil,_tempera_and_pastel_on_cardboard,_91_x_73_cm,_National_Gallery_of_Norway.jpg"
+    }
+  },
+  {
+    "id": "blue-marble",
+    "title": "The Blue Marble",
+    "artist": "Photo: NASA, Apollo 17 crew",
+    "year": "1972",
+    "width": 960,
+    "height": 961,
+    "strokeCount": 5000,
+    "scores": {
+      "reference": "/home/node/.openclaw/workspace/painting-cookbook/references/blue-marble.jpg",
+      "render": "/home/node/.openclaw/workspace/painting-cookbook/recipes/variants/blue-marble-5000.png",
+      "ssim": 0.44225,
+      "mean_delta_e": 4.8302,
+      "edge_similarity": 0.53307,
+      "colour_similarity": 0.9034,
+      "similarity": 59.422,
+      "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+    },
+    "credit": {
+      "author": "NASA, Apollo 17 crew",
+      "licence": "Public domain",
+      "url": "https://commons.wikimedia.org/wiki/File:The_Earth_seen_from_Apollo_17.jpg"
+    }
+  }
+]

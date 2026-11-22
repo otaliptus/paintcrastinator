@@ -1,0 +1,17 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Painting Cookbook offline renderer</title>
+<canvas id="painting"></canvas>
+<script type="module">
+  import { prepareCanvas, renderRecipe } from "../app/brush.js";
+  window.renderRecipeToPNG = async (recipe) => {
+    const canvas = document.getElementById("painting");
+    canvas.width = recipe.width;
+    canvas.height = recipe.height;
+    const ctx = canvas.getContext("2d", { alpha: false });
+    prepareCanvas(ctx, recipe);
+    renderRecipe(ctx, recipe);
+    return canvas.toDataURL("image/png");
+  };
+  window.rendererReady = true;
+</script>
