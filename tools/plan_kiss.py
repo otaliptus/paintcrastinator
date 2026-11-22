@@ -53,6 +53,26 @@ def filled(mask, count, diameter=8, coverage=1.5, mode="small"):
     return strokes
 
 
+def dabs(mask, count):
+    rr = select(mask)
+    def chroma(region):
+        c = region["colour"].lstrip("#")
+        rgb = [int(c[i:i + 2], 16) for i in (0, 2, 4)]
+        return max(rgb) - min(rgb)
+    candidates = sorted((r for r in rr if r["area"] <= 1400), key=lambda r: (-chroma(r), r["area"]))
+    if len(candidates) < count:
+        used = {id(r) for r in candidates}
+        candidates += sorted((r for r in rr if id(r) not in used), key=lambda r: r["area"])
+    strokes = []
+    for region in candidates[:count]:
+        x, y = np.mean(region["points"], axis=0)
+        strokes.append({"p": [float(x), float(y), float(x + .01), float(y)],
+                        "c": region["colour"], "s": round(float(np.clip(np.sqrt(region["area"]) * .7, 1.8, 10)), 1),
+                        "o": 1})
+    assert len(strokes) == count
+    return strokes
+
+
 def edged(mask, count, coverage=.8):
     rr = select(mask)
     strokes = allocate([contours(region) for region in rr], rr, count, "edges")
@@ -96,6 +116,9 @@ female = poly([(520, 95), (650, 80), (755, 145), (795, 275), (775, 470),
 combined = np.maximum(male, female)
 meadow = poly([(0, 760), (260, 710), (420, 780), (620, 800), (750, 740),
                (840, 820), (840, 1000), (0, 1000)])
+male_face = poly([(340, 55), (425, 45), (495, 85), (490, 145), (430, 175), (350, 135)])
+female_face = poly([(535, 115), (615, 105), (675, 155), (650, 230), (565, 235), (520, 175)])
+hands = poly([(475, 215), (570, 190), (640, 245), (585, 320), (500, 290)])
 people = poly([(340, 30), (475, 20), (540, 75), (650, 80), (715, 135),
                (690, 260), (565, 355), (500, 295), (420, 210), (330, 150)])
 
@@ -107,13 +130,21 @@ female_pixels = female_pixels[(female_pixels[:, 0] > .45) & (female_pixels[:, 1]
 female_colour = colour(np.median(female_pixels, axis=0))
 meadow_colour = colour(np.median(source[meadow.astype(bool)], axis=0))
 
+def skin_colour(mask):
+    pixels = source[mask.astype(bool)]
+    skin = pixels[(pixels[:, 0] > .5) & (pixels[:, 1] > .4) & (pixels[:, 2] > .3)]
+    return colour(np.median(skin if len(skin) else pixels, axis=0))
+
 blocking = (flat(background, 140, bg_colour, 32, 2.4) + flat(meadow, 80, meadow_colour, 22, 2.4)
             + flat(male, 100, male_colour, 22, 2.4) + flat(female, 120, female_colour, 22, 2.4))
 form = filled(male, 250, 14, 2.0, "area") + filled(female, 250, 13, 2.0, "area") + filled(meadow, 100, 9, 1.8, "area")
 refinement = (filled(male, 350, 6, 1.4) + filled(female, 350, 6, 1.4)
               + filled(meadow, 200, 4, 1.3) + filled(background, 100, 7, 1.4))
-detail = (filled(people, 160, 3, 1.2) + flat_edges(combined, 60, "#71592d")
-          + edged(combined, 100, .7) + filled(meadow, 140, 2.8, 1.2))
+detail = (flat(male_face, 20, skin_colour(male_face), 9, 1.4)
+          + flat(female_face, 20, skin_colour(female_face), 9, 1.4)
+          + flat(hands, 15, skin_colour(hands), 7, 1.4)
+          + filled(people, 105, 3, 1.2) + dabs(female, 140)
+          + edged(combined, 60, .7) + filled(meadow, 100, 2.8, 1.2))
 
 stages = []
 expected = {"blocking": 440, "form": 600, "refinement": 1000, "detail": 460}
