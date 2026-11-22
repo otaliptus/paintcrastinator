@@ -1,0 +1,10 @@
+{
+  "reference": "references/american-gothic.jpg",
+  "render": "/home/node/.openclaw/workspace/_progress/claude-refine/out/american-gothic-claude.png",
+  "ssim": 0.69521,
+  "mean_delta_e": 3.0348,
+  "edge_similarity": 0.54363,
+  "colour_similarity": 0.9393,
+  "similarity": 74.57,
+  "method": "SSIM: grayscale, 384px longest side; deltaE2000: RGB Lab, 160px longest side; edges: reduced Sobel overlap; overall: 55% SSIM + 30% colour + 15% edges"
+}
