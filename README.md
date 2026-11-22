@@ -1,112 +1,91 @@
-# Painting Cookbook
+# Paintcrastinator
 
-A stroke-by-stroke collection recreated with soft-round brush recipes in four stages. The **Start here** shelf adds three generated lessons and five recognisable paintings in short, hand-paintable recipes (tens to hundreds of strokes), followed by the original masterworks, Icons and Modern colour studies. The static app uses vanilla JavaScript and Canvas 2D; planning and scoring use Python.
+**Paint famous pictures one stroke at a time** — from a two-minute warm-up to a five-hour masterpiece. The most productive way to not do your work.
 
-## Run the app
+<p align="center">
+  <img src="docs/parasol.gif" width="300" alt="Woman with a Parasol being painted stroke by stroke">
+</p>
 
-Serve the parent directory (the app loads sibling `app/` and `recipes/` paths):
+**Try it:** <https://paint.otaliptus.com>
 
-```bash
-cd /home/node/.openclaw/workspace/painting-cookbook
-python3 -m http.server 4173
-```
+Every painting is a *recipe*: an ordered list of soft brush strokes, each with a path, a colour, a size and an opacity. You can **watch** the recipe paint itself, or **paint it yourself**: the app shows you where the next stroke goes and gives you its colour and brush, and you make the gesture.
 
-Open <http://localhost:4173/app/>.
+<p align="center">
+  <img src="docs/mosaic.gif" width="640" alt="Nine paintings being painted at the same time">
+</p>
 
-- The library thumbnails are **recipe renders**, not reference photos. “View original” explicitly swaps a thumbnail to the reference and back.
-- Every recipe page starts blank. **Watch** builds the painting through the recipe; a per-recipe default speed completes in about 20 seconds. Play/pause, speed, continuous scrubbing, and four exact stage jumps are available.
-- **Paint Along** starts from blank. Drag or touch along each dashed ghost path. The gesture is yours; the recipe supplies colour, size and opacity. Every completed pointer stroke advances the counter. Recipes under 1,000 strokes use lesson mode: only a larger, brighter current ghost and a faint next ghost appear, with a one-line stage tip. The three generated lessons also state what they teach under their titles. “Finish this stage” auto-paints the rest of the current stage. Live colour match compares reduced-resolution RGB against the reference.
-- The original image is used only in the reference panel, explicit library toggle, and offscreen live-score calculation. It is never painted onto either visible painting canvas.
+## What's inside
 
-## Offline pipeline
+26 paintings, sorted by how long they take to paint (about 4 seconds per stroke):
 
-The bundled Playwright Core is imported from `/app/node_modules/playwright-core`. Its Chromium runtime must be available. The planning/scoring commands use this environment's `/home/node/.openclaw/venv/bin/python` with NumPy, SciPy, scikit-image, Pillow and OpenCV.
+| Section | Strokes | Paintings |
+|---|---:|---|
+| Warm-ups | 20–31 | Two short lessons: a sunset sky and hills fading into the distance |
+| 15 minutes | 225 | Whistler's *Nocturne*, Monet's *Impression, Sunrise* |
+| 30 minutes | 450 | Mondrian's *Composition with Red, Blue and Yellow* |
+| 1 hour | 600–900 | *Whistler's Mother*, *American Gothic*, Cézanne's *The Basket of Apples*, Hiroshige's *Sudden Shower* |
+| 2–3 hours | 1,800–2,800 | *Wanderer above the Sea of Fog*, *The Snail*, *Woman with a Parasol*, *Almond Blossom*, *Café Terrace at Night*, *The Fighting Temeraire*, *The Kiss* |
+| Masterpieces · 5 hours | 5,000 | *Mona Lisa*, *Girl with a Pearl Earring*, *The Starry Night*, *The Great Wave*, *The Scream*, *Sunflowers*, Van Gogh's *Self-Portrait*, Marilyn Monroe, the Blue Marble, a Lamborghini Countach |
 
-```bash
-# Discover a four-stage, deterministic 5,000-stroke vector recipe.
-/home/node/.openclaw/venv/bin/python tools/plan.py mona-lisa
-/home/node/.openclaw/venv/bin/python tools/plan.py all
-# Scale all four stages to a smaller photographic budget.
-/home/node/.openclaw/venv/bin/python tools/plan.py countach --strokes 1500
+## Painting in the app
 
-# Chromium rendering through app/brush.js — no Python raster painter.
-node tools/render.mjs recipes/mona-lisa.json recipes/mona-lisa.png
-node tools/render.mjs --all
+- **Watch** plays the recipe from a blank canvas. You can pause, change the speed, scrub, or jump to any of the four stages: *Blocking in*, *Form and color*, *Refinement*, *Fine details*.
+- **Paint** shows the next stroke as a shaded band with a dot where it starts. Drag over it in one go; the colour and brush size are chosen for you.
+  - **Zoom** enlarges the view when a stroke is small, so fine details are easy to hit.
+  - **Steady hand** pulls your stroke onto the guide, so a shaky mouse or finger still lands where it should.
+  - **Undo**, **Skip stage** and **Restart** are always there, and short recipes show a one-line tip for each stage.
+  - **Your progress is saved** in your browser for each painting, so you can close the tab and continue later.
 
-# Reduced-resolution structural, CIE Lab and edge scoring.
-/home/node/.openclaw/venv/bin/python tools/score.py \
-  references/mona-lisa.jpg recipes/mona-lisa.png \
-  --output recipes/mona-lisa.score.json
+## How it works
 
-# Independently measure all Modern colour budgets and select the smallest within 2.0 points of 5,000.
-/home/node/.openclaw/venv/bin/python tools/measure-modern.py
+- **One brush for everything.** [`app/brush.js`](app/brush.js) paints a stroke by stamping a soft round brush along its path. The app and the offline renderer use this same file. The planner uses a NumPy model of the same brush, and every recipe is re-rendered with the real brush before it is scored, so what you see in the browser is what was measured.
+- **Recipes** live in [`recipes/`](recipes) as JSON. A stroke is `{"p": [x0, y0, x1, y1, …], "c": "#rrggbb", "s": size, "o": opacity}` in the painting's own pixel space, grouped into four stages.
+- **The planner** ([`tools/greedy/greedy_planner.py`](tools/greedy/greedy_planner.py)) builds a recipe for a given stroke budget, stage by stage from big strokes to small ones:
+  1. It looks where the painting so far differs most from the original.
+  2. It tries many candidate strokes there: following the direction of the forms, straight, or at a free angle.
+  3. For each candidate it solves for the single colour that best fixes what is underneath (a least-squares fit, not an average).
+  4. It keeps the best candidate, nudges its position, size, length and angle to improve it further, and paints it.
 
-# Write the library manifest and REPORT.md.
-/home/node/.openclaw/venv/bin/python tools/finalize.py
-```
+  Stroke sizes scale with the budget, so a 225-stroke recipe uses big, broad marks and a 5,000-stroke recipe ends with fine detail.
+- **Scoring** ([`tools/score.py`](tools/score.py)) compares a render with its original using structural similarity, CIE ΔE2000 colour difference and edge overlap. It is only used offline, to compare planner versions; the app shows no scores.
 
-Optional measured improvement passes save candidates under `recipes/variants/` and promote only a higher composite score:
+## Run it locally
 
-```bash
-/home/node/.openclaw/venv/bin/python tools/refine.py all
-/home/node/.openclaw/venv/bin/python tools/recolor.py all
-```
-
-## Recipe format
-
-```json
-{
-  "id": "mona-lisa",
-  "title": "Mona Lisa",
-  "artist": "Leonardo da Vinci",
-  "year": "c. 1503–1519",
-  "width": 960,
-  "height": 1431,
-  "ground": "#ffffff",
-  "stages": [
-    {
-      "id": "blocking",
-      "label": "Blocking in",
-      "strokes": [
-        {"p": [20, 30, 70, 55, 120, 80], "c": "#6e6242", "s": 90, "o": 0.85, "stage": "blocking"}
-      ]
-    }
-  ]
-}
-```
-
-`p` is any even-length sequence of canvas x/y coordinates, permitting straight, curved and freehand paths. `s` is brush diameter in canvas pixels, `o` is 0–1 opacity, and `c` is six-digit RGB hex. The four stage IDs are `blocking`, `form`, `refinement`, and `detail`. `flattenStages()` preserves their order. Each finished recipe also carries its measured `scores` object.
-
-## Shared brush contract
-
-`app/brush.js` is imported by:
-
-1. `tools/render-page.html`, driven by `tools/render.mjs` for offline PNGs;
-2. Watch replay in `app/recipe.js`;
-3. Paint Along in `app/recipe.js`.
-
-The engine stamps a tinted radial-alpha falloff at quarter-diameter spacing along every polyline segment. A bounded LRU stamp cache makes replay practical. There is no renderer-only drawing shortcut and no reference-image raster input.
-
-## Planner
-
-`tools/plan.py` uses deterministic randomness, progressively less blurred multiscale colour fields, structure-tensor tangent/coherence estimates and grid-free importance sampling. Painting-specific weak-structure flow adds circular wind to Starry Night, curved wave contours to Great Wave, sky bands and straight bridge diagonals to The Scream, tangent-following cloud swirls to Blue Marble, and radial petal impasto to Sunflowers. The flat profile used by The Snail and Mondrian segments CIE Lab colours into connected regions, assigns each region's exact mean colour, lays straight mask-clipped fills and sharpens contours with straight strokes—without texture noise. Their 500-stroke coverage/finish core stays fixed in larger candidates, whose extra marks are blocking underpaint; this makes the budget sweep a direct test of redundant coverage. Audrey Hepburn's figure receives 70% of refinement/detail strokes while the patterned screen becomes sparse, soft pale blocks; Blue Marble uses a brightness-derived disc mask and path constraints to keep space black. Later short marks respond to edge energy. Residual passes use the shared-engine render as feedback; saved baselines prevent a worse candidate from replacing a better recipe.
-
-## Scores
-
-See [REPORT.md](REPORT.md). Each recipe has a sibling `.score.json` containing SSIM, mean CIEDE2000, edge overlap and the 0–100 composite. These are reduced-resolution similarity measurements, not claims of exact reproduction.
-
-## App verification
-
-With the local server running:
+It is a static site with no build step:
 
 ```bash
-node tools/test-app.mjs
+git clone https://github.com/otaliptus/painting-cookbook
+cd painting-cookbook
+python3 -m http.server 8000
 ```
 
-The Playwright suite checks the Start here shelf first, manifest-driven counts, estimated Paint Along times, a sub-150-stroke lesson counter, current/next lesson ghosts, Modern colour ordering, original toggling, variable-budget replay/pause, exact stage boundaries, full scrubbing, pointer painting and live score, undo/restart, every completed recipe/reference, linked credits and copyright notes, mobile layout and touch painting. It fails on any browser console error or uncaught page error. Desktop/mobile screenshots are written to `verification/`, including the required library, Sphere lesson and The Scream desktop views.
+Then open <http://localhost:8000/app/>.
 
-## Icons
+The offline tools (rendering with headless Chromium, scoring, planning) were run inside the project's development container, so their scripts contain that container's paths: Playwright is imported from `/app/node_modules/playwright-core`, and the Python tools need NumPy, SciPy, scikit-image and Pillow.
 
-Five Icon studies use independently measured 1,500, 2,500 and 5,000-stroke candidates; REPORT.md records every composite and the selected budget.
-The Countach photograph is credited by photographer, CC BY-SA 4.0 licence and Wikimedia source. The two publicity photographs, The Scream and the NASA/Apollo 17 photograph carry public-domain credits and sources in the library, recipe pages and CREDITS.md.
-Use `tools/measure-photos.py` to rerun the Icons sweep and `tools/measure-modern.py` for the new shelf, then `tools/finalize.py` to refresh score metadata and the manifest. `tools/contact-modern.py` writes the three-pair reference/render contact sheet.
+## Repository layout
+
+| Path | What it is |
+|---|---|
+| `app/` | The web app: `index.html` (library), `recipe.html` (watch and paint), `brush.js`, `library.js`, `recipe.js`, `style.css` |
+| `recipes/` | One JSON recipe, a rendered PNG and a score file per painting, plus `manifest.json` |
+| `references/` | The original images the recipes were planned from |
+| `tools/greedy/` | The planner used for every recipe on the site |
+| `tools/` | The first-generation planners, renderer, scorer and app tests |
+| `docs/` | The GIFs in this README |
+| `CREDITS.md` | Image sources and licences |
+
+## How it was built
+
+Paintcrastinator was made for the Cerebras × Kimi K3.1 Pro × OpenClaw hackathon (November 2026).
+
+- **Kimi K3.1 Pro**, running on Cerebras inside OpenClaw, wrote the first versions of the app, the brush engine, the offline render-and-score pipeline and the first recipes, task by task. Progress screenshots went to a Telegram chat as it worked.
+- **Claude Opus 5.5** directed the work: it wrote the task briefs, reviewed every result, and later rewrote the app's interface and wrote the greedy planner that produced the recipes now on the site.
+
+## Credits and licences
+
+The paintings are public domain, except the Countach photograph (CC BY-SA 4.0) and Matisse's *The Snail*, which is public domain in the EU but still in copyright in some other countries, including the US. Every source is listed in [CREDITS.md](CREDITS.md) and shown next to its painting in the app.
+
+The logo uses the Cerebras mark as a nod to the hackathon sponsor; Cerebras is a trademark of Cerebras Systems.
+
+No licence has been chosen for the code yet.
