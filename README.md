@@ -54,8 +54,8 @@ Every painting is a *recipe*: an ordered list of soft brush strokes, each with a
 It is a static site with no build step:
 
 ```bash
-git clone https://github.com/otaliptus/painting-cookbook
-cd painting-cookbook
+git clone https://github.com/otaliptus/paintcrastinator
+cd paintcrastinator
 python3 -m http.server 8000
 ```
 
